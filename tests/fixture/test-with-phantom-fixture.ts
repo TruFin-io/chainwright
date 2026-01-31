@@ -1,10 +1,10 @@
 import type { Page } from "@playwright/test";
-import testWithPlaywrightKit from "@/core/test-with-playwright-kit";
+import testWithChainwright from "@/core/test-with-chainwright";
 import { phantomFixture } from "@/wallets/phantom";
 import { phantomWorkerScopeFixture } from "@/wallets/phantom/phantom-worker-scope-fixture";
 
 export const testWithPhantomFixture = phantomFixture();
-export const testWithPhantom = testWithPlaywrightKit(phantomFixture());
+export const testWithPhantom = testWithChainwright(phantomFixture());
 export const testWithPhantomWorkerScope = phantomWorkerScopeFixture({
     dappUrl: "http://localhost:3000/solana",
 });

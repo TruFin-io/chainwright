@@ -1,9 +1,9 @@
 import type { Page } from "@playwright/test";
-import testWithPlaywrightKit from "@/core/test-with-playwright-kit";
+import testWithChainwright from "@/core/test-with-chainwright";
 import { petraFixture } from "@/wallets/petra/petra-fixture";
 
 export const testWithPetraFixture = petraFixture();
-export const testWithPetra = testWithPlaywrightKit(petraFixture());
+export const testWithPetra = testWithChainwright(petraFixture());
 
 type TestDappFixture = {
     dappPage: Page;
