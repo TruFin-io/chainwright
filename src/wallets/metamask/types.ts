@@ -1,4 +1,7 @@
+import type { Page } from "@playwright/test";
+import type { Instance } from "prool";
 import z from "zod";
+import type { Metamask } from "./metamask";
 
 export type OnboardingArgs =
     | {
@@ -46,3 +49,13 @@ export type GasFeeSettings =
       };
 
 export type GetAccountAddressChains = "Ethereum" | "Tron" | "Bitcoin" | "Solana";
+
+export type MetamaskFixture = {
+    contextPath: string;
+    metamask: Metamask;
+    metamaskPage: Page;
+    createAnvilNode: (
+        options?: Instance.anvil.Parameters,
+    ) => Promise<{ rpcUrl: string; anvil: Instance.anvil.Parameters; chainId: number }>;
+    connectToAnvil: () => Promise<void>;
+};

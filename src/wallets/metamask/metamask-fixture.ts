@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test as base, chromium, type Page } from "@playwright/test";
+import { Instance, Pool } from "prool";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
@@ -10,12 +11,7 @@ import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-exte
 import unlock from "./actions/unlock.metamask";
 import { Metamask } from "./metamask";
 import { MetamaskProfile } from "./metamask-profile";
-
-export type MetamaskFixture = {
-    contextPath: string;
-    metamask: Metamask;
-    metamaskPage: Page;
-};
+import type { MetamaskFixture } from "./types";
 
 let _metamaskPage: Page;
 
@@ -86,6 +82,38 @@ export const metamaskFixture = (slowMo: number = 0, profileName?: string) => {
         metamask: async ({ context: _ }, use) => {
             const metamaskInstance = new Metamask(_metamaskPage);
             await use(metamaskInstance);
+        },
+        createAnvilNode: async ({ context: _ }, use, testInfo) => {
+            const poolId = testInfo.workerIndex;
+            let pool: Pool.define.ReturnType<number> | undefined;
+
+            await use(async (options?: Instance.anvil.Parameters) => {
+                pool = Pool.define({
+                    instance: Instance.anvil(options),
+                });
+                const anvil = await pool.start(poolId);
+                const rpcUrl = `http://${anvil.host}:${anvil.port}`;
+
+                const DEFAULT_ANVIL_CHAIN_ID = 31337;
+                const chainId = options?.chainId ?? DEFAULT_ANVIL_CHAIN_ID;
+
+                return { rpcUrl, anvil, chainId };
+            });
+
+            if (pool) {
+                await pool.stop(poolId);
+            }
+        },
+        connectToAnvil: async ({ context: _, metamask, createAnvilNode }, use) => {
+            await use(async () => {
+                const { chainId, rpcUrl } = await createAnvilNode({ chainId: 2251 });
+                await metamask.addCustomNetwork({
+                    chainId,
+                    currencySymbol: "ETH",
+                    networkName: "Anvil Localnet",
+                    rpcUrl: rpcUrl,
+                });
+            });
         },
     });
 };
