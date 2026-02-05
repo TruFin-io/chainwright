@@ -64,7 +64,7 @@ export type GetAccountAddress = {
           }
         | {
               mode: "testnet";
-              // NB: Testnet is for the Sui chain
+              // NB: "Testnet" is for the Sui chain
               network: "Devnet" | "Sepolia" | "Testnet";
           };
 };

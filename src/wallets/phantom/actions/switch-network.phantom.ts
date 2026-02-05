@@ -1,5 +1,4 @@
-import { expect, type Page } from "@playwright/test";
-import { sleep } from "@/utils/sleep";
+import type { Page } from "@playwright/test";
 import { settingsSelectors } from "../selectors/homepage-selectors.phantom";
 import type { SwitchNetwork } from "../types";
 import { openSettings } from "./open-settings.phantom";
@@ -13,7 +12,6 @@ export async function switchNetwork({ page, ...args }: SwitchNetworkParams) {
     await developerSettingsButton.scrollIntoViewIfNeeded();
     await developerSettingsButton.click();
 
-    const developerSettingsMenu = page.locator("div", { has: page.locator("button[data-testid='toggleTestNetwork']") });
     const toggleTestnetButton = page.getByTestId("toggleTestNetwork");
     const toggleTestnetSwitch = toggleTestnetButton.locator(
         "label[data-testid='toggleTestNetwork-switch'] > input[aria-label='Toggle']",
@@ -36,54 +34,32 @@ export async function switchNetwork({ page, ...args }: SwitchNetworkParams) {
 
     if (args.mode === "on" && args.chain === "Solana") {
         const { network } = args;
-        const solanaTestnetButton = developerSettingsMenu.locator(
-            "button:has-text('Solana'):not([data-testid^='fungible-token-row'])",
-        );
-        await solanaTestnetButton.click();
-
         const networkButton = page.locator(`button:has-text("${network}")`);
         await networkButton.click();
-
-        await expect(solanaTestnetButton.last()).toContainText(network);
     }
 
     if (args.mode === "on" && args.chain === "Ethereum") {
         const { network } = args;
-        const ethereumTestnetButton = developerSettingsMenu.locator(
-            "button:has-text('Ethereum'):not([data-testid^='fungible-token-row'])",
-        );
-        const isEthereumButtonVisible = await ethereumTestnetButton.isVisible().catch(() => false);
+        const evmHeader = page.getByText("EVM", { exact: true });
+        const isEvmHeaderVisible = await evmHeader.isVisible().catch(() => false);
 
-        if (!isEthereumButtonVisible) {
+        if (!isEvmHeaderVisible) {
             throw new Error(
                 [
-                    "Ethereum testnet option is not available. Please ensure Ethereum is enabled in optional chains.",
-                    "\n To enable Ethereum, use the 'toggleOptionalChain'",
-                    "\n For example: toggleOptionalChain({ page: page, toggleMode: 'on', supportedChains: ['Ethereum'] })",
-                    "\n Note: To persist this change, you should enable Ethereum at after the onboarding process in your setup file.",
-                ].join(" "),
+                    "EVM testnet options are not available. Please ensure Ethereum is enabled in optional chains.",
+                    "To enable Ethereum, call the 'toggleOptionalChain' action before switching the network.",
+                    "toggleOptionalChain({ page: page, toggleMode: 'on', supportedChains: ['Ethereum'] })",
+                    "Tip: For persistence, enable Ethereum in your setup file after the onboarding step completes.",
+                ].join("\n"),
             );
         }
 
-        await ethereumTestnetButton.click();
         const networkButton = page.locator(`button:has-text("${network}")`);
         await networkButton.click();
-        await expect(ethereumTestnetButton).toContainText(network);
     }
 
     const headerBackButton = page.getByTestId("header--back");
     await headerBackButton.click();
-
-    // This is a hack to ensure that the "headerBackButton" is clicked.
-    // In slowMo mode, we wouldn't need this. In normal mode, there is a race condition
-    // happening that prevents the "headerBackButton" from being clicked.
-    let isHeaderBackButtonVisible = await headerBackButton.isVisible().catch(() => false);
-    while (isHeaderBackButtonVisible) {
-        isHeaderBackButtonVisible = await headerBackButton.isVisible().catch(() => false);
-        if (!isHeaderBackButtonVisible) break;
-        await headerBackButton.click();
-        await sleep(300);
-    }
 
     const settingsCloseButton = page.getByTestId(settingsSelectors.closeMenuButton);
     await settingsCloseButton.click();
