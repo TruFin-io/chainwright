@@ -11,7 +11,7 @@ export const SOLFLARE_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}solflare-wallet
 export const PETRA_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}petra-wallet-extension-v2.2.2.zip`;
 export const PHANTOM_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}phantom-wallet-extension-v26.3.0.zip`;
 export const METEOR_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}meteor-wallet-extension-v0.7.0.zip`;
-export const KEPLR_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}keplr-wallet-extension-v0.12.296.zip`;
+export const KEPLR_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}keplr-wallet-extension-v0.13.3.zip`;
 
 export const SUPPORTED_WALLETS: SupportedWalletsMap = {
     metamask: {

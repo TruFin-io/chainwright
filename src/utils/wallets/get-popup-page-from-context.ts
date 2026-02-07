@@ -38,5 +38,5 @@ async function waitForStablePage(page: Page, locator: string) {
     await page.waitForLoadState("domcontentloaded", { timeout: TIMEOUT });
 
     const domContent = page.locator(locator);
-    await domContent.waitFor({ state: "visible", timeout: TIMEOUT });
+    await domContent.waitFor({ state: "attached", timeout: TIMEOUT });
 }
