@@ -1,52 +1,61 @@
-import type { Locator, Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 import z from "zod";
-import { menuSelectors } from "../selectors/homepage-selectors.phantom";
+import { menuSelectors, settingsSelectors } from "../selectors/homepage-selectors.phantom";
 import type { GetAccountAddress } from "../types";
 
 type GetAccountAddressArgs = GetAccountAddress & { page: Page };
+
+const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export async function getAccountAddress({ page, accountName, chain }: GetAccountAddressArgs) {
     const parsedAccountName = z.string().min(1, "Account name cannot be an empty string").parse(accountName);
     const openMenuButton = page.getByTestId(menuSelectors.openMenuButton);
     await openMenuButton.click();
 
-    let accountListButton: Locator | null = null;
-    const accountButton = await page
-        .locator(`div[data-testid='account-menu'] div[data-testid='tooltip_interactive-wrapper']`)
-        .all();
+    const manageAccountsButton = page.getByTestId(menuSelectors.manageAccountsButton);
+    await manageAccountsButton.click();
 
-    for (const account of accountButton) {
-        const textContent = await account.textContent();
-        if (textContent?.includes(parsedAccountName)) {
-            accountListButton = account;
-            break;
-        }
+    const accountProfileToSelect = page.getByTestId(`manage-accounts-sortable-${parsedAccountName}`);
+    await accountProfileToSelect.click();
+
+    const accountAddressesButton = page.getByRole("button", { name: /Account Address(?:es)?/i });
+    const numberOfAddress = accountAddressesButton.locator("div[data-name='row.pair'] > div").last();
+    const _numberOfAddress = await numberOfAddress.textContent();
+
+    /**
+     * If there is only one address associated with the account, we can click directly on the address to copy it.
+     * If there are multiple addresses, we need to open the account details page and click on the copy button for the specific chain address.
+     */
+    if (_numberOfAddress && Number(_numberOfAddress) === 1) {
+        await accountAddressesButton.locator("> div > div").last().click();
+
+        const headerBackButton = page.getByTestId("header--back");
+        await headerBackButton.click();
+
+        const settingsCloseButton = page.getByTestId(settingsSelectors.closeMenuButton);
+        await settingsCloseButton.waitFor({ state: "visible", timeout: 15_000 });
+        await settingsCloseButton.click();
+    } else {
+        await accountAddressesButton.click();
+        const re = new RegExp(`${escapeRegExp(chain.network)}`, "i");
+        const chainAddressToCopyButton = page.getByRole("button", { name: re });
+        const contentContainer = chainAddressToCopyButton.locator("> div").last();
+        const actionsContainer = contentContainer.locator("> div").last();
+        const copyButton = actionsContainer.locator("div > button").last();
+        await copyButton.click();
+
+        const closeButton = page.getByRole("button", { name: "Close", exact: true });
+        await closeButton.click();
+
+        const headerBackButton = page.getByTestId("header--back");
+        await headerBackButton.waitFor({ state: "visible", timeout: 15_000 });
+        await headerBackButton.click();
+
+        const settingsCloseButton = page.getByTestId(settingsSelectors.closeMenuButton);
+        await settingsCloseButton.waitFor({ state: "visible", timeout: 15_000 });
+        await settingsCloseButton.click();
     }
 
-    if (!accountListButton) {
-        throw new Error(`Account with name "${parsedAccountName}" not found in the account list.`);
-    }
-
-    await accountListButton.hover();
-
-    // Get the tooltip menu that cointains the address.
-    const tooltipMenu = accountListButton.locator(`div:has-text('${parsedAccountName}')`).nth(-2);
-    const addressElement = tooltipMenu.locator(`div > p:has-text('${chain.network}')`);
-
-    const isAddressElementVisible = await addressElement.isVisible().catch(() => false);
-    if (!isAddressElementVisible) {
-        throw Error(
-            [
-                `Address for chain "${chain}" not found for account "${parsedAccountName}".`,
-                `To get the account address for ${chain}, please import the account for the ${chain} network.`,
-            ].join(" "),
-        );
-    }
-
-    await addressElement.click();
-    const closeButton = page.locator("button[aria-label='Close']");
-    await closeButton.click();
     const copiedAddress = await page.evaluate(() => navigator.clipboard.readText());
-
     return copiedAddress;
 }

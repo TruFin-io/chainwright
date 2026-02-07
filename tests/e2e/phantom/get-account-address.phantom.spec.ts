@@ -23,10 +23,10 @@ test.describe("Phantom Get Account Address Test", () => {
     });
 
     test("Should get the current account address for Solana", async ({ phantom }) => {
-        const ACCOUNT_ADDRESS = "3EZLUndpNGpXxGNo1Fa44K6L7UVnXBXWk5kCuf2v5Wtw";
+        const ACCOUNT_ADDRESS = "FEr8gxXZXYRBp4XvBXJ5UBAo8xbhrRDB1MkAFYbaCuT5";
 
         const accountAddress = await phantom.getAccountAddress({
-            accountName: "Zebra",
+            accountName: "Foxtrot",
             chain: {
                 mode: "testnet",
                 network: "Devnet",

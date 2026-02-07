@@ -131,9 +131,6 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
         const loadingButton = continueButton.locator("> div > svg");
         await loadingButton.waitFor({ state: "detached", timeout: 30_000 });
 
-        await continueButton.waitFor({ state: "attached", timeout: 30_000 });
-        await continueButton.click();
-
         const getStartedButton = page.locator(onboardingSelectors.getStartedButton).last();
         await getStartedButton.click();
     }
@@ -166,7 +163,5 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
         await switchNetwork({ page: newPage, ...args.toggleNetworkMode });
     }
 
-    // // wait for the wallet profile to finish saving
-    await sleep(2_000);
     console.info(picocolors.greenBright("✨ Phantom onboarding completed successfully"));
 }
