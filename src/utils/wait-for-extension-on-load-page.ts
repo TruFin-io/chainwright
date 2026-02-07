@@ -1,5 +1,6 @@
 import type { BrowserContext, Page } from "@playwright/test";
 import picocolors from "picocolors";
+import type { SupportedWallets } from "@/types";
 import { sleep } from "./sleep";
 
 // Increase max retries for CI environments
@@ -30,7 +31,10 @@ async function findExtensionPage(context: BrowserContext) {
 /**
  * Waits for the extension page to load and ensures it's not blank or has errors
  */
-export async function waitForExtensionOnLoadPage(context: BrowserContext, walletName?: string): Promise<Page> {
+export async function waitForExtensionOnLoadPage(
+    context: BrowserContext,
+    walletName?: SupportedWallets,
+): Promise<Page> {
     let retries = 0;
     let _extensionPage: Page | null = null;
 

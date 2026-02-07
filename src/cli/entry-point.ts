@@ -122,6 +122,7 @@ export async function clientEntry() {
                             pc.redBright(`❌  Failed to setup cache for ${walletName}: ${(error as Error).message}`),
                         );
                     }
+                    process.exit(1);
                 }
             }
         });
