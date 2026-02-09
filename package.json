@@ -37,8 +37,5 @@
         "glob": "^13.0.1",
         "picocolors": "^1.1.1",
         "prool": "^0.2.2"
-    },
-    "overrides": {
-        "@rollup/rollup-win32-arm64-msvc": "^4.52.5"
     }
 }
