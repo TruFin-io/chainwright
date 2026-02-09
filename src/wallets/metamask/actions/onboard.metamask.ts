@@ -28,6 +28,7 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
     const PASSWORD = await getWalletPasswordFromCache("metamask");
     const walletProfile = new MetamaskProfile();
 
+    const loadingSpinner = page.locator("img[class='loading-spinner']");
     const createWalletButton = page.getByTestId(onboardSelectors.createWalletButton);
     const importWalletButton = page.getByTestId(onboardSelectors.importWalletButton);
     const createNewPasswordInput = page.getByTestId(onboardSelectors.createNewPasswordInput);
@@ -36,6 +37,8 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
     const createPasswordButton = page.getByTestId(onboardSelectors.createPasswordButton);
     const metamaskMetricsIAgreeButton = page.getByTestId(onboardSelectors.metamaskMetricsIAgreeButton);
     const onboardingDoneButton = page.getByTestId(onboardSelectors.onboardingDoneButton);
+
+    await loadingSpinner.waitFor({ state: "detached", timeout: 30_000 });
 
     if (args.mode === "create") {
         const useSecretRecoveryPhraseButton = page.getByTestId(onboardSelectors.useSecretRecoveryPhraseButton);
@@ -125,6 +128,7 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
     }
 
     await page.goto(await walletProfile.indexUrl());
+    await loadingSpinner.waitFor({ state: "detached", timeout: 30_000 });
 
     await expect(page.getByTestId(homepageSelectors.buyButton)).toBeVisible();
     await expect(page.getByTestId(homepageSelectors.swapButton)).toBeVisible();
@@ -136,7 +140,7 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
         await switchAccount({ page, accountName: mainAccountName });
     }
 
-    await sleep(3_000);
+    await sleep(1_000);
 
     console.info(picocolors.greenBright("✨ MetaMask onboarding completed successfully"));
 }
