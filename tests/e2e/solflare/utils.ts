@@ -2,6 +2,10 @@ import { expect, type Page } from "@playwright/test";
 import type { Solflare } from "@/wallets/solflare";
 
 export async function connectWallet(dappPage: Page, solflare: Solflare) {
+    // Wait for the app to load and be ready for interaction
+    const submitButton = dappPage.getByRole("button", { name: "Submit", exact: true });
+    await submitButton.waitFor({ state: "visible", timeout: 30_000 });
+
     const connectWalletButton = dappPage.getByTestId("connect-wallet-button");
     const isConnectWalletButtonVisible = await connectWalletButton.isVisible().catch(() => false);
 

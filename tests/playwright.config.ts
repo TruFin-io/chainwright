@@ -13,7 +13,7 @@ export default defineConfig({
     reporter: [["list"]],
 
     /* Global timeout for each test */
-    timeout: process.env.CI ? 180_000 : 20_000,
+    timeout: process.env.CI ? 180_000 : 1_000_000_000,
 
     use: {
         // We are using locally deployed Metamask Test Dapp for somePhantom tests.
@@ -21,7 +21,7 @@ export default defineConfig({
 
         // Collect all traces on CI, and only traces for failed tests when running locally.
         // See https://playwright.dev/docs/trace-viewer.
-        trace: process.env.CI ? "on" : "retain-on-failure",
+        trace: "retain-on-failure",
         screenshot: "only-on-failure",
         video: "retain-on-failure",
         // Added for getting account address

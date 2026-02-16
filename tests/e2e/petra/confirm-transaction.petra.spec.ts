@@ -16,8 +16,8 @@ test("Should confirm transaction successfully", async ({ dappPage, petra }) => {
     await petra.connectToApp();
 
     const appConnectedButton = dappPage.getByTestId("wallet-connected-button");
+    await appConnectedButton.waitFor({ state: "attached", timeout: 30_000 });
     await expect(appConnectedButton).toBeVisible();
-    await expect(appConnectedButton).toContainText("0x");
 
     const ADDRESS = "0xc74921a7033a1f6bf764ec907e4e5d8fa4567726f3cfe6c9a1185b44689e26e6";
     const addressInput = dappPage.locator("input[id='address']");

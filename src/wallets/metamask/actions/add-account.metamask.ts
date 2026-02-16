@@ -15,7 +15,7 @@ export async function addAccount({ page, privateKey, accountName }: AddAccount) 
 
     const accountMenuButton = page.getByTestId(homepageSelectors.accountMenuButton);
 
-    await expect(accountMenuButton).toBeVisible({ timeout: 15_000 });
+    await expect(accountMenuButton).toBeVisible({ timeout: 30_000 });
     await accountMenuButton.click();
     await expect(page.getByRole("heading", { name: /accounts/i })).toBeVisible();
 

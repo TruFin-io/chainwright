@@ -16,6 +16,7 @@ test("Should connect wallet successfully", async ({ dappPage, petra }) => {
     await petra.connectToApp();
 
     const appConnectedButton = dappPage.getByTestId("wallet-connected-button");
+    await appConnectedButton.waitFor({ state: "attached", timeout: 30_000 });
     await expect(appConnectedButton).toBeVisible();
     await expect(appConnectedButton).toContainText("0x");
 

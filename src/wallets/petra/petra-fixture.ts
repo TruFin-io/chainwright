@@ -43,7 +43,7 @@ export const petraFixture = (slowMo: number = 0, profileName?: string) => {
                 throw new Error(`❌ Cache for Petra wallet data not found. Create it first`);
             }
 
-            await fs.promises.cp(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
+            fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
             const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];
             if (process.env.HEADLESS) {

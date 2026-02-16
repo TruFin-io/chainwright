@@ -12,7 +12,7 @@ export async function getPageFromContextPhantom(context: BrowserContext) {
      * "Could not establish connection. Receiving end does not exist."
      * Giving it 1s to finish its own internal boot sequence makes the popup stable.
      */
-    await sleep(1_000);
+    await sleep(2_500);
 
     const promptPage = await context.newPage();
 

@@ -43,7 +43,7 @@ export const phantomFixture = (slowMo: number = 0, profileName?: string) => {
                 throw new Error(`❌ Cache for Phantom wallet data not found. Create it first`);
             }
 
-            await fs.promises.cp(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
+            fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
             if (process.env.HEADLESS) {
                 if (slowMo > 0) {
@@ -69,7 +69,7 @@ export const phantomFixture = (slowMo: number = 0, profileName?: string) => {
 
             for (const page of walletPageContext.pages()) {
                 const url = page.url();
-                if (url.includes("about:blank") || url.includes(wallet.onboardingPath)) {
+                if (url.includes("about:blank")) {
                     await page.close();
                 }
             }

@@ -1,5 +1,4 @@
-import type { BrowserContext, Page } from "@playwright/test";
-import { sleep } from "../sleep";
+import { type BrowserContext, expect, type Page } from "@playwright/test";
 
 type GetPopupPageFromContextArgs = {
     context: BrowserContext;
@@ -8,17 +7,22 @@ type GetPopupPageFromContextArgs = {
 };
 
 export async function getPopupPageFromContext({ context, path, locator }: GetPopupPageFromContextArgs) {
-    await sleep(500);
-    const isPopupPage = (page: Page) => page.url().includes(path);
-
-    // Check if prompt page is already open.
-    let popupPage = context.pages().find(isPopupPage);
+    let popupPage: Page | undefined;
+    await expect
+        .poll(
+            async () => {
+                popupPage = context.pages().find((page) => page.url().match(path));
+                return !!popupPage;
+            },
+            {
+                intervals: [1_000, 3_000, 5_000, 7_000, 10_000, 12_000, 15_000],
+                timeout: 30_000,
+            },
+        )
+        .toBe(true);
 
     if (!popupPage) {
-        popupPage = await context.waitForEvent("page", {
-            predicate: isPopupPage,
-            timeout: 50_000,
-        });
+        throw new Error(`Popup page with path ${path} not found in context.`);
     }
 
     await waitForStablePage(popupPage, locator);
@@ -33,7 +37,7 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
 }
 
 async function waitForStablePage(page: Page, locator: string) {
-    const TIMEOUT = 15_000;
+    const TIMEOUT = 40_000;
     await page.waitForLoadState("load", { timeout: TIMEOUT });
     await page.waitForLoadState("domcontentloaded", { timeout: TIMEOUT });
 
