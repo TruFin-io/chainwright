@@ -1,6 +1,6 @@
 import { testWithMeteorWorkerScope } from "@/tests/fixture/test-with-meteor-fixture";
 import { fillForm } from "@/tests/utils/transaction-form";
-import { connectWallet } from "./utils";
+import { connectWallet } from "../utils";
 
 const test = testWithMeteorWorkerScope;
 

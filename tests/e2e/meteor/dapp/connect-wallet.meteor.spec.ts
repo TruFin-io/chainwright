@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import { testDappFixture } from "@/tests/fixture/test-with-meteor-fixture";
-import { connectWallet } from "./utils";
+import { connectWallet } from "../utils";
 
 const test = testDappFixture;
 

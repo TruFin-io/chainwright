@@ -1,6 +1,6 @@
 import { testDappFixture } from "@/tests/fixture/test-with-solflare-fixture";
 import { fillForm } from "@/tests/utils/transaction-form";
-import { connectWallet } from "./utils";
+import { connectWallet } from "../utils";
 
 const test = testDappFixture;
 

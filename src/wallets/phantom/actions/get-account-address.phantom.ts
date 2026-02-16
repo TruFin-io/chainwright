@@ -19,6 +19,7 @@ export async function getAccountAddress({ page, accountName, chain }: GetAccount
     await accountProfileToSelect.click();
 
     const accountAddressesButton = page.getByRole("button", { name: /Account Address(?:es)?/i });
+    await accountAddressesButton.waitFor({ state: "visible", timeout: 20_000 });
     const numberOfAddress = accountAddressesButton.locator("div[data-name='row.pair'] > div").last();
     const _numberOfAddress = await numberOfAddress.textContent();
 

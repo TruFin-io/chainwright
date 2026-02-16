@@ -26,7 +26,7 @@ test.describe("Phantom Get Account Address Test", () => {
         const ACCOUNT_ADDRESS = "FEr8gxXZXYRBp4XvBXJ5UBAo8xbhrRDB1MkAFYbaCuT5";
 
         const accountAddress = await phantom.getAccountAddress({
-            accountName: "Foxtrot",
+            accountName: "Default",
             chain: {
                 mode: "testnet",
                 network: "Devnet",
