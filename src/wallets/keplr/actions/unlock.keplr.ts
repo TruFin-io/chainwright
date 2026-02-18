@@ -9,4 +9,7 @@ export async function unlock(page: Page) {
 
     const unlockButton = page.locator(unlockWalletSelectors.unlockButton);
     await unlockButton.click();
+
+    const depositButton = page.locator("div:has-text('Deposit')").last();
+    await depositButton.waitFor({ state: "visible", timeout: 30_000 });
 }

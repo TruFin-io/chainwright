@@ -19,5 +19,8 @@ export async function switchAccount(page: Page, account: string) {
         );
     }
 
+    const popupHeader = page.locator("div:has-text('Select Wallet')").last();
     await walletSelector.click();
+
+    await popupHeader.waitFor({ state: "detached", timeout: 30_000 });
 }

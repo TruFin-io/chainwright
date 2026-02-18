@@ -8,4 +8,7 @@ export async function lockWallet(page: Page) {
     const lockWalletButton = page.locator(homepageSelectors.lockWalletButton).nth(-1);
 
     await lockWalletButton.click();
+
+    const welcomeBackText = page.getByText("Welcome Back");
+    await welcomeBackText.waitFor({ state: "visible", timeout: 30_000 });
 }
