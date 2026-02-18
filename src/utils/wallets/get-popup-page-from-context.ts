@@ -15,7 +15,6 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
                 return !!popupPage;
             },
             {
-                intervals: [1_000, 3_000, 5_000, 7_000, 10_000, 12_000, 15_000],
                 timeout: 30_000,
             },
         )
@@ -41,6 +40,6 @@ async function waitForStablePage(page: Page, locator: string) {
     await page.waitForLoadState("load", { timeout: TIMEOUT });
     await page.waitForLoadState("domcontentloaded", { timeout: TIMEOUT });
 
-    const domContent = page.locator(locator);
+    const domContent = page.locator(locator).first();
     await domContent.waitFor({ state: "attached", timeout: TIMEOUT });
 }
