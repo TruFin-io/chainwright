@@ -36,10 +36,13 @@ export const meteorWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worke
                 const meteor = new Meteor(walletPageFromContext);
                 await meteor.unlock();
                 await use({ wallet: meteor, walletPage: walletPageFromContext, context });
-
                 await context.close();
-                const error = await removeTempContextDir(contextPath);
-                if (error) console.error(error);
+
+                try {
+                    await removeTempContextDir(contextPath);
+                } catch (error) {
+                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
+                }
             },
             { scope: "worker" },
         ],

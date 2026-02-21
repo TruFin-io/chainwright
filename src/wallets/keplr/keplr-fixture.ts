@@ -26,12 +26,6 @@ export const keplrFixture = (slowMo: number = 0, profileName?: string) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);
 
             await use(tempWalletDataDir);
-
-            const error = await removeTempContextDir(tempWalletDataDir);
-
-            if (error) {
-                console.error(error);
-            }
         },
         context: async ({ context: currentContext, contextPath: tempWalletDataDir }, use) => {
             const wallet = new KeplrProfile();
@@ -44,7 +38,7 @@ export const keplrFixture = (slowMo: number = 0, profileName?: string) => {
                 throw new Error(`❌ Cache for Keplr wallet data not found. Create it first`);
             }
 
-            await fs.promises.cp(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
+            fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
             const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];
             if (process.env.HEADLESS) {
@@ -57,7 +51,7 @@ export const keplrFixture = (slowMo: number = 0, profileName?: string) => {
 
             const walletPageContext = await chromium.launchPersistentContext(tempWalletDataDir, {
                 headless: false,
-                args: [`--disable-extensions-except=${extensionPath}`],
+                args: browserArgs,
                 slowMo: process.env.HEADLESS ? 0 : slowMo,
             });
 
@@ -84,6 +78,12 @@ export const keplrFixture = (slowMo: number = 0, profileName?: string) => {
             await unlock(_keplrPage);
             await use(walletPageContext);
             await walletPageContext.close();
+
+            try {
+                await removeTempContextDir(tempWalletDataDir);
+            } catch (error) {
+                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
+            }
         },
         keplrPage: async ({ context: _ }, use) => {
             await use(_keplrPage);

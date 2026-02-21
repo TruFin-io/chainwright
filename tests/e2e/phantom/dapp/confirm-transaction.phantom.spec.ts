@@ -6,6 +6,9 @@ const test = testWithPhantomWorkerScope;
 
 test.describe("Confirm transaction E2E tests", () => {
     test("Should confirm transaction successfully", async ({ dappPage, phantom }) => {
+        const navigation = dappPage.getByRole("navigation");
+        await navigation.waitFor({ state: "attached", timeout: 15_000 });
+
         await connectWallet(dappPage, phantom);
         await fillForm({
             appPage: dappPage,

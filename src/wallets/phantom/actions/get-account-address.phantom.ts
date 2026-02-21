@@ -57,6 +57,6 @@ export async function getAccountAddress({ page, accountName, chain }: GetAccount
         await settingsCloseButton.click();
     }
 
-    const copiedAddress = await page.evaluate(() => navigator.clipboard.readText());
+    const copiedAddress = await page.evaluate(async () => await navigator.clipboard.readText());
     return copiedAddress;
 }

@@ -36,12 +36,14 @@ export const petraWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worker
 
                 const petra = new Petra(walletPageFromContext);
                 await petra.unlock();
-
                 await use({ wallet: petra, walletPage: walletPageFromContext, context });
-
                 await context.close();
-                const error = await removeTempContextDir(contextPath);
-                if (error) console.error(error);
+
+                try {
+                    await removeTempContextDir(contextPath);
+                } catch (error) {
+                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
+                }
             },
             { scope: "worker" },
         ],

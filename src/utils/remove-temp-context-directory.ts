@@ -1,5 +1,5 @@
-import fs from "node:fs";
+import fs from "node:fs/promises";
 
 export async function removeTempContextDir(dir: string) {
-    return fs.promises.rm(dir, { recursive: true, force: true, maxRetries: 5 }).catch((error) => error);
+    await fs.rm(dir, { maxRetries: 20, retryDelay: 200, recursive: true, force: true });
 }

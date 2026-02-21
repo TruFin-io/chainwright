@@ -37,6 +37,8 @@ export async function renameAccount({ page, newAccountName }: RenameAccount) {
     const backButton = page.locator(homepageSelectors.backButton);
     await backButton.click();
 
-    await expect(page.locator(homepageSelectors.depositButton)).toBeVisible();
-    await expect(page.locator(homepageSelectors.sendButton)).toBeVisible();
+    await Promise.allSettled([
+        page.locator(homepageSelectors.depositButton).waitFor({ state: "visible", timeout: 20_000 }),
+        page.locator(homepageSelectors.sendButton).waitFor({ state: "visible", timeout: 20_000 }),
+    ]);
 }

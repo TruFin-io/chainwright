@@ -26,11 +26,6 @@ export const phantomFixture = (slowMo: number = 0, profileName?: string) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);
 
             await use(tempWalletDataDir);
-            const error = await removeTempContextDir(tempWalletDataDir);
-
-            if (error) {
-                console.error(error);
-            }
         },
         context: async ({ context: currentContext, contextPath: tempWalletDataDir }, use) => {
             const wallet = new PhantomProfile();
@@ -78,6 +73,12 @@ export const phantomFixture = (slowMo: number = 0, profileName?: string) => {
             await unlock(_phantomPage);
             await use(walletPageContext);
             await walletPageContext.close();
+
+            try {
+                await removeTempContextDir(tempWalletDataDir);
+            } catch (error) {
+                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
+            }
         },
         phantomPage: async ({ context: _ }, use) => {
             await use(_phantomPage);

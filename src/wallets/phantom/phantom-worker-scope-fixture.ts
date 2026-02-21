@@ -36,12 +36,14 @@ export const phantomWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Work
 
                 const phantom = new Phantom(walletPageFromContext);
                 await phantom.unlock();
-
                 await use({ wallet: phantom, walletPage: walletPageFromContext, context });
-
                 await context.close();
-                const error = await removeTempContextDir(contextPath);
-                if (error) console.error(error);
+
+                try {
+                    await removeTempContextDir(contextPath);
+                } catch (error) {
+                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
+                }
             },
             { scope: "worker" },
         ],

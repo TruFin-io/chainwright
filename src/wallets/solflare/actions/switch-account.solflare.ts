@@ -8,7 +8,7 @@ export async function switchAccount(page: Page, accountName: string) {
         .getByTestId("list-item-m-title")
         .filter({ hasText: accountName })
         .locator("xpath=../..");
-    const isAccountElementVisible = accountElement.isVisible().catch(() => false);
+    const isAccountElementVisible = await accountElement.isVisible().catch(() => false);
 
     if (!isAccountElementVisible) {
         throw new Error(

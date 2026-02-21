@@ -25,8 +25,12 @@ export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: Wor
 
                 await use({ wallet: metamask, walletPage: walletPageFromContext, context });
                 await context.close();
-                const error = await removeTempContextDir(contextPath);
-                if (error) console.error(error);
+
+                try {
+                    await removeTempContextDir(contextPath);
+                } catch (error) {
+                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
+                }
             },
             { scope: "worker" },
         ],

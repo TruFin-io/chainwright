@@ -24,11 +24,6 @@ export const meteorFixture = (slowMo: number = 0, profileName?: string) => {
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);
             await use(tempWalletDataDir);
-            const error = await removeTempContextDir(tempWalletDataDir);
-
-            if (error) {
-                console.error(error);
-            }
         },
         context: async ({ context: currentContext, contextPath: tempWalletDataDir }, use) => {
             const wallet = new MeteorProfile();
@@ -41,7 +36,7 @@ export const meteorFixture = (slowMo: number = 0, profileName?: string) => {
                 throw new Error(`❌ Cache for Meteor wallet data not found. Create it first`);
             }
 
-            await fs.promises.cp(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
+            fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
             if (process.env.HEADLESS) {
                 if (slowMo > 0) {
@@ -76,6 +71,11 @@ export const meteorFixture = (slowMo: number = 0, profileName?: string) => {
             await unlock(_meteorPage);
             await use(walletPageContext);
             await walletPageContext.close();
+            try {
+                await removeTempContextDir(tempWalletDataDir);
+            } catch (error) {
+                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
+            }
         },
         meteorPage: async ({ context: _ }, use) => {
             await use(_meteorPage);

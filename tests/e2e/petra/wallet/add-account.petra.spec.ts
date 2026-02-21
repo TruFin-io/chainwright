@@ -36,7 +36,6 @@ test.describe("E2E For Adding account in Petra wallet", () => {
         const menuButtonTextContent = await accountMenuButton.textContent();
         const splitValue = menuButtonTextContent?.split("Switch wallet")[1]?.split("0x")[0];
 
-        // biome-ignore lint/style/noNonNullAssertion: nothing
-        expect(accountName?.includes(splitValue!)).toBeTruthy();
+        expect(splitValue?.includes(accountName)).toBeTruthy();
     });
 });

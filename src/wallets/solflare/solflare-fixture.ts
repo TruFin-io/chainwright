@@ -25,14 +25,7 @@ export const solflareFixture = (slowMo: number = 0, profileName?: string) => {
     return base.extend<SolflareFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);
-
             await use(tempWalletDataDir);
-
-            const error = await removeTempContextDir(tempWalletDataDir);
-
-            if (error) {
-                console.error(error);
-            }
         },
         context: async ({ context: currentContext, contextPath: tempWalletDataDir }, use) => {
             const wallet = new SolflareProfile();
@@ -87,8 +80,15 @@ export const solflareFixture = (slowMo: number = 0, profileName?: string) => {
             }
 
             await unlock(_solflarePage);
+
             await use(walletPageContext);
             await walletPageContext.close();
+
+            try {
+                await removeTempContextDir(tempWalletDataDir);
+            } catch (error) {
+                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
+            }
         },
         solflarePage: async ({ context: _ }, use) => {
             await use(_solflarePage);

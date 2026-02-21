@@ -24,6 +24,9 @@ export default defineConfig({
 
         // Added for getting account address
         permissions: ["clipboard-read"],
+        trace: "off",
+        video: "off",
+        screenshot: "off",
     },
 
     /* Configure projects for major browsers */

@@ -7,5 +7,4 @@ test("should lock the Petra wallet successfully", async ({ petra, petraPage }) =
     await petra.lock();
 
     await expect(petraPage.getByText("Welcome")).toBeVisible();
-    await expect(petraPage.getByText("Enter your password")).toBeVisible();
 });

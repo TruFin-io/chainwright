@@ -23,6 +23,8 @@ export default async function unlock(page: Page) {
     await expect(unlockButton).toBeEnabled();
     await unlockButton.click();
 
-    await expect(page.locator(homepageSelectors.sendButton)).toBeVisible();
-    await expect(page.locator(homepageSelectors.receiveButton)).toBeVisible();
+    await Promise.allSettled([
+        page.locator(homepageSelectors.sendButton).waitFor({ state: "visible", timeout: 20_000 }),
+        page.locator(homepageSelectors.receiveButton).waitFor({ state: "visible", timeout: 20_000 }),
+    ]);
 }

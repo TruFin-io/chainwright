@@ -19,14 +19,7 @@ export const metamaskFixture = (slowMo: number = 0, profileName?: string) => {
     return base.extend<MetamaskFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);
-
             await use(tempWalletDataDir);
-
-            const error = await removeTempContextDir(tempWalletDataDir);
-
-            if (error) {
-                console.error(error);
-            }
         },
         context: async ({ context: currentContext, contextPath: tempWalletDataDir }, use) => {
             const wallet = new MetamaskProfile();
@@ -39,7 +32,7 @@ export const metamaskFixture = (slowMo: number = 0, profileName?: string) => {
                 throw new Error(`❌ Cache for MetaMask wallet data not found. Create it first`);
             }
 
-            await fs.promises.cp(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
+            fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
             const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];
             if (process.env.HEADLESS) {
@@ -75,6 +68,12 @@ export const metamaskFixture = (slowMo: number = 0, profileName?: string) => {
             await unlock(_metamaskPage);
             await use(walletPageContext);
             await walletPageContext.close();
+
+            try {
+                await removeTempContextDir(tempWalletDataDir);
+            } catch (error) {
+                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
+            }
         },
         metamaskPage: async ({ context: _ }, use) => {
             await use(_metamaskPage);

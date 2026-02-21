@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 import { openSettings } from "./open-settings.petra";
 
 export async function lockWallet(page: Page) {
@@ -8,5 +8,5 @@ export async function lockWallet(page: Page) {
     await lockWalletButton.click();
 
     const unlockPageTitle = page.getByRole("heading", { name: /welcome/i });
-    await expect(unlockPageTitle).toBeVisible();
+    await unlockPageTitle.waitFor({ state: "visible", timeout: 20_000 });
 }

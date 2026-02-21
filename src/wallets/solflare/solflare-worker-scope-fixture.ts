@@ -32,8 +32,12 @@ export const solflareWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Wor
                 await use({ wallet: solflare, walletPage: walletPageFromContext, context });
 
                 await context.close();
-                const error = await removeTempContextDir(contextPath);
-                if (error) console.error(error);
+
+                try {
+                    await removeTempContextDir(contextPath);
+                } catch (error) {
+                    console.error(`Failed to remove temporary context directory at ${contextPath}:`, error);
+                }
             },
             { scope: "worker" },
         ],
