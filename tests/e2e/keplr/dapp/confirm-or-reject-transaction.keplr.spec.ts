@@ -5,6 +5,9 @@ const test = testWithKeplrWorkerScope;
 
 test.describe("Confirm and reject transaction E2E tests", () => {
     test("Should confirm transaction successfully", async ({ dappPage, keplr }) => {
+        const navigation = dappPage.getByRole("navigation");
+        await navigation.waitFor({ state: "attached", timeout: 15_000 });
+
         const connectWalletButton = dappPage.getByTestId("connect-wallet-button");
         await connectWalletButton.click();
         await keplr.connectToApp();

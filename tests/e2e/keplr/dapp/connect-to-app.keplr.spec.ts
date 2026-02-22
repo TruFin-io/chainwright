@@ -4,6 +4,9 @@ import { testDappFixture } from "@/tests/fixture/test-with-keplr-fixture";
 const test = testDappFixture;
 
 test("Should connect wallet successfully", async ({ dappPage, keplr }) => {
+    const navigation = dappPage.getByRole("navigation");
+    await navigation.waitFor({ state: "attached", timeout: 15_000 });
+
     const connectWalletButton = dappPage.getByTestId("connect-wallet-button");
     await connectWalletButton.click();
     await keplr.connectToApp();

@@ -140,7 +140,6 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
         await switchAccount({ page, accountName: mainAccountName });
     }
 
-    await sleep(1_000);
-
+    await sleep(3_000);
     console.info(picocolors.greenBright("✨ MetaMask onboarding completed successfully"));
 }

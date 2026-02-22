@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import picocolors from "picocolors";
+import { sleep } from "@/utils/sleep";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { KeplrProfile } from "../keplr-profile";
 import { homepageSelectors } from "../selectors/homepage-selectors.keplr";
@@ -50,5 +51,6 @@ export default async function onboard({ page, onboard }: Onboard) {
         }
     }
 
+    await sleep(3_000);
     console.info(picocolors.greenBright("✨ Keplr onboarding completed successfully"));
 }

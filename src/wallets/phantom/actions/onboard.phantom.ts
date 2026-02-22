@@ -206,6 +206,6 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
         await switchNetwork({ page: newPage, ...args.toggleNetworkMode });
     }
 
-    await sleep(2_500);
+    await sleep(3_000);
     console.info(picocolors.greenBright("✨ Phantom onboarding completed successfully"));
 }

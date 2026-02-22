@@ -4,6 +4,9 @@ import { fillForm } from "@/tests/utils/transaction-form";
 const test = testDappFixture;
 
 test("Should reject transaction successfully", async ({ dappPage, keplr }) => {
+    const navigation = dappPage.getByRole("navigation");
+    await navigation.waitFor({ state: "attached", timeout: 15_000 });
+
     const connectWalletButton = dappPage.getByTestId("connect-wallet-button");
     await connectWalletButton.click();
     await keplr.connectToApp();

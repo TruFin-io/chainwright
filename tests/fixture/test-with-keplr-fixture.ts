@@ -5,7 +5,9 @@ import { keplrWorkerScopeFixture } from "@/wallets/keplr/keplr-worker-scope-fixt
 
 export const testWithKeplrFixture = keplrFixture();
 export const testWithKeplr = testWithChainwright(keplrFixture());
-export const testWithKeplrWorkerScope = keplrWorkerScopeFixture({ dappUrl: "http://localhost:3000/injective" });
+export const testWithKeplrWorkerScope = keplrWorkerScopeFixture({
+    dappUrl: "http://localhost:3000/injective",
+});
 
 type TestDappFixture = {
     dappPage: Page;

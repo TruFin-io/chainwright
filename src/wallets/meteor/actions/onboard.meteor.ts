@@ -133,7 +133,6 @@ export default async function onboard({ page, privateKey, network, accountName, 
         await switchAccount(page, accountName);
     }
 
-    await sleep(1_000);
-
+    await sleep(3_000);
     console.info(picocolors.greenBright("✨ Meteor onboarding completed successfully"));
 }
