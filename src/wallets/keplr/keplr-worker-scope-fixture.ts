@@ -1,6 +1,6 @@
 import { test as base, type Page } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import { type WorkerScopeFixture, workerScopeContext } from "../utils/worker-scope-context";
 import { Keplr } from "./keplr";
 import { KeplrProfile } from "./keplr-profile";
@@ -38,13 +38,7 @@ export const keplrWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worker
                 await keplr.unlock();
 
                 await use({ wallet: keplr, walletPage: walletPageFromContext, context });
-                await context.close();
-
-                try {
-                    await removeTempContextDir(contextPath);
-                } catch (error) {
-                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
-                }
+                await teardownContext(context, contextPath);
             },
             { scope: "worker" },
         ],

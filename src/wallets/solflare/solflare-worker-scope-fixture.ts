@@ -1,6 +1,6 @@
 import { test as base, type Page } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import { Solflare } from "./solflare";
 import { autoCloseSolflareNotification } from "./utils";
 import { type WorkerScopeFixture, workerScopeContextSolana } from "./worker-scope-context.solflare";
@@ -30,14 +30,7 @@ export const solflareWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Wor
                 await solflare.unlock();
 
                 await use({ wallet: solflare, walletPage: walletPageFromContext, context });
-
-                await context.close();
-
-                try {
-                    await removeTempContextDir(contextPath);
-                } catch (error) {
-                    console.error(`Failed to remove temporary context directory at ${contextPath}:`, error);
-                }
+                await teardownContext(context, contextPath);
             },
             { scope: "worker" },
         ],

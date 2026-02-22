@@ -5,7 +5,7 @@ import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
 import persistLocalStorage from "@/utils/persist-local-storage";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
 import { unlock } from "./actions/unlock.keplr";
@@ -77,13 +77,7 @@ export const keplrFixture = (slowMo: number = 0, profileName?: string) => {
             await _keplrPage.bringToFront();
             await unlock(_keplrPage);
             await use(walletPageContext);
-            await walletPageContext.close();
-
-            try {
-                await removeTempContextDir(tempWalletDataDir);
-            } catch (error) {
-                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
-            }
+            await teardownContext(walletPageContext, tempWalletDataDir);
         },
         keplrPage: async ({ context: _ }, use) => {
             await use(_keplrPage);

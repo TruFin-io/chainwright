@@ -1,6 +1,6 @@
 import { test as base, type Page } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import { type WorkerScopeFixture, workerScopeContext } from "../utils/worker-scope-context";
 import { Petra } from "./petra";
 import { PetraProfile } from "./petra-profile";
@@ -37,13 +37,7 @@ export const petraWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worker
                 const petra = new Petra(walletPageFromContext);
                 await petra.unlock();
                 await use({ wallet: petra, walletPage: walletPageFromContext, context });
-                await context.close();
-
-                try {
-                    await removeTempContextDir(contextPath);
-                } catch (error) {
-                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
-                }
+                await teardownContext(context, contextPath);
             },
             { scope: "worker" },
         ],

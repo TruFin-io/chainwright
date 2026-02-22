@@ -1,6 +1,6 @@
 import { test as base, type Page } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Phantom } from "./phantom";
 import { autoClosePhantomNotification } from "./utils";
@@ -37,13 +37,7 @@ export const phantomWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Work
                 const phantom = new Phantom(walletPageFromContext);
                 await phantom.unlock();
                 await use({ wallet: phantom, walletPage: walletPageFromContext, context });
-                await context.close();
-
-                try {
-                    await removeTempContextDir(contextPath);
-                } catch (error) {
-                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
-                }
+                await teardownContext(context, contextPath);
             },
             { scope: "worker" },
         ],

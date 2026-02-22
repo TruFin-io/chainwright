@@ -1,6 +1,6 @@
 import { test as base, type Page } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import { type WorkerScopeFixture, workerScopeContext } from "../utils/worker-scope-context";
 import { Meteor } from "./meteor";
 import { MeteorProfile } from "./meteor-profile";
@@ -36,13 +36,7 @@ export const meteorWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worke
                 const meteor = new Meteor(walletPageFromContext);
                 await meteor.unlock();
                 await use({ wallet: meteor, walletPage: walletPageFromContext, context });
-                await context.close();
-
-                try {
-                    await removeTempContextDir(contextPath);
-                } catch (error) {
-                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
-                }
+                await teardownContext(context, contextPath);
             },
             { scope: "worker" },
         ],

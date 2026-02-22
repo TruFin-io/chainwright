@@ -4,7 +4,7 @@ import { test as base, chromium, type Page } from "@playwright/test";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import persistLocalStorage from "@/utils/persist-local-storage";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
 import { unlock } from "./actions/unlock.phantom";
 import { Phantom } from "./phantom";
@@ -72,13 +72,7 @@ export const phantomFixture = (slowMo: number = 0, profileName?: string) => {
             await _phantomPage.bringToFront();
             await unlock(_phantomPage);
             await use(walletPageContext);
-            await walletPageContext.close();
-
-            try {
-                await removeTempContextDir(tempWalletDataDir);
-            } catch (error) {
-                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
-            }
+            await teardownContext(walletPageContext, tempWalletDataDir);
         },
         phantomPage: async ({ context: _ }, use) => {
             await use(_phantomPage);

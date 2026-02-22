@@ -1,7 +1,7 @@
 import { test as base } from "@playwright/test";
 import { Instance, Pool } from "prool";
 import type { WorkerScopeFixtureArgs } from "@/types";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import { Metamask } from "./metamask";
 import type { MetamaskFixture } from "./types";
 import { type WorkerScopeFixture, workerScopeContextMetamask } from "./worker-scope-context.metamask";
@@ -24,13 +24,7 @@ export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: Wor
                 await metamask.unlock();
 
                 await use({ wallet: metamask, walletPage: walletPageFromContext, context });
-                await context.close();
-
-                try {
-                    await removeTempContextDir(contextPath);
-                } catch (error) {
-                    console.error(`Failed to remove temporary context directory at ${contextPath}. Error:`, error);
-                }
+                await teardownContext(context, contextPath);
             },
             { scope: "worker" },
         ],

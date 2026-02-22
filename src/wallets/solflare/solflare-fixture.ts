@@ -5,7 +5,7 @@ import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
 import persistLocalStorage from "@/utils/persist-local-storage";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
+import { teardownContext } from "@/utils/teardown-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
 import { unlock } from "./actions/unlock.solflare";
 import { Solflare } from "./solflare";
@@ -82,13 +82,7 @@ export const solflareFixture = (slowMo: number = 0, profileName?: string) => {
             await unlock(_solflarePage);
 
             await use(walletPageContext);
-            await walletPageContext.close();
-
-            try {
-                await removeTempContextDir(tempWalletDataDir);
-            } catch (error) {
-                console.error(`Failed to remove temporary context directory at ${tempWalletDataDir}. Error:`, error);
-            }
+            await teardownContext(walletPageContext, tempWalletDataDir);
         },
         solflarePage: async ({ context: _ }, use) => {
             await use(_solflarePage);
