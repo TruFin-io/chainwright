@@ -15,7 +15,7 @@ export async function addAccount({ page, privateKey, accountName, chain }: AddAc
     const importPrivateKeyButton = page.locator(onboardingSelectors.importPrivateKeyButton);
     await importPrivateKeyButton.click();
 
-    const listBoxMenu = page.locator("span[id='button--listbox-input--1']");
+    const listBoxMenu = page.locator("span[id^='button--listbox-input--']");
     const listBoxMenuTitle = await listBoxMenu.textContent();
 
     const nameInput = page.locator("input[name='name']");
@@ -24,7 +24,7 @@ export async function addAccount({ page, privateKey, accountName, chain }: AddAc
     if (listBoxMenuTitle !== chain) {
         await listBoxMenu.click();
 
-        const menuList = page.locator("ul[id='listbox--listbox-input--1']");
+        const menuList = page.locator("ul[id^='listbox--listbox-input--']");
         const menuListItem = menuList.locator(`li[data-label='${chain}']`);
         await menuListItem.click();
     }

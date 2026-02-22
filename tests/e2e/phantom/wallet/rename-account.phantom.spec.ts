@@ -5,9 +5,10 @@ import { menuSelectors } from "@/wallets/phantom/selectors/homepage-selectors.ph
 const test = testWithPhantomFixture;
 
 test("should rename the account successfully", async ({ phantom, phantomPage }) => {
-    const CURRENT_ACCOUNT = "Default";
+    const CURRENT_ACCOUNT = "Delta";
     const ACCOUNT_TO_RENAME = "Zebra";
 
     await phantom.renameAccount({ currentAccountName: CURRENT_ACCOUNT, newAccountName: ACCOUNT_TO_RENAME });
+    await phantom.switchAccount(ACCOUNT_TO_RENAME);
     await expect(phantomPage.getByTestId(menuSelectors.homeHeaderAccountName)).toContainText(ACCOUNT_TO_RENAME);
 });

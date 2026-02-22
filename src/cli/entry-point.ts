@@ -118,7 +118,7 @@ export async function clientEntry() {
 
                     if (!(error as Error).message.includes("directory already exists")) {
                         console.error(
-                            pc.redBright(`❌  Failed to setup cache for ${walletName}: ${(error as Error).message}`),
+                            pc.redBright(`❌ Failed to setup cache for ${walletName}: ${(error as Error).message}`),
                         );
                     }
                     process.exit(1);

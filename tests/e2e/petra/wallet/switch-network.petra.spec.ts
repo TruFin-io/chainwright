@@ -10,18 +10,18 @@ test.describe("Switch network E2E tests", () => {
         const devnetPulse = petraPage.locator("div>span:has-text('Devnet')");
         const tokenTabButton = petraPage.locator("button[role='tab']:has-text('Tokens')");
 
-        await Promise.allSettled([
-            expect(tokenTabButton).toBeVisible(),
-            expect(tokenTabButton).toHaveText("Tokens"),
-            expect(devnetPulse).toBeVisible(),
-            expect(devnetPulse).toHaveText("Devnet"),
-        ]);
+        await expect(tokenTabButton).toBeVisible();
+        await expect(tokenTabButton).toHaveText("Tokens");
+
+        await expect(devnetPulse).toBeVisible();
+        await expect(devnetPulse).toHaveText("Devnet");
     });
     test("Should switch to Mainnet network successfully", async ({ petra, petraPage }) => {
         const tokenTabButton = petraPage.locator("button[role='tab']:has-text('Tokens')");
 
         await petra.switchNetwork("Mainnet");
 
-        await Promise.allSettled([expect(tokenTabButton).toBeVisible(), expect(tokenTabButton).toHaveText("Tokens")]);
+        await expect(tokenTabButton).toBeVisible();
+        await expect(tokenTabButton).toHaveText("Tokens");
     });
 });

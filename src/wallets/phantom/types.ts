@@ -1,6 +1,7 @@
 export type OnboardingArgs =
     | {
           mode: "create";
+          accountName: string;
           toggleNetworkMode?: SwitchNetwork;
           addWallet?: Array<AddAccountArgs>;
       }

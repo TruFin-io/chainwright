@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import picocolors from "picocolors";
 import { sleep } from "@/utils/sleep";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
@@ -12,6 +12,16 @@ import { switchAccount } from "./switch-account.phantom";
 import { switchNetwork } from "./switch-network.phantom";
 
 type Onboarding = OnboardingArgs & { page: Page };
+
+type TargetInfo = {
+    targetId: string;
+    type: "page";
+    title: "Phantom Wallet";
+    url: string;
+    attached: boolean;
+    canAccessOpener: boolean;
+    browserContextId: string;
+};
 
 export default async function onboard({ page, addWallet, ...args }: Onboarding) {
     console.info(picocolors.yellowBright(`\n Phantom onboarding started...`));
@@ -136,27 +146,61 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
     }
 
     const newPage = await page.context().newPage();
-    await newPage.goto(await new PhantomProfile().indexUrl());
+    const indexUrl = await new PhantomProfile().indexUrl();
+    await newPage.goto(indexUrl);
 
-    const shouldRename = args.mode === "create" || args.mode === "recovery phrase";
+    // Look for the side panel that opens up and close it.
+    const pageContext = page.context();
+    const cdp = await pageContext.browser()?.newBrowserCDPSession();
+    let sidePanelTargetInfo: TargetInfo | undefined;
+    await expect
+        .poll(
+            async () => {
+                if (cdp) {
+                    const { targetInfos } = await cdp.send("Target.getTargets");
+                    const sidePanelPopupTarget = targetInfos.filter((target) => target.title === "Phantom Wallet");
+                    const _isSidePanelVisible = sidePanelPopupTarget.find(
+                        (target) => !target.attached && target.url === indexUrl,
+                    );
+                    sidePanelTargetInfo = _isSidePanelVisible as TargetInfo;
+                    return !!_isSidePanelVisible;
+                }
+            },
+            {
+                timeout: 20_000,
+            },
+        )
+        .toBe(true);
+
+    // Close the sidepanel page
+    if (sidePanelTargetInfo) {
+        await cdp?.send("Target.closeTarget", { targetId: sidePanelTargetInfo.targetId });
+    }
+
+    const initialAccountName = await newPage.getByTestId("home-header-account-name").textContent();
+    const shouldRename = args.mode === "create";
     if (shouldRename) {
-        await renameAccount({ page: newPage, newAccountName: "Default", currentAccountName: "Account 1" });
+        const { accountName } = args;
+        await renameAccount({ page: newPage, newAccountName: accountName, currentAccountName: "Account 1" });
     }
 
     if (addWallet && addWallet.length > 0) {
         let cancelled = false;
         const isCancelled = () => cancelled;
 
-        const runner = autoClosePhantomNotification(newPage, isCancelled);
+        autoClosePhantomNotification(newPage, isCancelled).catch((error) => console.error({ error }));
+
         for (const { accountName, chain, privateKey } of addWallet) {
             await addAccount({ page: newPage, privateKey, accountName, chain });
             cancelled = true;
         }
 
-        runner.catch((error) => console.error({ error }));
+        const lastAddedAccountName =
+            args.mode === "create" || args.mode === "private key" ? args.accountName : initialAccountName;
 
-        const _accountName = "accountName" in args ? args.accountName : "Default";
-        await switchAccount(newPage, _accountName);
+        if (lastAddedAccountName) {
+            await switchAccount(newPage, lastAddedAccountName);
+        }
     }
 
     if (args.toggleNetworkMode) {

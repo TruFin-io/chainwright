@@ -5,6 +5,8 @@ import { connectWallet } from "../utils";
 const test = testDappFixture;
 
 test("Should confirm transaction successfully", async ({ dappPage, meteor }) => {
+    const navigation = dappPage.getByRole("navigation");
+    await navigation.waitFor({ state: "attached", timeout: 15_000 });
     await connectWallet(dappPage, meteor);
     await fillForm({
         appPage: dappPage,

@@ -14,9 +14,5 @@ export async function connectToApp(page: Page, account?: string) {
     }
 
     await page.locator(popupPageSelectors.connectButton).click();
-
-    const executingTransaction = page.locator("h2:has-text('Executing Transaction')");
-    await executingTransaction.waitFor({ state: "attached" });
-
     await page.waitForEvent("close", { timeout: 15_000 });
 }

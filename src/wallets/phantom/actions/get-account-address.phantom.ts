@@ -45,7 +45,7 @@ export async function getAccountAddress({ page, accountName, chain }: GetAccount
         const copyButton = actionsContainer.locator("div > button").last();
         await copyButton.click();
 
-        const closeButton = page.getByRole("button", { name: "Close", exact: true });
+        const closeButton = page.getByRole("button", { name: "Close", exact: true }).last();
         await closeButton.click();
 
         const headerBackButton = page.getByTestId("header--back");

@@ -6,6 +6,9 @@ const test = testWithMeteorWorkerScope;
 
 test.describe("Confirm and reject transaction E2E tests", () => {
     test("Should confirm transaction successfully", async ({ dappPage, meteor }) => {
+        const navigation = dappPage.getByRole("navigation");
+        await navigation.waitFor({ state: "attached", timeout: 15_000 });
+
         await connectWallet(dappPage, meteor);
         await fillForm({
             appPage: dappPage,
