@@ -105,6 +105,8 @@ async function renameImportedAccount({
     await expect(confirmButton).toBeEnabled();
     await confirmButton.click();
 
+    await dialog.waitFor({ state: "detached", timeout: 15_000 });
+
     const activeAccount = page.locator(
         "div:has(> div[data-testid^='multichain-account-cell-keyring'][data-testid$='-selected-indicator'])",
     );
