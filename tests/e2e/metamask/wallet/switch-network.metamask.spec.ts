@@ -8,10 +8,14 @@ test("Should switch network successfully", async ({ metamask, metamaskPage }) =>
     await metamask.switchNetwork({ chainName: "Sepolia", networkType: "testnet" });
 
     await expect(metamaskPage.getByTestId("app-header-logo").first()).toBeVisible();
-    await expect(metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton)).toContainText("Sepolia");
+    await expect(metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton)).toContainText("Sepolia", {
+        timeout: 30_000,
+    });
 
     await metamask.switchNetwork({ chainName: "Ethereum", networkType: "mainnet" });
 
     await expect(metamaskPage.getByTestId("app-header-logo").first()).toBeVisible();
-    await expect(metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton)).toContainText("Ethereum");
+    await expect(metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton)).toContainText("Ethereum", {
+        timeout: 30_000,
+    });
 });

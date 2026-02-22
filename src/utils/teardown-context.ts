@@ -3,7 +3,7 @@ import { removeTempContextDir } from "./remove-temp-context-directory";
 
 const CONTEXT_CLOSE_TIMEOUT_MS = 35_000;
 
-export async function teardownContext(context: BrowserContext, contextPath: string): Promise<void> {
+export async function teardownContext(context: BrowserContext, contextPath: string) {
     try {
         await Promise.race([
             context.close(),
