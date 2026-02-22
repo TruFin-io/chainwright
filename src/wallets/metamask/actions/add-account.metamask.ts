@@ -24,7 +24,7 @@ export async function addAccount({ page, privateKey, accountName }: AddAccount) 
 
     if (startTextContent?.includes("Syncing")) {
         await expect
-            .poll(async () => (await addWalletButton.textContent())?.trim() ?? "", { timeout: 360_000 })
+            .poll(async () => (await addWalletButton.textContent())?.trim() ?? "", { timeout: 120_000 })
             .not.toBe(startTextContent);
     }
 

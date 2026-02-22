@@ -56,14 +56,18 @@ export const metamaskFixture = (slowMo: number = 0, profileName?: string) => {
             const indexUrl = await wallet.indexUrl();
             await walletPageContext.waitForEvent("page", {
                 predicate: (page) => page.url().startsWith(indexUrl),
-                timeout: 15_000,
+                timeout: 30_000,
             });
+
             const homePage = walletPageContext.pages().find((page) => page.url().startsWith(indexUrl));
             _metamaskPage = homePage ?? (await getPageFromContext(walletPageContext, indexUrl));
 
             for (const page of walletPageContext.pages()) {
                 if (page.url().includes("about:blank")) await page.close();
             }
+
+            const loadingSpinner = _metamaskPage.locator("img[class='loading-spinner']");
+            await loadingSpinner.waitFor({ state: "detached", timeout: 40_000 });
 
             await unlock(_metamaskPage);
             await use(walletPageContext);

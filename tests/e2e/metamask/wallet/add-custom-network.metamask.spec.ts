@@ -15,7 +15,7 @@ test.describe("Add custom network", () => {
 
         await expect(metamaskPage.getByTestId("app-header-logo").first()).toBeVisible();
         const networkButton = metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton);
-        await expect(networkButton).toContainText("Gnosis");
+        await expect(networkButton).toContainText("Gnosis", { timeout: 15_000 });
     });
 
     test("Should add and connect to the local Anvil network successfully", async ({
@@ -33,6 +33,6 @@ test.describe("Add custom network", () => {
 
         await expect(metamaskPage.getByTestId("app-header-logo").first()).toBeVisible();
         const networkButton = metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton);
-        await expect(networkButton).toContainText("Anvil Localnet");
+        await expect(networkButton).toContainText("Anvil Localnet", { timeout: 15_000 });
     });
 });
