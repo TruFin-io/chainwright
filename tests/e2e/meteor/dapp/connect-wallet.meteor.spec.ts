@@ -11,5 +11,4 @@ test("Should connect wallet successfully", async ({ dappPage, meteor }) => {
 
     const appConnectedButton = dappPage.getByTestId("wallet-connected-button");
     await expect(appConnectedButton).toBeVisible();
-    expect(dappPage).toBeTruthy();
 });

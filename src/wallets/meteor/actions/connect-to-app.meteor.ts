@@ -13,6 +13,9 @@ export async function connectToApp(page: Page, account?: string) {
         await switchAccount(page, account);
     }
 
-    await page.locator(popupPageSelectors.connectButton).click();
-    await page.waitForEvent("close", { timeout: 15_000 });
+    const connectRequestHeading = page.getByRole("heading", { name: "Connect Request", exact: true });
+    await Promise.all([
+        page.locator(popupPageSelectors.connectButton).click(),
+        connectRequestHeading.waitFor({ state: "detached", timeout: 30_000 }),
+    ]);
 }

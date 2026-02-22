@@ -195,8 +195,7 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
             cancelled = true;
         }
 
-        const lastAddedAccountName =
-            args.mode === "create" || args.mode === "private key" ? args.accountName : initialAccountName;
+        const lastAddedAccountName = args.mode === "create" ? args.accountName : initialAccountName;
 
         if (lastAddedAccountName) {
             await switchAccount(newPage, lastAddedAccountName);
@@ -207,5 +206,6 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
         await switchNetwork({ page: newPage, ...args.toggleNetworkMode });
     }
 
+    await sleep(2_500);
     console.info(picocolors.greenBright("✨ Phantom onboarding completed successfully"));
 }
