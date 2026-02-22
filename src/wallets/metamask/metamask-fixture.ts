@@ -67,7 +67,7 @@ export const metamaskFixture = (slowMo: number = 0, profileName?: string) => {
             }
 
             const loadingSpinner = _metamaskPage.locator("img[class='loading-spinner']");
-            await loadingSpinner.waitFor({ state: "detached", timeout: 40_000 });
+            await loadingSpinner.waitFor({ state: "detached" });
 
             await unlock(_metamaskPage);
             await use(walletPageContext);
