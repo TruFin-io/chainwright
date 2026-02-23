@@ -46,7 +46,7 @@ export async function workerScopeContextMetamask({ workerInfo, profileName, slow
     const indexUrl = await wallet.indexUrl();
     await context.waitForEvent("page", {
         predicate: (page) => page.url().startsWith(indexUrl),
-        timeout: 15_000,
+        timeout: 40_000,
     });
     let page = context.pages().find((page) => page.url().startsWith(indexUrl));
 

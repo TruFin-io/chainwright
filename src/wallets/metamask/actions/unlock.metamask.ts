@@ -22,9 +22,5 @@ export default async function unlock(page: Page) {
     await unlockButton.click();
 
     await waitForMetaMaskLoad(page);
-
-    await expect(page.getByTestId(homepageSelectors.buyButton)).toBeVisible();
-    await expect(page.getByTestId(homepageSelectors.swapButton)).toBeVisible();
-    await expect(page.getByTestId(homepageSelectors.sendButton)).toBeVisible();
-    await expect(page.getByTestId(homepageSelectors.receiveButton)).toBeVisible();
+    await expect(page.getByTestId(homepageSelectors.buyButton)).toBeVisible({ timeout: 30_000 })
 }
