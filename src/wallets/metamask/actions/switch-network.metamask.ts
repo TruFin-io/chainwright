@@ -43,4 +43,5 @@ export async function switchNetwork({ page, networkType, chainName }: SwitchNetw
     expect(chainSelectorText).toBe(chainName);
 
     await chainSelector.click();
+    await expect(openChainSelector).toContainText(chainName, { timeout: 30_000 });
 }
