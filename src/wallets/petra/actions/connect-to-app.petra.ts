@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import { type Page, expect } from "@playwright/test";
 import { actionFooterSelectors } from "../selectors/action-footer";
 import { switchAccount } from "./switch-account.petra";
 
@@ -10,5 +10,7 @@ export async function connectToApp(page: Page, account?: string) {
         await switchAccount(page, account);
     }
 
-    await page.locator(actionFooterSelectors.approveButton).click();
+    const approveButton = page.locator(actionFooterSelectors.approveButton);
+    await expect(approveButton).toBeEnabled({ timeout: 20_000 });
+    await approveButton.click();
 }
