@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { addAccount } from "./actions/add-account.phantom";
 import { confirmTransaction } from "./actions/confirm-transaction.phantom";
-import { connectToApp } from "./actions/connect-to-app";
+import { connectToApp } from "./actions/connect-to-app.phantom";
 import { getAccountAddress } from "./actions/get-account-address.phantom";
 import { lockWallet } from "./actions/lock.phantom";
 import onboard from "./actions/onboard.phantom";
