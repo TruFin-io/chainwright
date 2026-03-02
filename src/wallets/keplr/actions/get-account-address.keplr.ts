@@ -40,6 +40,8 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
     const chains = await popoverContainer.locator("div[cursor='pointer']", { hasText: parsedData.chain }).all();
     let addressElement: Locator | undefined;
 
+    console.info(`Chains ---> ${chains}`);
+
     for (const chain of chains) {
         let chainTag: string | undefined;
         if ("chainTag" in args) chainTag = args.chainTag;
