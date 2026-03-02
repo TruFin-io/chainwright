@@ -61,7 +61,10 @@ export async function addWalletViaPrivateKey({
         const chainsContainer = page.locator("div[class='simplebar-content']");
         const currentChain = chainsContainer.locator(`div[cursor='pointer']:has-text('${chain}')`).first();
         await currentChain.waitFor({ state: "visible", timeout: 20_000 });
+        console.info(`Current chain to: ${await currentChain.textContent()}`);
         const isCurrentChainChecked = await currentChain.locator("input[type='checkbox']").getAttribute("checked");
+
+        console.info(`Is current chain checked: ${isCurrentChainChecked}`);
 
         // If the current chain is not checked, check it.
         if (isCurrentChainChecked === null) {
