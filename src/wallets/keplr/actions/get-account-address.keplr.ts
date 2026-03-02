@@ -37,10 +37,16 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
     const popoverSearchInput = popoverSearchContainer.locator("input");
     await popoverSearchInput.fill(parsedData.chain);
 
-    const chains = await popoverContainer.locator("div[cursor='pointer']", { hasText: parsedData.chain }).all();
-    let addressElement: Locator | undefined;
+    const popoverSerchInputContent = await popoverContainer.textContent();
+    console.info("Popover Container ---> ", popoverSerchInputContent);
 
+    console.info("Parsed Data: ", parsedData);
+
+    const _chains = popoverContainer.locator("div[cursor='pointer']", { hasText: parsedData.chain });
+    const chains = await _chains.all();
     console.info(`Chains ---> ${chains}`);
+
+    let addressElement: Locator | undefined;
 
     for (const chain of chains) {
         let chainTag: string | undefined;
