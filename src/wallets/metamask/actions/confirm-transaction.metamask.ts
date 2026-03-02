@@ -72,4 +72,7 @@ export async function confirmTransaction(page: Page, gasFee?: GasFeeSettings) {
             await alertConfirmButton.click();
         }
     }
+
+    // Wait for the transaction confirmation to complete and the window to close
+    await page.waitForEvent("close", { timeout: 15_000 });
 }
