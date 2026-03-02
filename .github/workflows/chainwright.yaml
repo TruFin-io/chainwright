@@ -36,7 +36,7 @@ jobs:
          run:  pnpx playwright install chromium
 
        - name: Install Foundry
-         run: foundry-rs/foundry-toolchain@v1
+         uses: foundry-rs/foundry-toolchain@v1
 
        - name: Initialize wallets
          run: xvfb-run pnpm run build:wallets
