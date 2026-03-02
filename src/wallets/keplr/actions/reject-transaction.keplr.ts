@@ -3,5 +3,6 @@ import { popupPageSelectors } from "../selectors/popup-page-selectors.keplr";
 
 export async function rejectTransaction(page: Page) {
     const rejectButton = page.locator(popupPageSelectors.rejectButton);
+    await rejectButton.waitFor({ state: "visible", timeout: 20_000 });
     await rejectButton.click();
 }

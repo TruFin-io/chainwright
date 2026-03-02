@@ -56,6 +56,9 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
         const combinedChainText = chainTagTextContent ? `${chainTextContent} ${chainTagTextContent}` : chainTextContent;
         const combinedParsedData = chainTag ? `${parsedData.chain} ${chainTag}` : parsedData.chain;
 
+        console.info("Combined Chain Text:", combinedChainText);
+        console.info("Combined Parsed Data:", combinedParsedData);
+
         if (combinedChainText === combinedParsedData) {
             // Traversing up the DOM to find the address parent element
             const parentChainElement = chainElement.locator("xpath=../../../..");
