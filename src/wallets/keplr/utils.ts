@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { sleep } from "@/utils/sleep";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { onboardingSelectors } from "./selectors/onboard-selectors.keplr";
 import type { AddAccountArgs } from "./types";
@@ -61,14 +62,16 @@ export async function addWalletViaPrivateKey({
         const chainsContainer = page.locator("div[class='simplebar-content']");
         const currentChain = chainsContainer.locator(`div[cursor='pointer']:has-text('${chain}')`).first();
         await currentChain.waitFor({ state: "visible", timeout: 20_000 });
-        console.info(`Current chain to: ${await currentChain.textContent()}`);
+        console.info(`Current chain to check: ${await currentChain.textContent()}`);
         const isCurrentChainChecked = await currentChain.locator("input[type='checkbox']").getAttribute("checked");
 
         console.info(`Is current chain checked: ${isCurrentChainChecked}`);
 
         // If the current chain is not checked, check it.
         if (isCurrentChainChecked === null) {
+            console.info(`Checking current chain: ${chain}`);
             await currentChain.click();
+            await sleep(2_000);
         }
     }
 
