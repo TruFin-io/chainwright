@@ -14,7 +14,7 @@ export const testDappFixture = testWithPetra.extend<TestDappFixture>({
         await petra.switchAccount("Echo");
         await petra.switchNetwork("Testnet");
 
-        await page.goto("http://localhost:3000/aptos");
+        await page.goto("/aptos");
         await use(page);
     },
 });

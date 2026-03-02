@@ -6,7 +6,7 @@ import { phantomWorkerScopeFixture } from "@/wallets/phantom/phantom-worker-scop
 export const testWithPhantomFixture = phantomFixture();
 export const testWithPhantom = testWithChainwright(phantomFixture());
 export const testWithPhantomWorkerScope = phantomWorkerScopeFixture({
-    dappUrl: "http://localhost:3000/solana",
+    dappUrl: "/solana",
 });
 
 type TestDappFixture = {
@@ -15,7 +15,7 @@ type TestDappFixture = {
 
 export const testDappFixture = testWithPhantom.extend<TestDappFixture>({
     dappPage: async ({ page }, use) => {
-        await page.goto("http://localhost:3000/solana");
+        await page.goto("/solana");
         await use(page);
     },
 });

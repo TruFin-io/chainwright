@@ -6,7 +6,7 @@ import { solflareWorkerScopeFixture } from "@/wallets/solflare/solflare-worker-s
 export const testWithsolflareFixture = solflareFixture();
 export const testWithSolflare = testWithChainwright(solflareFixture());
 export const testWithSolflareWorkerScope = solflareWorkerScopeFixture({
-    dappUrl: "http://localhost:3000/solana",
+    dappUrl: "/solana",
 });
 
 type TestDappFixture = {
@@ -15,7 +15,7 @@ type TestDappFixture = {
 
 export const testDappFixture = testWithSolflare.extend<TestDappFixture>({
     dappPage: async ({ page }, use) => {
-        await page.goto("http://localhost:3000/solana");
+        await page.goto("/solana");
         await use(page);
     },
 });

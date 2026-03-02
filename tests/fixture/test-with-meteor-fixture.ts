@@ -5,14 +5,14 @@ import { meteorWorkerScopeFixture } from "@/wallets/meteor/meteor-worker-scope-f
 export const testWithMeteorFixture = meteorFixture();
 export const testFixtureWithNetworkProfile = meteorFixture(undefined, "multiple-network");
 export const testWithMeteorWorkerScope = meteorWorkerScopeFixture({
-    dappUrl: "http://localhost:3000/near",
+    dappUrl: "/near",
 });
 
 export const testDappFixture = testWithMeteorFixture.extend<{
     dappPage: Page;
 }>({
     dappPage: async ({ page }, use) => {
-        await page.goto("http://localhost:3000/near");
+        await page.goto("/near");
         await use(page);
     },
 });
