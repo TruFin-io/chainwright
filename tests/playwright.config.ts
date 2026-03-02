@@ -17,16 +17,16 @@ export default defineConfig({
 
     use: {
         // We are using locally deployed Metamask Test Dapp for somePhantom tests.
-        baseURL: "http://localhost:3000",
+        baseURL: process.env.CI ? "https://chainwright-dapp.vercel.app/" : "http://localhost:3000",
 
         // Collect all traces on CI, and only traces for failed tests when running locally.
         // See https://playwright.dev/docs/trace-viewer.
 
         // Added for getting account address
         permissions: ["clipboard-read"],
-        trace: "off",
-        video: "off",
-        screenshot: "off",
+        trace: process.env.CI ? "retain-on-failure" : "off",
+        video: process.env.CI ? "retain-on-failure" : "off",
+        screenshot: process.env.CI ? "only-on-failure" : "off",
     },
 
     /* Configure projects for major browsers */

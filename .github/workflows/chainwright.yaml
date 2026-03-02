@@ -12,6 +12,8 @@ jobs:
      steps:
        - name: Checkout code
          uses: actions/checkout@v5
+         with:
+            submodules: "recursive"
 
        - name: Install pnpm
          uses: pnpm/action-setup@v4
@@ -33,5 +35,11 @@ jobs:
        - name: Install Playwright browsers
          run:  pnpx playwright install chromium
 
+       - name: Install Foundry
+         run: foundry-rs/foundry-toolchain@v1
+
        - name: Initialize wallets
          run: xvfb-run pnpm run build:wallets
+
+       - name: Run tests
+         run: xvfb-run pnpx playwright test --config=tests/playwright.config.ts
