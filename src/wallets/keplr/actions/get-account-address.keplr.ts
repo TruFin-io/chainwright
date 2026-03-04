@@ -21,7 +21,6 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
     await spendableAssetList.waitFor({ state: "attached", timeout: 20_000 });
 
     const isSpendableAssetVisible = await spendableAssetList.isVisible().catch(() => false);
-    console.info(`\n Is spendable asset visible for chain "${parsedData.chain}"?`, isSpendableAssetVisible);
     if (!isSpendableAssetVisible) {
         throw Error(`Make sure "${parsedData.chain}" is activated.`);
     }
@@ -29,29 +28,17 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
     const allSpendableAssets = await spendableAssetList.locator("div").all();
     expect(allSpendableAssets.length).toBeGreaterThan(0);
 
-    console.info(
-        `\n All spendable assets`,
-        await Promise.all(allSpendableAssets.map(async (asset) => await asset.textContent())),
-    );
-
     const copyWalletAddressContainer = page.locator(`div:has(div:has-text('${parsedData.walletName}'))`).nth(-3);
     const copyWalletAddressPopover = copyWalletAddressContainer.locator("div:has(> div > svg)");
     await copyWalletAddressPopover.click();
 
     const popoverContainer = page.locator("div:has(> div[data-simplebar='init'])").last();
-    console.info("\n Popover Container Text Content: ", await popoverContainer.textContent());
     const popoverSearchContainer = popoverContainer.locator("div:has(> div > input)");
     const popoverSearchInput = popoverSearchContainer.locator("input");
     await popoverSearchInput.fill(parsedData.chain);
 
-    const popoverSerchInputContent = await popoverContainer.textContent();
-    console.info("Popover Container after searching ---> ", popoverSerchInputContent);
-
-    console.info("Parsed Data: ", parsedData);
-
     const _chains = popoverContainer.locator("div[cursor='pointer']", { hasText: parsedData.chain });
     const chains = await _chains.all();
-    console.info(`Chains ---> ${chains}`);
 
     let addressElement: Locator | undefined;
 
@@ -70,9 +57,6 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
 
         const combinedChainText = chainTagTextContent ? `${chainTextContent} ${chainTagTextContent}` : chainTextContent;
         const combinedParsedData = chainTag ? `${parsedData.chain} ${chainTag}` : parsedData.chain;
-
-        console.info("Combined Chain Text:", combinedChainText);
-        console.info("Combined Parsed Data:", combinedParsedData);
 
         if (combinedChainText === combinedParsedData) {
             // Traversing up the DOM to find the address parent element

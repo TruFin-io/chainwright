@@ -64,7 +64,6 @@ export async function addWalletViaPrivateKey({
     const searchNetworkInput = page.locator(onboardingSelectors.searchNetworkInput);
 
     for (const chain of chains) {
-        console.log("\n Chains ---> ", chains);
         await searchNetworkInput.fill(chain);
 
         const chainsContainer = page.locator("div[class='simplebar-content']");
@@ -78,15 +77,12 @@ export async function addWalletViaPrivateKey({
             .nth(2)
             .locator("../../../../..");
 
-        console.info(`Current chain to check: ${await currentChain.textContent()}`);
         await currentChain.waitFor({ state: "visible", timeout: 20_000 });
         const isCurrentChainChecked = await currentChain.locator("input[type='checkbox']").getAttribute("checked");
 
-        console.info(`Is current chain checked: ${isCurrentChainChecked}`);
 
         // If the current chain is not checked, check it.
         if (isCurrentChainChecked === null) {
-            console.info(`Checking current chain: ${chain}`);
             await currentChain.click();
         }
     }
