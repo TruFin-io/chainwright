@@ -11,7 +11,7 @@
     "scripts": {
         "build": "tsup",
         "dev": "tsx src/cli/index.ts chainwright ./tests/wallet-setup -f",
-        "build:wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup -a",
+        "build:wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --kp",
         "test": "vitest --exclude '**/*.spec.ts'",
         "format": "biome format --write ./src",
         "test:e2e:debug": "playwright test --config=tests/playwright.config.ts --debug",

@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { expect, type Page } from "@playwright/test";
 import { sleep } from "@/utils/sleep";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
@@ -7,6 +9,10 @@ import type { AddAccountArgs } from "./types";
 type AddWalletViaPrivateKey = AddAccountArgs & {
     page: Page;
 };
+
+function escapeRegExp(s: string) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 export async function addWalletViaPrivateKey({
     page,
@@ -57,12 +63,22 @@ export async function addWalletViaPrivateKey({
     const searchNetworkInput = page.locator(onboardingSelectors.searchNetworkInput);
 
     for (const chain of chains) {
+        console.log("\n Chains ---> ", chains);
         await searchNetworkInput.fill(chain);
 
         const chainsContainer = page.locator("div[class='simplebar-content']");
-        const currentChain = chainsContainer.locator(`div[cursor='pointer']:has-text('${chain}')`).first();
-        await currentChain.waitFor({ state: "visible", timeout: 20_000 });
+        const currentChain = chainsContainer
+            .locator(`div[cursor] > div`)
+            .first()
+            .locator("div")
+            .filter({
+                hasText: new RegExp(`^${escapeRegExp(chain)}$`, "i"),
+            })
+            .nth(2)
+            .locator("../../../../..");
+
         console.info(`Current chain to check: ${await currentChain.textContent()}`);
+        await currentChain.waitFor({ state: "visible", timeout: 20_000 });
         const isCurrentChainChecked = await currentChain.locator("input[type='checkbox']").getAttribute("checked");
 
         console.info(`Is current chain checked: ${isCurrentChainChecked}`);
@@ -71,7 +87,6 @@ export async function addWalletViaPrivateKey({
         if (isCurrentChainChecked === null) {
             console.info(`Checking current chain: ${chain}`);
             await currentChain.click();
-            await sleep(2_000);
         }
     }
 
