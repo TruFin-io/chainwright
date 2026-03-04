@@ -42,4 +42,4 @@ jobs:
          run: xvfb-run pnpm run build:wallets
 
        - name: Run tests
-         run: xvfb-run pnpm playwright test ./tests/e2e/keplr --config=tests/playwright.config.ts
+         run: xvfb-run pnpm playwright test --config=tests/playwright.config.ts
