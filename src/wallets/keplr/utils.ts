@@ -1,8 +1,8 @@
-import fs from "node:fs";
-import path from "node:path";
 import { expect, type Page } from "@playwright/test";
 import { sleep } from "@/utils/sleep";
+import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
+import { KeplrProfile } from "./keplr-profile";
 import { onboardingSelectors } from "./selectors/onboard-selectors.keplr";
 import type { AddAccountArgs } from "./types";
 
@@ -22,6 +22,7 @@ export async function addWalletViaPrivateKey({
     mode = "onboard",
 }: AddWalletViaPrivateKey) {
     const PASSWORD = await getWalletPasswordFromCache("keplr");
+    const walletProfile = new KeplrProfile();
     const importExistingWalletButton = page.locator(onboardingSelectors.importExistingWalletButton);
     await importExistingWalletButton.click();
 
@@ -94,10 +95,64 @@ export async function addWalletViaPrivateKey({
     await saveButton.scrollIntoViewIfNeeded();
     await saveButton.click();
 
+    // Delay to ensure that the selected chains are saved before proceeding.
+    await sleep(2_000);
+
+    if (mode === "onboard") {
+        await page.goto(await walletProfile.indexUrl());
+        return;
+    }
+
     if (mode === "add-account-single") {
         const finishButton = page.locator(onboardingSelectors.finishButton);
         await finishButton.waitFor({ state: "visible", timeout: 20_000 });
         await expect(finishButton).toBeEnabled({ timeout: 20_000 });
         await finishButton.click();
     }
+}
+
+export async function goToOnboardingPage(page: Page) {
+    const walletProfile = new KeplrProfile();
+    const onboardingUrl = await walletProfile.onboardingUrl();
+
+    const settingsButton = page.getByRole("link", { name: "Settings", exact: true });
+    await settingsButton.click();
+
+    const activeAccount = page.locator("div[cursor='pointer']").first();
+    await activeAccount.click();
+
+    const addWalletButton = page.getByRole("button", { name: "Add Wallet", exact: true });
+    await addWalletButton.click();
+
+    // Wait for the onboarding page to open in a new tab and switch to it.
+    let onboardPage: Page | undefined;
+    await expect
+        .poll(
+            async () => {
+                onboardPage = page
+                    .context()
+                    .pages()
+                    .find((page) => page.url().match(onboardingUrl));
+
+                return !!onboardPage;
+            },
+            {
+                timeout: 30_000,
+            },
+        )
+        .toBe(true)
+        .catch((error) => {
+            console.error(
+                `Failed to find onboarding page with URL matching ${onboardingUrl}. Original error: ${error}`,
+            );
+        });
+
+    if (!onboardPage) {
+        throw new Error(`Onboarding page not found. Expected URL: ${onboardingUrl}`);
+    }
+
+    await waitForStablePage(onboardPage);
+    await onboardPage.bringToFront();
+
+    return onboardPage;
 }
