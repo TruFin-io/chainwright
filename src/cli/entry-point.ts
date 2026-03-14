@@ -120,6 +120,7 @@ export async function clientEntry() {
                             styleText(
                                 "redBright",
                                 `❌ Failed to setup cache for ${walletName}: ${(error as Error).message}`,
+                                { validateStream: false },
                             ),
                         );
                     }
