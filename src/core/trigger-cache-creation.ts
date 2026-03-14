@@ -78,7 +78,9 @@ export async function triggerCacheCreation({
 
     if (!fs.existsSync(extensionIdPathTxt) && !fs.existsSync(extensionPathTxt)) {
         const extensionId = await getWalletExtensionIdFromBrowser(context, extensionName);
-        console.info(styleText("magentaBright", `🆔 ${extensionName} extension ID: ${extensionId}`));
+        console.info(
+            styleText("magentaBright", `🆔 ${extensionName} extension ID: ${extensionId}`, { validateStream: false }),
+        );
 
         fs.writeFileSync(extensionIdPathTxt, extensionId, "utf-8");
         console.info(styleText("cyanBright", `💾 Saved extension ID to: ${extensionIdPathTxt}`));
