@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-    name: "playwright-kit-web3",
+    name: "chainwright",
     entry: ["src/cli/index.ts", "src/wallets/index.ts"],
     external: ["@playwright/test", "commander", "zod"],
     outDir: "dist",
