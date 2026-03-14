@@ -24,14 +24,6 @@ vi.mock("cli-progress", () => ({
     },
 }));
 
-// Mock picocolors to avoid color output in tests
-vi.mock("picocolors", () => ({
-    default: {
-        redBright: (str: string) => str,
-        cyan: (str: string) => str,
-    },
-}));
-
 describe("downloadFile", () => {
     const TEST_DIR = path.resolve(process.cwd(), "src/utils/.test-downloads");
 

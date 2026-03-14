@@ -1,5 +1,5 @@
+import { styleText } from "node:util";
 import type { Page } from "@playwright/test";
-import picocolors from "picocolors";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { onboardingSelectors } from "../selectors/onboard-selectors.solflare";
 import type { OnboardingArgs } from "../types";
@@ -10,7 +10,7 @@ import { switchNetwork } from "./switch-network.solflare";
 type Onboard = OnboardingArgs & { page: Page };
 
 export async function onboard({ page, recoveryPhrase, network, walletName, addWallet }: Onboard) {
-    console.info(picocolors.yellowBright(`\n Solflare onboarding started...`));
+    console.info(styleText("yellowBright", `\n Solflare onboarding started...`));
 
     const PASSWORD = await getWalletPasswordFromCache("solflare");
 
@@ -54,5 +54,5 @@ export async function onboard({ page, recoveryPhrase, network, walletName, addWa
         }
     }
 
-    console.info(picocolors.greenBright("✨ Solflare onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Solflare onboarding completed successfully"));
 }

@@ -90,8 +90,12 @@ describe("getSetupFunction", () => {
     it("should throw an error when no setup files are found", async () => {
         vi.mocked(glob).mockResolvedValue([]);
 
-        await expect(handleMock([], "all")).rejects.toThrow(
-            `No wallet setup files found at ${WALLET_SETUP_DIR} Remember that all wallet setup files must end with ".setup.{ts,js,mjs}" extension!`,
+        await expect(handleMock([], "all")).rejects.toThrowError(
+            [
+                `No wallet setup file found at ${WALLET_SETUP_DIR} for wallet: "all".`,
+                `Setup files must use a ".setup.{ts,js,mjs}" extension and include a valid wallet name.`,
+                `Examples: "metamask.setup.ts", "solflare.setup.ts", "phantom.setup.ts", "metamask-connected.setup.ts"`,
+            ].join("\n "),
         );
     });
 
@@ -105,7 +109,11 @@ describe("getSetupFunction", () => {
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
         await expect(handleMock(mockFilePaths, "metamask", walletSetupDir)).rejects.toThrow(
-            `No wallet setup files found at ${walletSetupDir} Remember that all wallet setup files must end with ".setup.{ts,js,mjs}" extension!`,
+            [
+                `No wallet setup file found at /test/wallet-setup for wallet: "metamask".`,
+                `Setup files must use a ".setup.{ts,js,mjs}" extension and include a valid wallet name.`,
+                `Examples: "metamask.setup.ts", "solflare.setup.ts", "phantom.setup.ts", "metamask-connected.setup.ts"`,
+            ].join("\n "),
         );
     });
 

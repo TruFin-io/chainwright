@@ -1,5 +1,5 @@
+import { styleText } from "node:util";
 import type { BrowserContext, Page } from "@playwright/test";
-import picocolors from "picocolors";
 import type { SupportedWallets } from "@/types";
 import { sleep } from "./sleep";
 
@@ -31,10 +31,7 @@ async function findExtensionPage(context: BrowserContext) {
 /**
  * Waits for the extension page to load and ensures it's not blank or has errors
  */
-export async function waitForExtensionOnLoadPage(
-    context: BrowserContext,
-    walletName?: SupportedWallets,
-): Promise<Page> {
+export async function waitForExtensionOnLoadPage(context: BrowserContext, walletName?: SupportedWallets) {
     let retries = 0;
     let _extensionPage: Page | null = null;
 
@@ -43,7 +40,7 @@ export async function waitForExtensionOnLoadPage(
     }
 
     // Initial delay to ensure browser is fully initialized
-    console.info(` Waiting ${INITIAL_BROWSER_DELAY}ms for browser to initialize...`);
+    console.info(`Waiting ${INITIAL_BROWSER_DELAY}ms for browser to initialize...`);
     await sleep(INITIAL_BROWSER_DELAY);
 
     while (retries <= MAX_RETRIES) {
@@ -74,7 +71,7 @@ export async function waitForExtensionOnLoadPage(
         }
     }
 
-    console.info(picocolors.greenBright("✅ Extension page is properly loaded and ready"));
+    console.info(styleText("greenBright", "✅ Extension page is properly loaded and ready"));
     // biome-ignore lint/style/noNonNullAssertion: this is intentional
     return _extensionPage!;
 }

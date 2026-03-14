@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import { styleText } from "node:util";
 import AdmZip from "adm-zip";
-import picocolors from "picocolors";
 import type { CLIOptions } from "@/types";
 import { SUPPORTED_WALLETS } from "./constants";
 import { downloadFile } from "./download-file";
@@ -24,7 +24,7 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
 
     if (force && fs.existsSync(CACHE_DIR_NAME) && !IS_EXECUTED) {
         fs.rmSync(CACHE_DIR_NAME, { recursive: true });
-        console.info(picocolors.magenta(`🧹 Removed ${walletName} because of the force flag`));
+        console.info(styleText("magenta", `🧹 Removed ${walletName} because of the force flag`));
     }
 
     // Ensure the cache directory exists
@@ -39,9 +39,9 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
     if (fs.existsSync(outputPath)) {
         console.info(`✅ ${walletName} Version is downloaded already.`);
     } else {
-        console.info(picocolors.cyanBright(`📥 Downloading ${walletName} extension...`));
+        console.info(styleText("cyanBright", `📥 Downloading ${walletName} extension...`));
         await downloadFile({ url: downloadUrl, destination: zipFilePath });
-        console.info(picocolors.green(`✅ ${name.toUpperCase()} Extension downloaded successfully.`));
+        console.info(styleText("green", `✅ ${name.toUpperCase()} Extension downloaded successfully.`));
     }
 
     // Unzip the archive if not already extracted
@@ -52,12 +52,13 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
         console.info(`✅ ${walletName} Extension extracted successfully.`);
     } else {
         if (IS_EXECUTED) {
-            console.info(picocolors.magentaBright(`Using the cached ${walletName} extension for profile creation.`));
+            console.info(styleText("magentaBright", `Using the cached ${walletName} extension for profile creation.`));
             return outputPath;
         }
 
         console.info(
-            picocolors.yellow(
+            styleText(
+                "yellow",
                 `⚠️ Skipping ${walletName} cache creation: Cache already exists at ${outputPath}. Use --force to overwrite.`,
             ),
         );

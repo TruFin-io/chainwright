@@ -1,5 +1,5 @@
+import { styleText } from "node:util";
 import { expect, type Page } from "@playwright/test";
-import picocolors from "picocolors";
 import { sleep } from "@/utils/sleep";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
@@ -17,7 +17,7 @@ type Onboard = OnboardingArgs & {
 };
 
 export default async function onboard({ page, ...args }: Onboard) {
-    console.info(picocolors.yellowBright(`\n Petra onboarding started...`));
+    console.info(styleText("yellowBright", `\n Petra onboarding started...`));
 
     const petraProfile = new PetraProfile();
     const PASSWORD = await getWalletPasswordFromCache("petra");
@@ -118,5 +118,5 @@ export default async function onboard({ page, ...args }: Onboard) {
     }
 
     await sleep(3_000);
-    console.info(picocolors.greenBright("✨ Petra onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Petra onboarding completed successfully"));
 }

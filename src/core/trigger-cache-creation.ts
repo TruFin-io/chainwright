@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import { styleText } from "node:util";
 import { chromium } from "@playwright/test";
-import picocolors from "picocolors";
 import type { GetSetupFunctionFileList, SupportedWallets, WalletSetupConfig, WalletSetupFunction } from "@/types";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import { getWalletExtensionIdFromBrowser } from "@/utils/wallets/get-wallet-extension-id-from-browser";
@@ -47,16 +47,16 @@ export async function triggerCacheCreation({
     if (fs.existsSync(walletDataDir) && fileList.length > 1) {
         throw Error(
             [
-                picocolors.yellowBright(
+                styleText(
+                    "yellowBright",
                     [
                         `❌ ${walletProfileDir} directory already exists for ${extensionName}.`,
                         `\n To setup another wallet profile, add a profile name to the wallet setup function.`,
-                        picocolors.blueBright(
-                            picocolors.italic(
-                                `Example: defineWalletSetup(async ({ context, walletPage }) => { ... }, { profileName: "profile-name" });`,
-                            ),
+                        styleText(
+                            ["blueBright", "italic"],
+                            `Example: defineWalletSetup(async ({ context, walletPage }) => { ... }, { profileName: "profile-name" });`,
                         ),
-                        picocolors.italic(`You can also use the --force flag to overwrite the existing cache.`),
+                        styleText("italic", `You can also use the --force flag to overwrite the existing cache.`),
                     ].join("\n"),
                 ),
             ].join("\n"),
@@ -73,22 +73,22 @@ export async function triggerCacheCreation({
         slowMo: config?.slowMo ?? 0,
     });
 
-    console.info(picocolors.magentaBright(`🧩🚀 Starting Chrome extension for ${walletName.toUpperCase()}`));
+    console.info(styleText("magentaBright", `🧩🚀 Starting Chrome extension for ${walletName.toUpperCase()}`));
     const walletPage = await waitForExtensionOnLoadPage(context, walletName);
 
     if (!fs.existsSync(extensionIdPathTxt) && !fs.existsSync(extensionPathTxt)) {
         const extensionId = await getWalletExtensionIdFromBrowser(context, extensionName);
-        console.info(picocolors.magentaBright(`🆔 ${extensionName} extension ID: ${extensionId}`));
+        console.info(styleText("magentaBright", `🆔 ${extensionName} extension ID: ${extensionId}`));
 
         fs.writeFileSync(extensionIdPathTxt, extensionId, "utf-8");
-        console.info(picocolors.cyanBright(`💾 Saved extension ID to: ${extensionIdPathTxt}`));
+        console.info(styleText("cyanBright", `💾 Saved extension ID to: ${extensionIdPathTxt}`));
 
         // Save extension path to disk
         fs.writeFileSync(extensionPathTxt, extensionPath, "utf-8");
-        console.info(picocolors.blueBright(`📁 Saved extension Path to: ${extensionPathTxt}`));
+        console.info(styleText("blueBright", `📁 Saved extension Path to: ${extensionPathTxt}`));
 
         fs.writeFileSync(passwordTxt, walletPassword, "utf-8");
-        console.info(picocolors.yellowBright(`🔑 Saved ${walletName} password to: ${passwordTxt}`));
+        console.info(styleText("yellowBright", `🔑 Saved ${walletName} password to: ${passwordTxt}`));
     }
 
     try {

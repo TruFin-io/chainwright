@@ -1,5 +1,5 @@
+import { styleText } from "node:util";
 import { expect, type Page } from "@playwright/test";
-import picocolors from "picocolors";
 import { sleep } from "@/utils/sleep";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { PhantomProfile } from "../phantom-profile";
@@ -24,7 +24,7 @@ type TargetInfo = {
 };
 
 export default async function onboard({ page, addWallet, ...args }: Onboarding) {
-    console.info(picocolors.yellowBright(`\n Phantom onboarding started...`));
+    console.info(styleText("yellowBright", `\n Phantom onboarding started...`));
 
     const PASSWORD = await getWalletPasswordFromCache("phantom");
 
@@ -207,5 +207,5 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
     }
 
     await sleep(3_000);
-    console.info(picocolors.greenBright("✨ Phantom onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Phantom onboarding completed successfully"));
 }

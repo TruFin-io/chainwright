@@ -1,9 +1,8 @@
 import { createWriteStream } from "node:fs";
 import { Readable } from "node:stream";
 import type * as streamWeb from "node:stream/web";
+import { styleText } from "node:util";
 import cliProgress from "cli-progress";
-import colors from "picocolors";
-import picocolors from "picocolors";
 
 const TIMEOUT = 120_000;
 
@@ -18,7 +17,7 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
     const response = await fetch(url, { redirect: "follow", signal: controller.signal });
 
     if (!response.ok) {
-        console.error(picocolors.redBright(`❌ Download failed: HTTP ${response.status}`));
+        console.error(styleText("redBright", `❌ Download failed: HTTP ${response.status}`));
         controller.abort();
         process.exit(1);
     }
@@ -30,7 +29,7 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
 
     try {
         const progressBar = new cliProgress.SingleBar({
-            format: `Downloading ${colors.cyan("{bar}")} {percentage}%`,
+            format: `Downloading ${styleText("cyan", "{bar}")} {percentage}%`,
             clearOnComplete: true,
             barCompleteChar: "\u2588",
             barIncompleteChar: "\u2591",
@@ -53,7 +52,7 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
             });
         });
     } catch (error) {
-        console.error(picocolors.redBright(`❌ Download failed: ${error}`));
+        console.error(styleText("redBright", `❌ Download failed: ${error}`));
         process.exit(1);
     } finally {
         clearTimeout(requestTimeout);

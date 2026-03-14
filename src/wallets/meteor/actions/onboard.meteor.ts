@@ -1,5 +1,5 @@
+import { styleText } from "node:util";
 import type { Page } from "@playwright/test";
-import picocolors from "picocolors";
 import { sleep } from "@/utils/sleep";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { MeteorProfile } from "../meteor-profile";
@@ -14,7 +14,7 @@ import { switchNetwork } from "./switch-network.meteor";
 type Onboard = OnboardingArgs & { page: Page };
 
 export default async function onboard({ page, privateKey, network, accountName, addWallet }: Onboard) {
-    console.info(picocolors.yellowBright(`\n Meteor onboarding started...`));
+    console.info(styleText("yellowBright", `\n Meteor onboarding started...`));
 
     const PASSWORD = await getWalletPasswordFromCache("meteor");
     const meteorProfile = new MeteorProfile();
@@ -87,7 +87,8 @@ export default async function onboard({ page, privateKey, network, accountName, 
 
         if (!isRetrySuccessful) {
             throw Error(
-                picocolors.redBright(
+                styleText(
+                    "redBright",
                     [
                         "No Account Found",
                         "Account associated with the private key not found. Please make sure you are trying to import an account on the correct network(Mainnet/Testnet).",
@@ -134,5 +135,5 @@ export default async function onboard({ page, privateKey, network, accountName, 
     }
 
     await sleep(3_000);
-    console.info(picocolors.greenBright("✨ Meteor onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Meteor onboarding completed successfully"));
 }

@@ -1,9 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { styleText } from "node:util";
 import { select } from "@inquirer/prompts";
 import { Command } from "commander";
-import pc from "picocolors";
-import picocolors from "picocolors";
 import { generateTypes } from "@/core/generate-types";
 import getSetupFunction from "@/core/get-setup-function";
 import { triggerCacheCreation } from "@/core/trigger-cache-creation";
@@ -26,9 +25,9 @@ export async function clientEntry() {
     const program = new Command();
 
     program
-        .name(pc.yellow("Chainwright"))
-        .description(pc.green("A CLI tool for setting up wallet cache for E2E testing of web3 applications"))
-        .version(pc.blue("0.0.0"));
+        .name(styleText("yellow", "Chainwright"))
+        .description(styleText("green", "A CLI tool for setting up wallet cache for E2E testing of web3 applications"))
+        .version(styleText("blue", "0.0.0"));
 
     program
         .command("chainwright")
@@ -96,7 +95,7 @@ export async function clientEntry() {
 
             for (const { walletName, config, walletPassword, setupFunction, fileList } of _setupFunction) {
                 try {
-                    console.info(pc.cyanBright(`\n Setting up cache for ${walletName}...`));
+                    console.info(styleText("cyanBright", `\n Setting up cache for ${walletName}...`));
 
                     await triggerCacheCreation({
                         walletName: walletName as SupportedWallets,
@@ -118,7 +117,10 @@ export async function clientEntry() {
 
                     if (!(error as Error).message.includes("directory already exists")) {
                         console.error(
-                            pc.redBright(`❌ Failed to setup cache for ${walletName}: ${(error as Error).message}`),
+                            styleText(
+                                "redBright",
+                                `❌ Failed to setup cache for ${walletName}: ${(error as Error).message}`,
+                            ),
                         );
                     }
                     process.exit(1);
@@ -130,5 +132,5 @@ export async function clientEntry() {
 }
 
 clientEntry().catch((error) =>
-    console.error(picocolors.redBright(`Failed to run the CLI: ${(error as Error).message})`)),
+    console.error(styleText("redBright", `Failed to run the CLI: ${(error as Error).message})`)),
 );

@@ -41,10 +41,10 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallet 
     if (!_fileList.length || _fileList.length === 0) {
         throw new Error(
             [
-                `No wallet setup file found at ${walletSetupDir} for wallet: ${selectedWallet}`,
+                `No wallet setup file found at ${walletSetupDir} for wallet: "${selectedWallet}".`,
                 `Setup files must use a ".setup.{ts,js,mjs}" extension and include a valid wallet name.`,
                 `Examples: "metamask.setup.ts", "solflare.setup.ts", "phantom.setup.ts", "metamask-connected.setup.ts"`,
-            ].join("\n"),
+            ].join("\n "),
         );
     }
 

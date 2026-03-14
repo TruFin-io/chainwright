@@ -1,5 +1,5 @@
+import { styleText } from "node:util";
 import { expect, type Page } from "@playwright/test";
-import picocolors from "picocolors";
 import { sleep } from "@/utils/sleep";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { MetamaskProfile } from "../metamask-profile";
@@ -24,7 +24,7 @@ type TargetInfo = {
 };
 
 export default async function onboard({ page, mainAccountName, ...args }: Onboard) {
-    console.info(picocolors.yellowBright(`\n 🦊 MetaMask onboarding started...`));
+    console.info(styleText("yellowBright", `\n 🦊 MetaMask onboarding started...`));
     const PASSWORD = await getWalletPasswordFromCache("metamask");
     const walletProfile = new MetamaskProfile();
 
@@ -141,5 +141,5 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
     }
 
     await sleep(5_000);
-    console.info(picocolors.greenBright("✨ MetaMask onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ MetaMask onboarding completed successfully"));
 }
