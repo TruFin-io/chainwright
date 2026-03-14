@@ -58,6 +58,7 @@ export async function triggerCacheCreation({
                         ),
                         styleText("italic", `You can also use the --force flag to overwrite the existing cache.`),
                     ].join("\n"),
+                    { validateStream: false },
                 ),
             ].join("\n"),
         );
@@ -73,7 +74,11 @@ export async function triggerCacheCreation({
         slowMo: config?.slowMo ?? 0,
     });
 
-    console.info(styleText("magentaBright", `🧩🚀 Starting Chrome extension for ${walletName.toUpperCase()}`));
+    console.info(
+        styleText("magentaBright", `🧩🚀 Starting Chrome extension for ${walletName.toUpperCase()}`, {
+            validateStream: false,
+        }),
+    );
     const walletPage = await waitForExtensionOnLoadPage(context, walletName);
 
     if (!fs.existsSync(extensionIdPathTxt) && !fs.existsSync(extensionPathTxt)) {
@@ -83,14 +88,20 @@ export async function triggerCacheCreation({
         );
 
         fs.writeFileSync(extensionIdPathTxt, extensionId, "utf-8");
-        console.info(styleText("cyanBright", `💾 Saved extension ID to: ${extensionIdPathTxt}`));
+        console.info(
+            styleText("cyanBright", `💾 Saved extension ID to: ${extensionIdPathTxt}`, { validateStream: false }),
+        );
 
         // Save extension path to disk
         fs.writeFileSync(extensionPathTxt, extensionPath, "utf-8");
-        console.info(styleText("blueBright", `📁 Saved extension Path to: ${extensionPathTxt}`));
+        console.info(
+            styleText("blueBright", `📁 Saved extension Path to: ${extensionPathTxt}`, { validateStream: false }),
+        );
 
         fs.writeFileSync(passwordTxt, walletPassword, "utf-8");
-        console.info(styleText("yellowBright", `🔑 Saved ${walletName} password to: ${passwordTxt}`));
+        console.info(
+            styleText("yellowBright", `🔑 Saved ${walletName} password to: ${passwordTxt}`, { validateStream: false }),
+        );
     }
 
     try {

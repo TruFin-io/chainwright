@@ -71,7 +71,7 @@ export async function waitForExtensionOnLoadPage(context: BrowserContext, wallet
         }
     }
 
-    console.info(styleText("greenBright", "✅ Extension page is properly loaded and ready"));
+    console.info(styleText("greenBright", "✅ Extension page is properly loaded and ready", { validateStream: false }));
     // biome-ignore lint/style/noNonNullAssertion: this is intentional
     return _extensionPage!;
 }

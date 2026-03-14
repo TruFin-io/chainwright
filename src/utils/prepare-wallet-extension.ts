@@ -24,7 +24,9 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
 
     if (force && fs.existsSync(CACHE_DIR_NAME) && !IS_EXECUTED) {
         fs.rmSync(CACHE_DIR_NAME, { recursive: true });
-        console.info(styleText("magenta", `🧹 Removed ${walletName} because of the force flag`));
+        console.info(
+            styleText("magenta", `🧹 Removed ${walletName} because of the force flag`, { validateStream: false }),
+        );
     }
 
     // Ensure the cache directory exists
@@ -39,9 +41,13 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
     if (fs.existsSync(outputPath)) {
         console.info(`✅ ${walletName} Version is downloaded already.`);
     } else {
-        console.info(styleText("cyanBright", `📥 Downloading ${walletName} extension...`));
+        console.info(styleText("cyanBright", `📥 Downloading ${walletName} extension...`, { validateStream: false }));
         await downloadFile({ url: downloadUrl, destination: zipFilePath });
-        console.info(styleText("green", `✅ ${name.toUpperCase()} Extension downloaded successfully.`));
+        console.info(
+            styleText("green", `✅ ${name.toUpperCase()} Extension downloaded successfully.`, {
+                validateStream: false,
+            }),
+        );
     }
 
     // Unzip the archive if not already extracted
@@ -52,7 +58,11 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
         console.info(`✅ ${walletName} Extension extracted successfully.`);
     } else {
         if (IS_EXECUTED) {
-            console.info(styleText("magentaBright", `Using the cached ${walletName} extension for profile creation.`));
+            console.info(
+                styleText("magentaBright", `Using the cached ${walletName} extension for profile creation.`, {
+                    validateStream: false,
+                }),
+            );
             return outputPath;
         }
 
@@ -60,6 +70,7 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
             styleText(
                 "yellow",
                 `⚠️ Skipping ${walletName} cache creation: Cache already exists at ${outputPath}. Use --force to overwrite.`,
+                { validateStream: false },
             ),
         );
     }

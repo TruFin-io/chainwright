@@ -9,7 +9,7 @@ import { switchAccount } from "./switch-account.keplr";
 type Onboard = { onboard: OnboardingArgs } & { page: Page };
 
 export default async function onboard({ page, onboard }: Onboard) {
-    console.info(styleText("yellowBright", `\n Keplr onboarding started...`));
+    console.info(styleText("yellowBright", `\n Keplr onboarding started...`, { validateStream: false }));
 
     if (onboard.length === 1) {
         for (const { privateKey, walletName, chains } of onboard) {
@@ -69,5 +69,5 @@ export default async function onboard({ page, onboard }: Onboard) {
     }
 
     await sleep(3_000);
-    console.info(styleText("greenBright", "✨ Keplr onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Keplr onboarding completed successfully", { validateStream: false }));
 }

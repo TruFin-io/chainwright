@@ -10,7 +10,7 @@ import { switchNetwork } from "./switch-network.solflare";
 type Onboard = OnboardingArgs & { page: Page };
 
 export async function onboard({ page, recoveryPhrase, network, walletName, addWallet }: Onboard) {
-    console.info(styleText("yellowBright", `\n Solflare onboarding started...`));
+    console.info(styleText("yellowBright", `\n Solflare onboarding started...`, { validateStream: false }));
 
     const PASSWORD = await getWalletPasswordFromCache("solflare");
 
@@ -54,5 +54,5 @@ export async function onboard({ page, recoveryPhrase, network, walletName, addWa
         }
     }
 
-    console.info(styleText("greenBright", "✨ Solflare onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Solflare onboarding completed successfully", { validateStream: false }));
 }

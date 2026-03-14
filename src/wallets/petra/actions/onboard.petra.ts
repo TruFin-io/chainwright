@@ -17,7 +17,7 @@ type Onboard = OnboardingArgs & {
 };
 
 export default async function onboard({ page, ...args }: Onboard) {
-    console.info(styleText("yellowBright", `\n Petra onboarding started...`));
+    console.info(styleText("yellowBright", `\n Petra onboarding started...`, { validateStream: false }));
 
     const petraProfile = new PetraProfile();
     const PASSWORD = await getWalletPasswordFromCache("petra");
@@ -118,5 +118,5 @@ export default async function onboard({ page, ...args }: Onboard) {
     }
 
     await sleep(3_000);
-    console.info(styleText("greenBright", "✨ Petra onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Petra onboarding completed successfully", { validateStream: false }));
 }

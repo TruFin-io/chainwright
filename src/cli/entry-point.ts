@@ -95,7 +95,9 @@ export async function clientEntry() {
 
             for (const { walletName, config, walletPassword, setupFunction, fileList } of _setupFunction) {
                 try {
-                    console.info(styleText("cyanBright", `\n Setting up cache for ${walletName}...`));
+                    console.info(
+                        styleText("cyanBright", `\n Setting up cache for ${walletName}...`, { validateStream: false }),
+                    );
 
                     await triggerCacheCreation({
                         walletName: walletName as SupportedWallets,
@@ -133,5 +135,7 @@ export async function clientEntry() {
 }
 
 clientEntry().catch((error) =>
-    console.error(styleText("redBright", `Failed to run the CLI: ${(error as Error).message})`)),
+    console.error(
+        styleText("redBright", `Failed to run the CLI: ${(error as Error).message})`, { validateStream: false }),
+    ),
 );

@@ -17,7 +17,7 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
     const response = await fetch(url, { redirect: "follow", signal: controller.signal });
 
     if (!response.ok) {
-        console.error(styleText("redBright", `❌ Download failed: HTTP ${response.status}`));
+        console.error(styleText("redBright", `❌ Download failed: HTTP ${response.status}`, { validateStream: false }));
         controller.abort();
         process.exit(1);
     }
@@ -29,7 +29,7 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
 
     try {
         const progressBar = new cliProgress.SingleBar({
-            format: `Downloading ${styleText("cyan", "{bar}")} {percentage}%`,
+            format: `Downloading ${styleText("cyan", "{bar}", { validateStream: false })} {percentage}%`,
             clearOnComplete: true,
             barCompleteChar: "\u2588",
             barIncompleteChar: "\u2591",
@@ -52,7 +52,7 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
             });
         });
     } catch (error) {
-        console.error(styleText("redBright", `❌ Download failed: ${error}`));
+        console.error(styleText("redBright", `❌ Download failed: ${error}`, { validateStream: false }));
         process.exit(1);
     } finally {
         clearTimeout(requestTimeout);

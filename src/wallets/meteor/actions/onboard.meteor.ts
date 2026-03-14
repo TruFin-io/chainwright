@@ -14,7 +14,7 @@ import { switchNetwork } from "./switch-network.meteor";
 type Onboard = OnboardingArgs & { page: Page };
 
 export default async function onboard({ page, privateKey, network, accountName, addWallet }: Onboard) {
-    console.info(styleText("yellowBright", `\n Meteor onboarding started...`));
+    console.info(styleText("yellowBright", `\n Meteor onboarding started...`, { validateStream: false }));
 
     const PASSWORD = await getWalletPasswordFromCache("meteor");
     const meteorProfile = new MeteorProfile();
@@ -93,6 +93,7 @@ export default async function onboard({ page, privateKey, network, accountName, 
                         "No Account Found",
                         "Account associated with the private key not found. Please make sure you are trying to import an account on the correct network(Mainnet/Testnet).",
                     ].join("\n"),
+                    { validateStream: false },
                 ),
             );
         }

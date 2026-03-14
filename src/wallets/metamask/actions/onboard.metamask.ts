@@ -24,7 +24,7 @@ type TargetInfo = {
 };
 
 export default async function onboard({ page, mainAccountName, ...args }: Onboard) {
-    console.info(styleText("yellowBright", `\n 🦊 MetaMask onboarding started...`));
+    console.info(styleText("yellowBright", `\n 🦊 MetaMask onboarding started...`, { validateStream: false }));
     const PASSWORD = await getWalletPasswordFromCache("metamask");
     const walletProfile = new MetamaskProfile();
 
@@ -141,5 +141,5 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
     }
 
     await sleep(5_000);
-    console.info(styleText("greenBright", "✨ MetaMask onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ MetaMask onboarding completed successfully", { validateStream: false }));
 }

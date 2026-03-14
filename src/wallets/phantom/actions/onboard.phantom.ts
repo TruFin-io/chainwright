@@ -24,7 +24,7 @@ type TargetInfo = {
 };
 
 export default async function onboard({ page, addWallet, ...args }: Onboarding) {
-    console.info(styleText("yellowBright", `\n Phantom onboarding started...`));
+    console.info(styleText("yellowBright", `\n Phantom onboarding started...`, { validateStream: false }));
 
     const PASSWORD = await getWalletPasswordFromCache("phantom");
 
@@ -207,5 +207,5 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
     }
 
     await sleep(3_000);
-    console.info(styleText("greenBright", "✨ Phantom onboarding completed successfully"));
+    console.info(styleText("greenBright", "✨ Phantom onboarding completed successfully", { validateStream: false }));
 }
