@@ -12,6 +12,7 @@ import { WALLET_SETUP_DIR_NAME } from "../utils/constants";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const BASE_DIR = path.join(__dirname, "..", "tests", WALLET_SETUP_DIR_NAME);
+const MAX_RETRIES = 2;
 
 type ActionOptions = {
     headless: boolean;
@@ -121,10 +122,49 @@ export async function clientEntry() {
                         console.error(
                             styleText(
                                 "redBright",
-                                `❌ Failed to setup cache for ${walletName}: ${(error as Error).message}`,
+                                `\n ❌ Failed to setup cache for ${walletName}: ${(error as Error).message}`,
                                 { validateStream: false },
                             ),
                         );
+
+                        // If the setup fails
+                        let retryCount = 0;
+                        while (MAX_RETRIES > retryCount) {
+                            console.info(
+                                `${styleText("yellow", `Retry Attempt ${retryCount + 1} of ${MAX_RETRIES} for ${walletName}...`, { validateStream: false })}`,
+                            );
+                            console.info(styleText("yellow", `Retrying wallet setup...`, { validateStream: false }));
+                            try {
+                                await triggerCacheCreation({
+                                    walletName: walletName as SupportedWallets,
+                                    config,
+                                    setupFunction,
+                                    fileList,
+                                    force: flags.force,
+                                    walletPassword: walletPassword,
+                                });
+                                break; // Break the loop if setup is successful
+                            } catch (error) {
+                                if (retryCount + 1 < MAX_RETRIES) {
+                                    console.error(
+                                        styleText("redBright", `\n ❌ Attempt ${retryCount + 1} failed! Retrying...`, {
+                                            validateStream: false,
+                                        }),
+                                    );
+                                }
+
+                                retryCount++;
+                                if (retryCount === MAX_RETRIES) {
+                                    console.error(
+                                        styleText(
+                                            "redBright",
+                                            `❌ Failed to setup cache after ${MAX_RETRIES} attempts for ${walletName}: ${(error as Error).message}`,
+                                            { validateStream: false },
+                                        ),
+                                    );
+                                }
+                            }
+                        }
                     }
                     process.exit(1);
                 }
