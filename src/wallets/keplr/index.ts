@@ -1,3 +1,3 @@
 export * from "./keplr";
 export * from "./keplr-fixture";
-export { keplrWorkerScopeFixture } from "./keplr-worker-scope-fixture";
+export * from "./keplr-worker-scope-fixture";
