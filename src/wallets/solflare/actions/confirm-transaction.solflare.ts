@@ -4,7 +4,7 @@ import { popupPageSelectors } from "../selectors/popup-page-selectors.solflare";
 export async function confirmTransaction(page: Page) {
     const approveButton = page.getByTestId(popupPageSelectors.approveButton);
     const networkFeeSection = page.getByTestId("section-network-fee");
-    await networkFeeSection.waitFor({ state: "attached", timeout: 20_000 });
+    await networkFeeSection.waitFor({ state: "attached", timeout: 40_000 });
 
     const controlLabelText = page.locator("div[data-id='control-label']");
     const isControlLabelTextVisible = await controlLabelText.isVisible().catch(() => false);

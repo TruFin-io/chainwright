@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 import { sleep } from "@/utils/sleep";
 
 export async function autoCloseSolflareNotification(page: Page, isCancelled: () => boolean) {
-    const INTERVAL = 600;
+    const INTERVAL = 150;
     let IS_POLLING_COMPLETE = false;
 
     while (!isCancelled()) {

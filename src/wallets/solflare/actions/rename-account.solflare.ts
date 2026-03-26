@@ -15,9 +15,9 @@ export async function renameAccount({ page, currentAccountName, newAccountName }
         throw new Error(`Account "${currentAccountName}" not found. Make sure the account is available.`);
     }
 
-    await walletSelector.hover();
+    await walletSelector.hover({ timeout: 20_000 });
     const walletSelectorMenu = walletSelector.getByTestId("icon-btn-three-dots");
-    await walletSelectorMenu.click();
+    await walletSelectorMenu.click({ timeout: 20_000 });
 
     const renameAccountButton = page.getByTestId("li-manage-wallet-rename-wallet");
     await renameAccountButton.click();
