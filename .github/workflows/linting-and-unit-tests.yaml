@@ -1,0 +1,36 @@
+name: Linting and Unit Tests
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    linting_and_unit_tests:
+        runs-on: ubuntu-22.04
+        timeout-minutes: 60
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v5
+              with:
+                submodules: "recursive"
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+
+            - name: Use Node LTS
+              uses: actions/setup-node@v6
+              with:
+                node-version: "23.x"
+                cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Run Linting
+              run: pnpm run lint
+
+            - name: Run unit tests
+              run: pnpm run tests
