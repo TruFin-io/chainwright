@@ -1,16 +1,17 @@
 name: Continous Integration
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
     paths:
-      - "src/wallets/**"
-      - "tests/e2e/**"
+      - "tests/e2e/**/*.spec.ts"
+      - "src/wallets/**/actions/**/*.ts"
   pull_request:
     branches: ["main"]
     paths:
-      - "src/wallets/**"
-      - "tests/e2e/**"
+      - "tests/e2e/**/*.spec.ts"
+      - "src/wallets/**/actions/**/*.ts"
 
 jobs:
   test:
@@ -22,6 +23,48 @@ jobs:
          uses: actions/checkout@v5
          with:
             submodules: "recursive"
+            fetch-depth: 0
+
+       - name: Determine changed test files
+         id: changed-tests
+         run: |
+           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+             echo "run_all=true" >> "$GITHUB_OUTPUT"
+             echo "test_files=" >> "$GITHUB_OUTPUT"
+             exit 0
+           fi
+
+           echo "run_all=false" >> "$GITHUB_OUTPUT"
+
+           if [ "${{ github.event_name }}" = "pull_request" ]; then
+             BASE=${{ github.event.pull_request.base.sha }}
+           else
+             BASE=${{ github.event.before }}
+           fi
+
+           CHANGED=$(git diff --name-only "$BASE"...HEAD)
+
+           TEST_FILES=""
+
+           SPEC_FILES=$(echo "$CHANGED" | grep '^tests/e2e/.*\.spec\.ts$' || true)
+           if [ -n "$SPEC_FILES" ]; then
+             TEST_FILES="$SPEC_FILES"
+           fi
+
+           ACTION_FILES=$(echo "$CHANGED" | grep '^src/wallets/.*/actions/.*\.ts$' || true)
+           for action in $ACTION_FILES; do
+             wallet=$(echo "$action" | cut -d'/' -f3)
+             action_name=$(basename "$action" | sed "s/\.$wallet\.ts$//")
+             matched=$(find tests/e2e/"$wallet" -name "*${action_name}*${wallet}.spec.ts" 2>/dev/null || true)
+             if [ -n "$matched" ]; then
+               TEST_FILES=$(printf '%s\n%s' "$TEST_FILES" "$matched")
+             fi
+           done
+
+           TEST_FILES=$(echo "$TEST_FILES" | sort -u | sed '/^$/d')
+           echo "test_files<<EOF" >> "$GITHUB_OUTPUT"
+           echo "$TEST_FILES" >> "$GITHUB_OUTPUT"
+           echo "EOF" >> "$GITHUB_OUTPUT"
 
        - name: Install pnpm
          uses: pnpm/action-setup@v4
@@ -50,4 +93,14 @@ jobs:
          run: xvfb-run pnpm run build:wallets
 
        - name: Run tests
-         run: xvfb-run pnpm playwright test --config=tests/playwright.config.ts
+         run: |
+           if [ "${{ steps.changed-tests.outputs.run_all }}" = "true" ]; then
+             echo "Manual trigger — running full test suite"
+             xvfb-run pnpm playwright test --config=tests/playwright.config.ts
+           elif [ -n "${{ steps.changed-tests.outputs.test_files }}" ]; then
+             echo "Running changed test files only:"
+             echo "${{ steps.changed-tests.outputs.test_files }}"
+             echo "${{ steps.changed-tests.outputs.test_files }}" | xargs xvfb-run pnpm playwright test --config=tests/playwright.config.ts
+           else
+             echo "No relevant test files changed — skipping tests"
+           fi
