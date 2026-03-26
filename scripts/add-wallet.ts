@@ -7,8 +7,8 @@ const projectRoot = path.resolve("./");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const templateWalletDir = path.resolve(__dirname, "templates", "wallet");
-const templateTestsDir = path.resolve(__dirname, "templates", "tests");
+const templateWalletDir = path.resolve(__dirname, "default-template", "wallet");
+const templateTestsDir = path.resolve(__dirname, "default-template", "tests");
 
 const pascalCase = (str: string) => str.replace(/(^\w|-\w)/g, (m) => m.replace("-", "").toUpperCase());
 

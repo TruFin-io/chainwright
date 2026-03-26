@@ -134,8 +134,8 @@ export class {{WalletName}} extends {{WalletName}}Profile {
      * const metamask = new Metamask(page);
      * await metamask.confirmTransaction();
      */
-    async confirmTransaction(gasFee?: GasFeeSettings) {
-        await confirmTransaction(await this.promptPage(this.page.context()), gasFee);
+    async confirmTransaction() {
+        await confirmTransaction(await this.promptPage(this.page.context()));
     }
 
     /**

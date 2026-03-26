@@ -5,33 +5,24 @@ import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
 import persistLocalStorage from "@/utils/persist-local-storage";
-import { removeTempContextDir } from "@/utils/remove-temp-context-directory";
 import waitForStablePage from "@/utils/wait-for-stable-page";
+import { teardownContext } from "@/utils/teardown-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
 import { unlock } from "./actions/unlock.{{walletName}}";
 import { {{WalletName}} } from "./{{walletName}}";
 import { {{WalletName}}Profile } from "./{{walletName}}-profile";
+import type { {{WalletName}}Fixture } from "./types";
+import type { WalletProfileFixtureArgs } from "@/types";
 
-export type {{WalletName}}Fixture = {
-    contextPath: string;
-    {{walletName}}: {{WalletName}};
-    {{walletName}}Page: Page;
-};
 
 let _{{walletName}}Page: Page;
 
-export const {{walletName}}Fixture = (slowMo: number = 0, profileName?: string) => {
+export const {{walletName}}Fixture = ({ slowMo = 0, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<{{WalletName}}Fixture>({
-        contextPath: async ({ browserName }, use, testInfo) => {
+            contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);
 
             await use(tempWalletDataDir);
-
-            const error = await removeTempContextDir(tempWalletDataDir);
-
-            if (error) {
-                console.error(error);
-            }
         },
         context: async ({ context: currentContext, contextPath: tempWalletDataDir }, use) => {
             const wallet = new {{WalletName}}Profile();
@@ -44,7 +35,7 @@ export const {{walletName}}Fixture = (slowMo: number = 0, profileName?: string) 
                 throw new Error(`❌ Cache for {{WalletName}} wallet data not found. Create it first`);
             }
 
-            await fs.promises.cp(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
+            fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
             const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];
             if (process.env.HEADLESS) {
@@ -57,7 +48,7 @@ export const {{walletName}}Fixture = (slowMo: number = 0, profileName?: string) 
 
             const walletPageContext = await chromium.launchPersistentContext(tempWalletDataDir, {
                 headless: false,
-                args: [`--disable-extensions-except=${extensionPath}`],
+                args: browserArgs,
                 slowMo: process.env.HEADLESS ? 0 : slowMo,
             });
 
@@ -81,12 +72,9 @@ export const {{walletName}}Fixture = (slowMo: number = 0, profileName?: string) 
             }
 
             await _{{walletName}}Page.bringToFront();
-
             await unlock(_{{walletName}}Page);
-
             await use(walletPageContext);
-
-            await walletPageContext.close();
+            await teardownContext(walletPageContext, tempWalletDataDir);
         },
         {{walletName}}Page: async ({ context: _ }, use) => {
             await use(_{{walletName}}Page);

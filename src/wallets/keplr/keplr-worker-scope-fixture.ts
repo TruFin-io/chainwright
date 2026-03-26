@@ -52,8 +52,8 @@ export const keplrWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worker
             await use(workerScopeContents.walletPage);
         },
         keplr: async ({ workerScopeContents }, use) => {
-            const petraInstance = new Keplr(workerScopeContents.walletPage);
-            await use(petraInstance);
+            const keplrInstance = new Keplr(workerScopeContents.walletPage);
+            await use(keplrInstance);
         },
     });
 };
