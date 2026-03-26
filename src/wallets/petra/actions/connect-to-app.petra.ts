@@ -1,4 +1,4 @@
-import { type Page, expect } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { actionFooterSelectors } from "../selectors/action-footer";
 import { switchAccount } from "./switch-account.petra";
 

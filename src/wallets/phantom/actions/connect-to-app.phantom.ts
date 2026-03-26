@@ -1,4 +1,4 @@
-import { type Page, expect } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { actionFooterSelectors } from "../selectors/action-footers.phantom";
 import { switchAccount } from "./switch-account.phantom";
 
@@ -11,6 +11,6 @@ export async function connectToApp(page: Page, account?: string) {
     }
 
     const confirmButton = page.getByTestId(actionFooterSelectors.confirmButton);
-    await expect(confirmButton).toBeEnabled({ timeout: 15_000 })
-    await confirmButton.click()
+    await expect(confirmButton).toBeEnabled({ timeout: 15_000 });
+    await confirmButton.click();
 }

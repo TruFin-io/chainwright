@@ -80,7 +80,6 @@ export async function addWalletViaPrivateKey({
         await currentChain.waitFor({ state: "visible", timeout: 20_000 });
         const isCurrentChainChecked = await currentChain.locator("input[type='checkbox']").getAttribute("checked");
 
-
         // If the current chain is not checked, check it.
         if (isCurrentChainChecked === null) {
             await currentChain.click();

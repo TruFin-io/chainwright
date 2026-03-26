@@ -1,42 +1,11 @@
-import { expect, type Page } from "@playwright/test";
-// import { sleep } from "@/utils/sleep";
+import type { Page } from "@playwright/test";
 import { MetamaskProfile } from "../metamask-profile";
-import { accountSelectors } from "../selectors/homepage-selectors.metamask";
 import { switchAccount } from "./switch-account.metamask";
 
 /**
  * By default, the last account will be selected. If you want to select a specific account, pass an `account` parameter.
  */
 export async function connectToApp(page: Page, account?: string) {
-    /**
-     * Grant permission to all accounts in the wallet.
-     * This is the first step so that we can easily switch to any desired account later.
-     * With this approach, we can switch accounts during a test session.
-     */
-    // const editAccountsButton = page.getByTestId("edit");
-    // await editAccountsButton.click();
-
-    // const addWalletButton = page.getByTestId(accountSelectors.addMultichainAccountButton);
-    // const startTextContent = await addWalletButton.textContent();
-    // if (startTextContent?.includes("Syncing")) {
-    //     await expect
-    //         .poll(async () => (await addWalletButton.textContent())?.trim() ?? "", { timeout: 60_000 })
-    //         .not.toBe(startTextContent);
-    // }
-
-    // const allAccounts = await page.locator("div[data-testid^='multichain-account-cell-entropy']").all();
-    // for (const _account of allAccounts) {
-    //     const label = _account.locator("label > span > span");
-    //     const isLabelVisible = await label.isVisible().catch(() => false);
-    //     if (!isLabelVisible) {
-    //         await _account.click();
-    //     }
-    // }
-
-    // const connectMoreAccountsButton = page.getByTestId("connect-more-accounts-button");
-    // await expect(connectMoreAccountsButton).toBeVisible();
-    // await connectMoreAccountsButton.click();
-
     // Now Allow only Ethereum and Sepolia chains
     const permissionsTab = page.getByRole("tab", { name: "Permissions", exact: true });
     await permissionsTab.waitFor({ state: "visible", timeout: 30_000 });
@@ -61,8 +30,6 @@ export async function connectToApp(page: Page, account?: string) {
 
     const updateButton = editNetworkDialog.getByRole("button", { name: "Update", exact: true });
     await updateButton.click();
-
-    // await sleep(400_000);
 
     if (account) {
         await switchAccount({ page, accountName: account });
