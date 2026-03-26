@@ -20,6 +20,11 @@ type ActionOptions = {
     all: "all" | boolean;
     metamask: "metamask" | boolean;
     solflare: "solflare" | boolean;
+    petra: "petra" | boolean;
+    meteor: "meteor" | boolean;
+    keplr: "keplr" | boolean;
+    phantom: "phantom" | boolean;
+    wallets?: CLIOptions[]; // Add this line to include the wallets option
 };
 
 export async function clientEntry() {
@@ -46,6 +51,7 @@ export async function clientEntry() {
         .option("--pt, --petra", "Setup Petra", "petra")
         .option("--ph, --phantom", "Setup Phantom", "phantom")
         .option("-s, --solflare", "Setup Solflare", "solflare")
+        .option("--wls, --wallets <wallets...>", "Specify wallets to setup (e.g., --wallets keplr metamask)")
         .action(async (setupDir: string, flags: ActionOptions) => {
             // Use this to filter out "headless" and "force"
             const commandOptions: Array<CLIOptions> = [
@@ -65,22 +71,26 @@ export async function clientEntry() {
             });
 
             const isWalletSelected = flagValue.length > 0;
-            const response: CLIOptions = !isWalletSelected
-                ? await select({
-                      message: "Select the wallet you want to setup",
-                      choices: [
-                          { name: "All", value: "all" },
-                          { name: "Keplr", value: "keplr" },
-                          { name: "MetaMask", value: "metamask" },
-                          { name: "Meteor", value: "meteor" },
-                          { name: "Petra", value: "petra" },
-                          { name: "Phantom", value: "phantom" },
-                          { name: "Solflare", value: "solflare" },
-                      ],
-                      pageSize: 10,
-                      default: "all",
-                  })
-                : (flagValue[0] as CLIOptions);
+            const multipleWallets = flags.wallets;
+
+            const response = multipleWallets
+                ? multipleWallets
+                : !isWalletSelected
+                  ? await select<CLIOptions>({
+                        message: "Select the wallet you want to setup",
+                        choices: [
+                            { name: "All", value: "all" },
+                            { name: "Keplr", value: "keplr" },
+                            { name: "MetaMask", value: "metamask" },
+                            { name: "Meteor", value: "meteor" },
+                            { name: "Petra", value: "petra" },
+                            { name: "Phantom", value: "phantom" },
+                            { name: "Solflare", value: "solflare" },
+                        ],
+                        pageSize: 10,
+                        default: "all",
+                    })
+                  : (flagValue[0] as CLIOptions);
 
             let walletSetupDir = setupDir;
             const customDirectory = program.commands[0]?.args ?? [];
@@ -166,7 +176,6 @@ export async function clientEntry() {
                             }
                         }
                     }
-                    process.exit(1);
                 }
             }
         });

@@ -1,13 +1,14 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { styleText } from "node:util";
 import { glob } from "glob";
-import type { CLIOptions, GetSetupFunctionFileList } from "@/types";
+import type { CLIOptions, GetSetupFunctionFileList, SupportedWallets } from "@/types";
 import extractWalletNameFromPath from "@/utils/wallets/extract-wallet-name-from-path";
 import type defineWalletSetup from "./define-wallet-setup";
 
 type SetupFunctionHash = {
     walletSetupDir: string;
-    selectedWallet: CLIOptions;
+    selectedWallet: Array<CLIOptions> | CLIOptions;
 };
 
 type SetupFunction = Awaited<ReturnType<typeof defineWalletSetup>>;
@@ -30,8 +31,27 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallet 
         })
     ).sort();
 
-    const filteredFileList =
-        selectedWallet === "all" ? fileList : fileList.filter((filePath) => filePath.includes(selectedWallet));
+    // Log a warning if the selected wallet is not found in the file list
+    const supportedWallets: Array<SupportedWallets> = ["metamask", "solflare", "petra", "meteor", "keplr", "phantom"];
+    Array.isArray(selectedWallet) &&
+        selectedWallet.forEach((wallet) => {
+            if (!supportedWallets.includes(wallet as SupportedWallets)) {
+                console.warn(
+                    styleText(
+                        "magenta",
+                        `Unsupported wallet: "${wallet}". Supported wallets are: ${supportedWallets.join(", ")}`,
+                        { validateStream: false },
+                    ),
+                );
+            }
+        });
+
+    const filteredFileList: Array<string> =
+        selectedWallet === "all"
+            ? fileList
+            : Array.isArray(selectedWallet)
+              ? fileList.filter((filePath) => selectedWallet.some((wallet) => filePath.includes(wallet)))
+              : fileList.filter((filePath) => filePath.includes(selectedWallet));
 
     const _fileList: GetSetupFunctionFileList[] = filteredFileList.map((filePath) => ({
         filePath,
