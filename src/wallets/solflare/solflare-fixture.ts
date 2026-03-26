@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test as base, chromium, type Page } from "@playwright/test";
+import type { WalletProfileFixtureArgs } from "@/types";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
@@ -10,18 +11,12 @@ import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-exte
 import { unlock } from "./actions/unlock.solflare";
 import { Solflare } from "./solflare";
 import { SolflareProfile } from "./solflare-profile";
+import type { SolflareFixture } from "./types";
 import { autoCloseSolflareNotification } from "./utils";
-
-export type SolflareFixture = {
-    contextPath: string;
-    solflare: Solflare;
-    solflarePage: Page;
-    autoCloseNotification: undefined;
-};
 
 let _solflarePage: Page;
 
-export const solflareFixture = (slowMo: number = 0, profileName?: string) => {
+export const solflareFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<SolflareFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);

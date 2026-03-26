@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test as base, chromium, type Page } from "@playwright/test";
+import type { WalletProfileFixtureArgs } from "@/types";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import persistLocalStorage from "@/utils/persist-local-storage";
@@ -9,18 +10,12 @@ import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-exte
 import { unlock } from "./actions/unlock.phantom";
 import { Phantom } from "./phantom";
 import { PhantomProfile } from "./phantom-profile";
+import type { PhantomFixture } from "./types";
 import { autoClosePhantomNotification, getPageFromContextPhantom } from "./utils";
-
-export type PhantomFixture = {
-    contextPath: string;
-    autoCloseNotification: undefined;
-    phantom: Phantom;
-    phantomPage: Page;
-};
 
 let _phantomPage: Page;
 
-export const phantomFixture = (slowMo: number = 0, profileName?: string) => {
+export const phantomFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<PhantomFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test as base, chromium, type Page } from "@playwright/test";
+import type { WalletProfileFixtureArgs } from "@/types";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
@@ -10,16 +11,11 @@ import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-exte
 import unlock from "./actions/unlock.petra";
 import { Petra } from "./petra";
 import { PetraProfile } from "./petra-profile";
-
-export type PetraFixture = {
-    contextPath: string;
-    petra: Petra;
-    petraPage: Page;
-};
+import type { PetraFixture } from "./types";
 
 let _petraPage: Page;
 
-export const petraFixture = (slowMo: number = 0, profileName?: string) => {
+export const petraFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<PetraFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);

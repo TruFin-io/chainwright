@@ -1,15 +1,10 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import { type WorkerScopeFixture, workerScopeContext } from "../utils/worker-scope-context";
 import { Meteor } from "./meteor";
 import { MeteorProfile } from "./meteor-profile";
-
-export type MeteorFixture = {
-    contextPath: string;
-    meteor: Meteor;
-    meteorPage: Page;
-};
+import type { MeteorFixture } from "./types";
 
 export const meteorWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
     return base.extend<MeteorFixture, WorkerScopeFixture<Meteor>>({

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test as base, chromium, type Page } from "@playwright/test";
+import type { WalletProfileFixtureArgs } from "@/types";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
@@ -11,16 +12,11 @@ import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-exte
 import { unlock } from "./actions/unlock.keplr";
 import { Keplr } from "./keplr";
 import { KeplrProfile } from "./keplr-profile";
-
-export type KeplrFixture = {
-    contextPath: string;
-    keplr: Keplr;
-    keplrPage: Page;
-};
+import type { KeplrFixture } from "./types";
 
 let _keplrPage: Page;
 
-export const keplrFixture = (slowMo: number = 0, profileName?: string) => {
+export const keplrFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<KeplrFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);

@@ -1,19 +1,14 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
+import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Solflare } from "./solflare";
+import type { SolflareFixture } from "./types";
 import { autoCloseSolflareNotification } from "./utils";
-import { type WorkerScopeFixture, workerScopeContextSolana } from "./worker-scope-context.solflare";
-
-export type SolflareFixture = {
-    contextPath: string;
-    solflare: Solflare;
-    solflarePage: Page;
-    autoCloseNotification: undefined;
-};
+import { workerScopeContextSolana } from "./worker-scope-context.solflare";
 
 export const solflareWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
-    return base.extend<SolflareFixture, WorkerScopeFixture>({
+    return base.extend<SolflareFixture, WorkerScopeFixture<Solflare>>({
         workerScopeContents: [
             async ({ browser: _ }, use, workerInfo) => {
                 const {

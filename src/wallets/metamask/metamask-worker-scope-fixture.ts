@@ -2,12 +2,13 @@ import { test as base } from "@playwright/test";
 import { Instance, Pool } from "prool";
 import type { WorkerScopeFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
+import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Metamask } from "./metamask";
 import type { MetamaskFixture } from "./types";
-import { type WorkerScopeFixture, workerScopeContextMetamask } from "./worker-scope-context.metamask";
+import { workerScopeContextMetamask } from "./worker-scope-context.metamask";
 
 export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: WorkerScopeFixtureArgs = {}) => {
-    return base.extend<MetamaskFixture, WorkerScopeFixture>({
+    return base.extend<MetamaskFixture, WorkerScopeFixture<Metamask>>({
         workerScopeContents: [
             async ({ browser: _ }, use, workerInfo) => {
                 const {

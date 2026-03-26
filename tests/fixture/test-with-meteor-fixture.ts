@@ -4,7 +4,7 @@ import { meteorWorkerScopeFixture } from "@/wallets/meteor/meteor-worker-scope-f
 import { BASE_URL } from "../utils/base-url";
 
 export const testWithMeteorFixture = meteorFixture();
-export const testFixtureWithNetworkProfile = meteorFixture(undefined, "multiple-network");
+export const testFixtureWithNetworkProfile = meteorFixture({ profileName: "multiple-network" });
 export const testWithMeteorWorkerScope = meteorWorkerScopeFixture({
     dappUrl: `${BASE_URL}/near`,
 });

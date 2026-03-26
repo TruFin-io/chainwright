@@ -1,26 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
-import { type BrowserContext, chromium, type Page, type WorkerInfo } from "@playwright/test";
+import { chromium, type WorkerInfo } from "@playwright/test";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
-import type { Metamask } from "./metamask";
 import { MetamaskProfile } from "./metamask-profile";
 
 type WorkerScopeContext = {
     workerInfo: WorkerInfo;
     profileName?: string;
     slowMo?: number;
-};
-
-export type WorkerScopeFixture = {
-    workerScopeContents: {
-        wallet: Metamask;
-        walletPage: Page;
-        context: BrowserContext;
-    };
-    dappPage: Page;
 };
 
 // Create a worker context for all wallets

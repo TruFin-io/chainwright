@@ -1,4 +1,6 @@
+import type { Page } from "@playwright/test";
 import z from "zod";
+import type { Solflare } from "./solflare";
 
 export type OnboardingArgs = {
     recoveryPhrase: string;
@@ -19,4 +21,11 @@ export type AddAccountArgs = z.infer<typeof addAccountSchema>;
 export type RenameAccountArgs = {
     currentAccountName: string;
     newAccountName: string;
+};
+
+export type SolflareFixture = {
+    contextPath: string;
+    solflare: Solflare;
+    solflarePage: Page;
+    autoCloseNotification: undefined;
 };

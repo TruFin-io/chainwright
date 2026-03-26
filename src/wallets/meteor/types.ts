@@ -1,3 +1,6 @@
+import type { Page } from "@playwright/test";
+import type { Meteor } from "./meteor";
+
 export type MeteorNetwork = "Mainnet" | "Testnet";
 
 export type OnboardingArgs = {
@@ -15,4 +18,10 @@ export type AddAccountArgs = {
     privateKey: string;
     accountName: string;
     network: MeteorNetwork;
+};
+
+export type MeteorFixture = {
+    contextPath: string;
+    meteor: Meteor;
+    meteorPage: Page;
 };

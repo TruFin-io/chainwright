@@ -1,17 +1,11 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Phantom } from "./phantom";
+import type { PhantomFixture } from "./types";
 import { autoClosePhantomNotification } from "./utils";
 import { workerScopeContextPhantom } from "./worker-scope-context.phantom";
-
-export type PhantomFixture = {
-    contextPath: string;
-    phantom: Phantom;
-    phantomPage: Page;
-    autoCloseNotification: undefined;
-};
 
 export const phantomWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
     return base.extend<PhantomFixture, WorkerScopeFixture<Phantom>>({

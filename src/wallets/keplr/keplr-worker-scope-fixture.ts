@@ -1,15 +1,10 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base } from "@playwright/test";
 import type { WorkerScopeFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import { type WorkerScopeFixture, workerScopeContext } from "../utils/worker-scope-context";
 import { Keplr } from "./keplr";
 import { KeplrProfile } from "./keplr-profile";
-
-export type KeplrFixture = {
-    contextPath: string;
-    keplr: Keplr;
-    keplrPage: Page;
-};
+import type { KeplrFixture } from "./types";
 
 export const keplrWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
     return base.extend<KeplrFixture, WorkerScopeFixture<Keplr>>({

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { test as base, chromium, type Page } from "@playwright/test";
 import { Instance, Pool } from "prool";
+import type { WalletProfileFixtureArgs } from "@/types";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
@@ -15,7 +16,7 @@ import type { MetamaskFixture } from "./types";
 
 let _metamaskPage: Page;
 
-export const metamaskFixture = (slowMo: number = 0, profileName?: string) => {
+export const metamaskFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<MetamaskFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);

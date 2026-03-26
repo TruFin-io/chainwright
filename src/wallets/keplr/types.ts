@@ -1,4 +1,6 @@
+import type { Page } from "@playwright/test";
 import z from "zod";
+import type { Keplr } from "./keplr";
 
 const keplrChains = [
     "Injective",
@@ -40,3 +42,9 @@ export const renameAccountSchema = z.object({
 });
 
 export type RenameAccountArgs = z.infer<typeof renameAccountSchema>;
+
+export type KeplrFixture = {
+    contextPath: string;
+    keplr: Keplr;
+    keplrPage: Page;
+};

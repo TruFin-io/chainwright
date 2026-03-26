@@ -1,3 +1,6 @@
+import type { Page } from "@playwright/test";
+import type { Phantom } from "./phantom";
+
 export type OnboardingArgs =
     | {
           mode: "create";
@@ -68,4 +71,11 @@ export type GetAccountAddress = {
               // NB: "Testnet" is for the Sui chain
               network: "Devnet" | "Sepolia" | "Testnet";
           };
+};
+
+export type PhantomFixture = {
+    contextPath: string;
+    autoCloseNotification: undefined;
+    phantom: Phantom;
+    phantomPage: Page;
 };

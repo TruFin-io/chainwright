@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test as base, chromium, type Page } from "@playwright/test";
+import type { WalletProfileFixtureArgs } from "@/types";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import getPageFromContext from "@/utils/get-page-from-context";
@@ -10,16 +11,11 @@ import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-exte
 import { unlock } from "./actions/unlock.meteor";
 import { Meteor } from "./meteor";
 import { MeteorProfile } from "./meteor-profile";
-
-export type MeteorFixture = {
-    contextPath: string;
-    meteor: Meteor;
-    meteorPage: Page;
-};
+import type { MeteorFixture } from "./types";
 
 let _meteorPage: Page;
 
-export const meteorFixture = (slowMo: number = 0, profileName?: string) => {
+export const meteorFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<MeteorFixture>({
         contextPath: async ({ browserName }, use, testInfo) => {
             const tempWalletDataDir = await createTempContextDirectory(`${browserName}-${testInfo.testId}`);

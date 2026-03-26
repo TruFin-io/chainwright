@@ -38,3 +38,8 @@ export type WorkerScopeFixtureArgs = {
     profileName?: string;
     dappUrl?: string;
 };
+
+export type WalletProfileFixtureArgs = {
+    slowMo?: number;
+    profileName?: string;
+};
