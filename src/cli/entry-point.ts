@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { styleText } from "node:util";
-import { select } from "@inquirer/prompts";
+import { checkbox } from "@inquirer/prompts";
 import { Command } from "commander";
 import { generateTypes } from "@/core/generate-types";
 import getSetupFunction from "@/core/get-setup-function";
@@ -76,7 +76,7 @@ export async function clientEntry() {
             const response = multipleWallets
                 ? multipleWallets
                 : !isWalletSelected
-                  ? await select<CLIOptions>({
+                  ? await checkbox<CLIOptions>({
                         message: "Select the wallet you want to setup",
                         choices: [
                             { name: "All", value: "all" },
@@ -88,9 +88,8 @@ export async function clientEntry() {
                             { name: "Solflare", value: "solflare" },
                         ],
                         pageSize: 10,
-                        default: "all",
                     })
-                  : (flagValue[0] as CLIOptions);
+                  : flagValue;
 
             let walletSetupDir = setupDir;
             const customDirectory = program.commands[0]?.args ?? [];
@@ -101,7 +100,7 @@ export async function clientEntry() {
 
             const _setupFunction = await getSetupFunction({
                 walletSetupDir,
-                selectedWallet: response,
+                selectedWallet: response as Array<CLIOptions>,
             });
 
             for (const { walletName, config, walletPassword, setupFunction, fileList } of _setupFunction) {

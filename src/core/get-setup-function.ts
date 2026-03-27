@@ -8,7 +8,7 @@ import type defineWalletSetup from "./define-wallet-setup";
 
 type SetupFunctionHash = {
     walletSetupDir: string;
-    selectedWallet: Array<CLIOptions> | CLIOptions;
+    selectedWallet: Array<CLIOptions>;
 };
 
 type SetupFunction = Awaited<ReturnType<typeof defineWalletSetup>>;
@@ -31,10 +31,13 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallet 
         })
     ).sort();
 
+    // biome-ignore lint/style/noNonNullAssertion: Selected wallet will always be available
+    const _selectedWallet = selectedWallet.length === 1 ? selectedWallet[0]! : selectedWallet;
+
     // Log a warning if the selected wallet is not found in the file list
     const supportedWallets: Array<SupportedWallets> = ["metamask", "solflare", "petra", "meteor", "keplr", "phantom"];
-    Array.isArray(selectedWallet) &&
-        selectedWallet.forEach((wallet) => {
+    Array.isArray(_selectedWallet) &&
+        _selectedWallet.forEach((wallet) => {
             if (!supportedWallets.includes(wallet as SupportedWallets)) {
                 console.warn(
                     styleText(
@@ -47,7 +50,7 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallet 
         });
 
     const filteredFileList: Array<string> =
-        selectedWallet === "all"
+        _selectedWallet === "all"
             ? fileList
             : Array.isArray(selectedWallet)
               ? fileList.filter((filePath) => selectedWallet.some((wallet) => filePath.includes(wallet)))
