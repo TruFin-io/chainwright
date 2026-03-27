@@ -100,7 +100,7 @@ export async function clientEntry() {
 
             const _setupFunction = await getSetupFunction({
                 walletSetupDir,
-                selectedWallet: response as Array<CLIOptions>,
+                selectedWallets: response as Array<CLIOptions>,
             });
 
             for (const { walletName, config, walletPassword, setupFunction, fileList } of _setupFunction) {

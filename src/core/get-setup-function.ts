@@ -8,7 +8,7 @@ import type defineWalletSetup from "./define-wallet-setup";
 
 type SetupFunctionHash = {
     walletSetupDir: string;
-    selectedWallet: Array<CLIOptions>;
+    selectedWallets: Array<CLIOptions>;
 };
 
 type SetupFunction = Awaited<ReturnType<typeof defineWalletSetup>>;
@@ -20,7 +20,7 @@ const createGlobPattern = (walletSetupDir: string) => {
     return `${base}/**/*.setup.{ts,js,}`;
 };
 
-export default async function getSetupFunction({ walletSetupDir, selectedWallet }: SetupFunctionHash) {
+export default async function getSetupFunction({ walletSetupDir, selectedWallets }: SetupFunctionHash) {
     const globPattern = createGlobPattern(walletSetupDir);
     const fileList = (
         await glob(globPattern, {
@@ -31,13 +31,14 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallet 
         })
     ).sort();
 
-    // biome-ignore lint/style/noNonNullAssertion: Selected wallet will always be available
-    const _selectedWallet = selectedWallet.length === 1 ? selectedWallet[0]! : selectedWallet;
+    const _selectedWallets =
+        // biome-ignore lint/style/noNonNullAssertion: We will always have a selected wallet
+        selectedWallets.length === 1 ? selectedWallets[0]! : selectedWallets.includes("all") ? "all" : selectedWallets;
 
     // Log a warning if the selected wallet is not found in the file list
     const supportedWallets: Array<SupportedWallets> = ["metamask", "solflare", "petra", "meteor", "keplr", "phantom"];
-    Array.isArray(_selectedWallet) &&
-        _selectedWallet.forEach((wallet) => {
+    Array.isArray(_selectedWallets) &&
+        _selectedWallets.forEach((wallet) => {
             if (!supportedWallets.includes(wallet as SupportedWallets)) {
                 console.warn(
                     styleText(
@@ -50,11 +51,11 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallet 
         });
 
     const filteredFileList: Array<string> =
-        _selectedWallet === "all"
+        _selectedWallets === "all"
             ? fileList
-            : Array.isArray(selectedWallet)
-              ? fileList.filter((filePath) => selectedWallet.some((wallet) => filePath.includes(wallet)))
-              : fileList.filter((filePath) => filePath.includes(selectedWallet));
+            : Array.isArray(_selectedWallets)
+              ? fileList.filter((filePath) => _selectedWallets.some((wallet) => filePath.includes(wallet)))
+              : fileList.filter((filePath) => filePath.includes(_selectedWallets));
 
     const _fileList: GetSetupFunctionFileList[] = filteredFileList.map((filePath) => ({
         filePath,
@@ -64,7 +65,7 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallet 
     if (!_fileList.length || _fileList.length === 0) {
         throw new Error(
             [
-                `No wallet setup file found at ${walletSetupDir} for wallet: "${selectedWallet}".`,
+                `No wallet setup file found at ${walletSetupDir} for wallet: "${selectedWallets}".`,
                 `Setup files must use a ".setup.{ts,js,mjs}" extension and include a valid wallet name.`,
                 `Examples: "metamask.setup.ts", "solflare.setup.ts", "phantom.setup.ts", "metamask-connected.setup.ts"`,
             ].join("\n "),
