@@ -37,12 +37,16 @@ describe("getSetupFunction", () => {
         fs.rmSync(WALLET_SETUP_DIR, { force: true, recursive: true });
     });
 
-    async function handleMock(mockFilePaths: string[], selectedWallet: CLIOptions = "all", walletSetupDir?: string) {
+    async function handleMock(
+        mockFilePaths: string[],
+        selectedWallet: Array<CLIOptions> = ["all"],
+        walletSetupDir?: string,
+    ) {
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
         const result = await getSetupFunction({
             walletSetupDir: walletSetupDir ?? WALLET_SETUP_DIR,
-            selectedWallet: selectedWallet,
+            selectedWallets: selectedWallet,
         });
 
         return result;
@@ -78,7 +82,7 @@ describe("getSetupFunction", () => {
             path.resolve(WALLET_SETUP_DIR, "phantom.setup.ts"),
         ];
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
-        const result = await handleMock(mockFilePaths, "metamask");
+        const result = await handleMock(mockFilePaths, ["metamask"]);
         expect(result).toHaveLength(2);
         result.forEach((item) => {
             expect(item).toHaveProperty("walletName", "metamask");
@@ -90,7 +94,7 @@ describe("getSetupFunction", () => {
     it("should throw an error when no setup files are found", async () => {
         vi.mocked(glob).mockResolvedValue([]);
 
-        await expect(handleMock([], "all")).rejects.toThrowError(
+        await expect(handleMock([], ["all"])).rejects.toThrowError(
             [
                 `No wallet setup file found at ${WALLET_SETUP_DIR} for wallet: "all".`,
                 `Setup files must use a ".setup.{ts,js,mjs}" extension and include a valid wallet name.`,
@@ -108,7 +112,7 @@ describe("getSetupFunction", () => {
 
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
-        await expect(handleMock(mockFilePaths, "metamask", walletSetupDir)).rejects.toThrow(
+        await expect(handleMock(mockFilePaths, ["metamask"], walletSetupDir)).rejects.toThrow(
             [
                 `No wallet setup file found at /test/wallet-setup for wallet: "metamask".`,
                 `Setup files must use a ".setup.{ts,js,mjs}" extension and include a valid wallet name.`,
@@ -122,7 +126,7 @@ describe("getSetupFunction", () => {
 
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
-        const result = await handleMock(mockFilePaths, "metamask");
+        const result = await handleMock(mockFilePaths, ["metamask"]);
 
         expect(result).toHaveLength(1);
         expect(result[0]).toHaveProperty("walletName", "metamask");
@@ -137,7 +141,7 @@ describe("getSetupFunction", () => {
 
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
-        await handleMock(mockFilePaths, "metamask", walletSetupDir);
+        await handleMock(mockFilePaths, ["metamask"], walletSetupDir);
 
         const globCall = vi.mocked(glob).mock.calls[0];
         if (globCall?.[0]) {
@@ -154,7 +158,7 @@ describe("getSetupFunction", () => {
 
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
-        const result = await handleMock(mockFilePaths, "all");
+        const result = await handleMock(mockFilePaths, ["all"]);
 
         expect(vi.mocked(glob)).toHaveBeenCalled();
         // Verify the file list is sorted (glob should sort, but we verify the result)
@@ -175,7 +179,7 @@ describe("getSetupFunction", () => {
 
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
-        const result = await handleMock(mockFilePaths, "all");
+        const result = await handleMock(mockFilePaths, ["all"]);
 
         expect(result).toHaveLength(2);
         result.forEach((item) => {
@@ -199,7 +203,7 @@ describe("getSetupFunction", () => {
 
         vi.mocked(glob).mockResolvedValue(mockFilePaths);
 
-        const result = await handleMock(mockFilePaths, "all");
+        const result = await handleMock(mockFilePaths, ["all"]);
 
         expect(result).toHaveLength(3);
         // Verify wallet names are correctly extracted
