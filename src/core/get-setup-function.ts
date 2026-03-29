@@ -31,9 +31,8 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallets
         })
     ).sort();
 
-    const _selectedWallets =
-        // biome-ignore lint/style/noNonNullAssertion: We will always have a selected wallet
-        selectedWallets.length === 1 ? selectedWallets[0]! : selectedWallets.includes("all") ? "all" : selectedWallets;
+    // biome-ignore lint/style/noNonNullAssertion: We will always have a selected wallet
+    const _selectedWallets = selectedWallets.length === 1 ? selectedWallets[0]! : selectedWallets;
 
     // Log a warning if the selected wallet is not found in the file list
     const supportedWallets: Array<SupportedWallets> = ["metamask", "solflare", "petra", "meteor", "keplr", "phantom"];

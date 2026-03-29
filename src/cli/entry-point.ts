@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { styleText } from "node:util";
-import { checkbox } from "@inquirer/prompts";
+import checkbox from "@inquirer/checkbox";
 import { Command } from "commander";
 import { generateTypes } from "@/core/generate-types";
 import getSetupFunction from "@/core/get-setup-function";
@@ -87,6 +87,13 @@ export async function clientEntry() {
                             { name: "Phantom", value: "phantom" },
                             { name: "Solflare", value: "solflare" },
                         ],
+                        validate: (selectedChoices) => {
+                            const values = selectedChoices.map((choice) => choice.value);
+                            if (values.includes("all") && values.length > 1) {
+                                return `Select either "All" or specific wallets, not both.`;
+                            }
+                            return true;
+                        },
                         pageSize: 10,
                     })
                   : flagValue;
