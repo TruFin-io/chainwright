@@ -90,7 +90,7 @@ jobs:
          uses: foundry-rs/foundry-toolchain@v1
 
        - name: Initialize wallets
-         run: xvfb-run pnpm run build:wallets
+         run: xvfb-run pnpm run setup-wallets
 
        - name: Run tests
          run: |

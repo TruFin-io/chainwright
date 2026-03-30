@@ -11,7 +11,7 @@
     "scripts": {
         "build": "tsup",
         "dev": "tsx src/cli/index.ts chainwright ./tests/wallet-setup -f",
-        "dev:playground": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --all",
+        "setup-wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --all",
         "wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --wallets keplr petra",
         "tests": "vitest --exclude '**/*.spec.ts'",
         "lint": "biome check ./src",
