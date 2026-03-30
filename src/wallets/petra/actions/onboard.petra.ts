@@ -3,7 +3,6 @@ import { expect, type Page } from "@playwright/test";
 import { sleep } from "@/utils/sleep";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
-import { IS_VISIBLE_TIMEOUT } from "@/wallets/utils/constants";
 import { PetraProfile } from "../petra-profile";
 import { homepageSelectors } from "../selectors/homepage-selectors.petra";
 import { onboardSelectors } from "../selectors/onboard-selectors.petra";
@@ -15,6 +14,8 @@ import { switchAccount } from "./switch-account.petra";
 type Onboard = OnboardingArgs & {
     page: Page;
 };
+
+const IS_VISIBLE_TIMEOUT = 30_000;
 
 export default async function onboard({ page, ...args }: Onboard) {
     console.info(styleText("yellowBright", `\n Petra onboarding started...`, { validateStream: false }));

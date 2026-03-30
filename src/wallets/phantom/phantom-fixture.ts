@@ -4,6 +4,7 @@ import { test as base, chromium, type Page } from "@playwright/test";
 import type { WalletProfileFixtureArgs } from "@/types";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
+import getPageFromContext from "@/utils/get-page-from-context";
 import persistLocalStorage from "@/utils/persist-local-storage";
 import { teardownContext } from "@/utils/teardown-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
@@ -11,7 +12,7 @@ import { unlock } from "./actions/unlock.phantom";
 import { Phantom } from "./phantom";
 import { PhantomProfile } from "./phantom-profile";
 import type { PhantomFixture } from "./types";
-import { autoClosePhantomNotification, getPageFromContextPhantom } from "./utils";
+import { autoClosePhantomNotification } from "./utils";
 
 let _phantomPage: Page;
 
@@ -55,7 +56,9 @@ export const phantomFixture = ({ slowMo = 0, profileName }: WalletProfileFixture
                 await persistLocalStorage(origins, walletPageContext);
             }
 
-            _phantomPage = await getPageFromContextPhantom(walletPageContext);
+            const indexUrl = await wallet.indexUrl();
+            const homePage = walletPageContext.pages().find((page) => page.url().startsWith(indexUrl));
+            _phantomPage = homePage || (await getPageFromContext(walletPageContext, indexUrl));
 
             for (const page of walletPageContext.pages()) {
                 const url = page.url();
