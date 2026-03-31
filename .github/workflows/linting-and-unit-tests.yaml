@@ -10,9 +10,6 @@ on:
 jobs:
     linting_and_unit_tests:
         runs-on: ubuntu-22.04
-        strategy:
-          matrix:
-            node-version: [24.x]
         timeout-minutes: 60
 
         steps:
@@ -26,10 +23,10 @@ jobs:
               with:
                 version: 10
 
-            - name: Use Node LTS ${{ matrix.node-version }}
+            - name: Use Node LTS
               uses: actions/setup-node@v6
               with:
-                node-version: ${{ matrix.node-version }}
+                node-version: 24.x
                 cache: "pnpm"
 
             - name: Install dependencies
