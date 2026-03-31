@@ -52,7 +52,7 @@ export async function addAccount({ page, privateKey, accountName }: AddAccount) 
     }
 
     const activeAccount = page.locator(
-        "div:has(> div[data-testid^='multichain-account-cell-keyring'][data-testid$='-selected-indicator'])",
+        "div:has(> div[data-testid^='multichain-account-cell-keyring'][class*='mm-box--background-color-background-muted'])",
     );
 
     const activeAccountName = (await activeAccount.textContent())?.split("$")[0];
@@ -105,10 +105,10 @@ async function renameImportedAccount({
     await expect(confirmButton).toBeEnabled();
     await confirmButton.click();
 
-    await dialog.waitFor({ state: "detached", timeout: 15_000 });
+    await dialog.waitFor({ state: "detached", timeout: 20_000 });
 
     const activeAccount = page.locator(
-        "div:has(> div[data-testid^='multichain-account-cell-keyring'][data-testid$='-selected-indicator'])",
+        "div:has(> div[data-testid^='multichain-account-cell-keyring'][class*='mm-box--background-color-background-muted'])",
     );
 
     await expect(activeAccount).toContainText(accountName);

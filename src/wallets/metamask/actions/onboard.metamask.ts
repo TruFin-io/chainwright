@@ -116,7 +116,6 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
                 }
             },
             {
-                intervals: [1_000, 3_000, 5_000, 7_000, 10_000],
                 timeout: 15_000,
             },
         )

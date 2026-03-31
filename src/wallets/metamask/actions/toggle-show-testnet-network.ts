@@ -8,7 +8,7 @@ export async function toggleShowTestnetNetwork({ page }: { page: Page }) {
     const networksButton = page.getByTestId(settingsSelectors.networksButton);
     await networksButton.click();
 
-    const netowrksDialog = page.getByRole("dialog");
+    const netowrksDialog = page.locator("section[role='dialog']");
     await expect(netowrksDialog).toBeVisible();
     await expect(netowrksDialog).toContainText(/manage networks/i);
 

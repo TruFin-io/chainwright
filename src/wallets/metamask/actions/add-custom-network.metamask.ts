@@ -19,7 +19,7 @@ export async function addCustomNetwork({ page, ...args }: AddCustomNetworkArgs) 
     const networksButton = page.getByTestId(settingsSelectors.networksButton);
     await networksButton.click();
 
-    const netowrksDialog = page.getByRole("dialog");
+    const netowrksDialog = page.locator("section[role='dialog']");
     await expect(netowrksDialog).toContainText(/manage networks/i);
 
     const addCustomNetworkButton = page.getByRole("button", { name: /add a custom network/i });
