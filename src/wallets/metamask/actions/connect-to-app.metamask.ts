@@ -22,8 +22,8 @@ export async function connectToApp(page: Page, account?: string) {
     await expect
         .poll(
             async () => {
-                const noticeDialog = page.locator("div[class='permissions-connect']");
-                isReviewPermissionsVisible = await noticeDialog.isVisible().catch(() => false);
+                const reviewPermissionsSection = page.locator("div[class='permissions-connect']");
+                isReviewPermissionsVisible = await reviewPermissionsSection.isVisible().catch(() => false);
                 return isReviewPermissionsVisible;
             },
             {
