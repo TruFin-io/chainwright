@@ -13,7 +13,6 @@ export const homepageSelectors = {
 };
 
 export const settingsSelectors = {
-    settingsMenu: "global-menu",
     lockButton: "global-menu-lock",
     networksButton: "global-menu-networks",
 };

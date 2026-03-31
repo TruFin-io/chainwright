@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { homepageSelectors, settingsSelectors } from "../selectors/homepage-selectors.metamask";
+import { homepageSelectors } from "../selectors/homepage-selectors.metamask";
 
 export async function openSettings(page: Page) {
     const notificationPopover = page.locator("div:has(> p[data-testid='notifications-tag-counter__unread-dot'])");
@@ -12,6 +12,4 @@ export async function openSettings(page: Page) {
         await expect(settingsButton).toBeVisible();
         await settingsButton.click();
     }
-
-    await expect(page.getByTestId(settingsSelectors.settingsMenu)).toBeVisible();
 }

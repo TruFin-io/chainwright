@@ -3,9 +3,9 @@ import path from "node:path";
 import { chromium, type WorkerInfo } from "@playwright/test";
 import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
+import getPageFromContext from "@/utils/get-page-from-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
 import { PhantomProfile } from "./phantom-profile";
-import { getPageFromContextPhantom } from "./utils";
 
 type WorkerScopeContext = {
     workerInfo: WorkerInfo;
@@ -33,7 +33,8 @@ export async function workerScopeContextPhantom({ workerInfo, profileName, slowM
         slowMo: process.env.HEADLESS ? 0 : slowMo,
     });
 
-    const page = await getPageFromContextPhantom(context);
+    const indexUrl = await wallet.indexUrl();
+    const page = await getPageFromContext(context, indexUrl);
 
     return { context, walletPage: page, contextPath };
 }
