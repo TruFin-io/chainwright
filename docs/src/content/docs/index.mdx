@@ -1,0 +1,37 @@
+---
+title: Chainwright
+description: Provision browser wallets for end-to-end testing of blockchain dapps.
+template: splash
+hero:
+  tagline: Provision browser wallets for end-to-end testing of blockchain dapps.
+  actions:
+    - text: Install
+      link: /getting-started/installation/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/amaify/chainwright
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+## What is Chainwright?
+
+Chainwright is a CLI that provisions browser-wallet extensions for end-to-end tests. It supports wallets across EVM, Cosmos, Aptos, and Solana ecosystems so a single test suite can exercise multi-chain dapps.
+
+<CardGrid>
+  <Card title="Get Started" icon="rocket">
+    Walk through [installation](/getting-started/installation/) and your [first run](/getting-started/quickstart/).
+  </Card>
+  <Card title="Guides" icon="open-book">
+    Learn how to [define a setup](/guides/defining-wallet-setup/) and [wire Chainwright into Playwright](/guides/using-with-playwright/).
+  </Card>
+  <Card title="Wallets" icon="puzzle">
+    Per-wallet notes for [MetaMask](/wallets/metamask/), [Keplr](/wallets/keplr/), [Petra](/wallets/petra/), and more.
+  </Card>
+  <Card title="Reference" icon="document">
+    The full [CLI](/reference/cli/), [API](/reference/api/), and [configuration](/reference/configuration/) surface.
+  </Card>
+</CardGrid>
