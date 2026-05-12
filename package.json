@@ -1,15 +1,46 @@
 {
-    "name": "chainwright",
+    "name": "@amaify/chainwright",
+    "version": "0.0.1",
+    "description": "Playwright-based end-to-end testing utilities for Web3 wallet interactions",
     "type": "module",
+    "license": "MIT",
+    "author": "Tobechukwu Ugwuanyi",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/amaify/chainwright.git"
+    },
+    "homepage": "https://github.com/amaify/chainwright#readme",
+    "bugs": {
+        "url": "https://github.com/amaify/chainwright/issues"
+    },
+    "keywords": [
+        "playwright",
+        "e2e",
+        "testing",
+        "web3",
+        "wallet",
+        "blockchain",
+        "dapp"
+    ],
+    "exports": {
+        ".": {
+            "import": "./dist/wallets/index.js",
+            "types": "./dist/wallets/index.d.ts"
+        }
+    },
+    "main": "./dist/wallets/index.js",
+    "types": "./dist/wallets/index.d.ts",
     "bin": {
         "chainwright": "./dist/cli/index.js"
     },
     "files": [
-        "dist",
-        "src"
+        "dist"
     ],
     "scripts": {
-        "build": "tsup",
+        "clean": "rm -rf dist",
+        "build:dist": "tsup",
+        "build:types": "tsc --emitDeclarationOnly",
+        "build": "pnpm run clean && pnpm run build:dist && pnpm run build:types",
         "dev": "tsx src/cli/index.ts chainwright ./tests/wallet-setup -f",
         "setup-wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --all",
         "wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --wallets keplr petra",
