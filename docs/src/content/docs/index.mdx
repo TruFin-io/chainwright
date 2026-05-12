@@ -3,9 +3,9 @@ title: Chainwright
 description: Provision browser wallets for end-to-end testing of blockchain dapps.
 template: splash
 hero:
-  tagline: Provision browser wallets for end-to-end testing of blockchain dapps.
+  tagline: Test, automate, and verify every wallet interaction, with the precision your users expect.
   actions:
-    - text: Install
+    - text: Get Started
       link: /getting-started/installation/
       icon: right-arrow
       variant: primary
@@ -13,25 +13,32 @@ hero:
       link: https://github.com/amaify/chainwright
       icon: external
       variant: minimal
+      attrs:
+        target: _blank
+        rel: noopener noreferrer
 ---
 
 import { Card, CardGrid } from "@astrojs/starlight/components";
 
 ## What is Chainwright?
 
-Chainwright is a CLI that provisions browser-wallet extensions for end-to-end tests. It supports wallets across EVM, Cosmos, Aptos, and Solana ecosystems so a single test suite can exercise multi-chain dapps.
+Chainwright is an end-to-end testing framework for dApps, built on top of Playwright. It enables seamless testing of multi-chain dApps by supporting multiple wallets across the EVM, Cosmos, Aptos, and Solana ecosystems.
+
+## Why Chainwright?
+
+Chainwright is an end-to-end testing framework built to meet your web3 development needs.
 
 <CardGrid>
-  <Card title="Get Started" icon="rocket">
-    Walk through [installation](/getting-started/installation/) and your [first run](/getting-started/quickstart/).
+  <Card title="Multi-wallet Support" icon="heart">
+    Support for major Web3 wallets, helping ensure your dApp stays compatible with the latest wallet updates.
   </Card>
-  <Card title="Guides" icon="open-book">
-    Learn how to [define a setup](/guides/defining-wallet-setup/) and [wire Chainwright into Playwright](/guides/using-with-playwright/).
+  <Card title="CI/CD Integration" icon="code-branch">
+    Chainwright integrates seamlessly into your CI/CD pipeline, helping you build and ship dApps with greater confidence.
   </Card>
-  <Card title="Wallets" icon="puzzle">
-    Per-wallet notes for [MetaMask](/wallets/metamask/), [Keplr](/wallets/keplr/), [Petra](/wallets/petra/), and more.
+  <Card title="Anvil support (EVM)" icon="database">
+    Easily spin up a local EVM blockchain node for development and testing.
   </Card>
-  <Card title="Reference" icon="document">
-    The full [CLI](/reference/cli/), [API](/reference/api/), and [configuration](/reference/configuration/) surface.
+  <Card title="Built for Developers" icon="vscode">
+    First-class TypeScript support, sensible defaults, and an API that stays out of your way.
   </Card>
 </CardGrid>

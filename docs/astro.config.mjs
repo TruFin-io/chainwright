@@ -4,7 +4,7 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
     integrations: [
         starlight({
-            title: "Chainwright",
+            title: "End-to-End Testing for Web3 Applications",
             description: "Provision browser wallets for end-to-end testing of blockchain dapps.",
             logo: {
                 light: "./src/assets/logo-dark.svg",
