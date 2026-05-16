@@ -15,92 +15,89 @@ on:
 
 jobs:
   test:
-     runs-on: ubuntu-22.04
-     timeout-minutes: 60
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
 
-     steps:
-       - name: Checkout code
-         uses: actions/checkout@v5
-         with:
-            submodules: "recursive"
-            fetch-depth: 0
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: "recursive"
+          fetch-depth: 0
 
-       - name: Determine changed test files
-         id: changed-tests
-         run: |
-           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-             echo "run_all=true" >> "$GITHUB_OUTPUT"
-             echo "test_files=" >> "$GITHUB_OUTPUT"
-             exit 0
-           fi
+      - name: Determine changed test files
+        if: github.event_name != 'workflow_dispatch'
+        id: changed-tests
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE=${{ github.event.pull_request.base.sha }}
+          else
+            BASE=${{ github.event.before }}
+          fi
 
-           echo "run_all=false" >> "$GITHUB_OUTPUT"
+          CHANGED=$(git diff --name-only "$BASE"...HEAD)
 
-           if [ "${{ github.event_name }}" = "pull_request" ]; then
-             BASE=${{ github.event.pull_request.base.sha }}
-           else
-             BASE=${{ github.event.before }}
-           fi
+          TEST_FILES=""
 
-           CHANGED=$(git diff --name-only "$BASE"...HEAD)
+          SPEC_FILES=$(echo "$CHANGED" | grep '^tests/e2e/.*\.spec\.ts$' || true)
+          if [ -n "$SPEC_FILES" ]; then
+            TEST_FILES="$SPEC_FILES"
+          fi
 
-           TEST_FILES=""
+          ACTION_FILES=$(echo "$CHANGED" | grep '^src/wallets/.*/actions/.*\.ts$' || true)
+          for action in $ACTION_FILES; do
+            wallet=$(echo "$action" | cut -d'/' -f3)
+            action_name=$(basename "$action" | sed "s/\.$wallet\.ts$//")
+            matched=$(find tests/e2e/"$wallet" -name "*${action_name}*${wallet}.spec.ts" 2>/dev/null || true)
+            if [ -n "$matched" ]; then
+              TEST_FILES=$(printf '%s\n%s' "$TEST_FILES" "$matched")
+            fi
+          done
 
-           SPEC_FILES=$(echo "$CHANGED" | grep '^tests/e2e/.*\.spec\.ts$' || true)
-           if [ -n "$SPEC_FILES" ]; then
-             TEST_FILES="$SPEC_FILES"
-           fi
+          TEST_FILES=$(echo "$TEST_FILES" | sort -u | sed '/^$/d')
+          echo "test_files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$TEST_FILES" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
-           ACTION_FILES=$(echo "$CHANGED" | grep '^src/wallets/.*/actions/.*\.ts$' || true)
-           for action in $ACTION_FILES; do
-             wallet=$(echo "$action" | cut -d'/' -f3)
-             action_name=$(basename "$action" | sed "s/\.$wallet\.ts$//")
-             matched=$(find tests/e2e/"$wallet" -name "*${action_name}*${wallet}.spec.ts" 2>/dev/null || true)
-             if [ -n "$matched" ]; then
-               TEST_FILES=$(printf '%s\n%s' "$TEST_FILES" "$matched")
-             fi
-           done
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
 
-           TEST_FILES=$(echo "$TEST_FILES" | sort -u | sed '/^$/d')
-           echo "test_files<<EOF" >> "$GITHUB_OUTPUT"
-           echo "$TEST_FILES" >> "$GITHUB_OUTPUT"
-           echo "EOF" >> "$GITHUB_OUTPUT"
+      - name: Use Node LTS
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          cache: "pnpm"
 
-       - name: Install pnpm
-         uses: pnpm/action-setup@v5
-         with:
-            version: 10
+      - name: Install dependencies
+        run: pnpm install
 
-       - name: Use Node LTS
-         uses: actions/setup-node@v6
-         with:
-            node-version: 24.x
-            cache: "pnpm"
+      - name: Install XVFB
+        run: sudo apt-get install -y xvfb
 
-       - name: Install dependencies
-         run: pnpm install
+      - name: Install Playwright browsers
+        run: pnpx playwright install chromium
 
-       - name: Install XVFB
-         run: sudo apt-get install -y xvfb
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
 
-       - name: Install Playwright browsers
-         run:  pnpx playwright install chromium
+      - name: Initialize wallets
+        run: xvfb-run pnpm run setup-wallets
 
-       - name: Install Foundry
-         uses: foundry-rs/foundry-toolchain@v1
+      - name: Run all e2e tests (manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Manual trigger - running full e2e suite"
+          xvfb-run pnpm playwright test --config=tests/playwright.config.ts
 
-       - name: Initialize wallets
-         run: xvfb-run pnpm run setup-wallets
+      - name: Run changed e2e tests
+        if: github.event_name != 'workflow_dispatch' && steps.changed-tests.outputs.test_files != ''
+        run: |
+          echo "Running changed test files only:"
+          echo "${{ steps.changed-tests.outputs.test_files }}"
+          echo "${{ steps.changed-tests.outputs.test_files }}" | xargs xvfb-run pnpm playwright test --config=tests/playwright.config.ts
 
-       - name: Run tests
-         run: |
-           if [ "${{ steps.changed-tests.outputs.run_all }}" = "true" ]; then
-             echo "Manual trigger — running full test suite"
-             xvfb-run pnpm playwright test --config=tests/playwright.config.ts
-           elif [ -n "${{ steps.changed-tests.outputs.test_files }}" ]; then
-             echo "Running changed test files only:"
-             echo "${{ steps.changed-tests.outputs.test_files }}"
-             echo "${{ steps.changed-tests.outputs.test_files }}" | xargs xvfb-run pnpm playwright test --config=tests/playwright.config.ts
-           else
-             echo "No relevant test files changed — skipping tests"
-           fi
+      - name: Skip e2e tests (no relevant file changes)
+        if: github.event_name != 'workflow_dispatch' && steps.changed-tests.outputs.test_files == ''
+        run: echo "No relevant test files changed - skipping tests"
