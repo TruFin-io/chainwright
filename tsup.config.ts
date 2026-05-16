@@ -10,6 +10,7 @@ export default defineConfig({
         "cli-progress",
         "commander",
         "glob",
+        "tsx",
         "zod",
     ],
     outDir: "dist",

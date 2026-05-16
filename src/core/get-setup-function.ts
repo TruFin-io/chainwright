@@ -2,6 +2,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { styleText } from "node:util";
 import { glob } from "glob";
+import { tsImport } from "tsx/esm/api";
 import type { CLIOptions, GetSetupFunctionFileList, SupportedWallets } from "@/types";
 import extractWalletNameFromPath from "@/utils/wallets/extract-wallet-name-from-path";
 import type { defineWalletSetup } from "./define-wallet-setup";
@@ -18,6 +19,11 @@ const toPosix = (path: string) => path.replace(/\\/g, "/");
 const createGlobPattern = (walletSetupDir: string) => {
     const base = toPosix(path.resolve(walletSetupDir));
     return `${base}/**/*.setup.{ts,js,}`;
+};
+
+const importSetupFile = (filePath: string) => {
+    const importUrl = new URL(pathToFileURL(filePath)).href;
+    return filePath.endsWith(".ts") ? tsImport(importUrl, import.meta.url) : import(importUrl);
 };
 
 export default async function getSetupFunction({ walletSetupDir, selectedWallets }: SetupFunctionHash) {
@@ -73,8 +79,8 @@ export default async function getSetupFunction({ walletSetupDir, selectedWallets
 
     const setupFunction = await Promise.all(
         _fileList.map(async ({ filePath, walletName }) => {
-            const importUrl = new URL(pathToFileURL(filePath)).href;
-            const setupFunction = (await import(importUrl).then((module) => module.default)) as SetupFunction;
+            const module = await importSetupFile(filePath);
+            const setupFunction = (await module.default) as SetupFunction;
             const { fn, config, password } = setupFunction;
 
             return {

@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.4.0
+
+### Minor Changes
+
+- Fix shebang file import
+
 ## 0.3.3
 
 ### Patch Changes
