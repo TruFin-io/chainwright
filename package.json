@@ -1,13 +1,13 @@
 {
-    "name": "@amaify/chainwright",
+    "name": "@tobelabs/chainwright",
     "version": "0.0.1",
-    "description": "Playwright-based end-to-end testing utilities for Web3 wallet interactions",
+    "description": "An end-to-end testing framework built on top of Playwright for Web3 wallet interactions",
     "type": "module",
     "license": "MIT",
     "author": "Tobechukwu Ugwuanyi",
     "repository": {
         "type": "git",
-        "url": "https://github.com/amaify/chainwright.git"
+        "url": "git+https://github.com/amaify/chainwright.git"
     },
     "homepage": "https://github.com/amaify/chainwright#readme",
     "bugs": {
@@ -35,7 +35,7 @@
     "main": "./dist/wallets/index.js",
     "types": "./dist/wallets/index.d.ts",
     "bin": {
-        "chainwright": "./dist/cli/index.js"
+        "chainwright": "dist/cli/index.js"
     },
     "files": [
         "dist"
@@ -48,7 +48,6 @@
     },
     "scripts": {
         "build": "tsup",
-        "prepublishOnly": "pnpm run build",
         "changeset": "changeset",
         "version-package": "changeset version",
         "release": "pnpm run build && changeset publish",
