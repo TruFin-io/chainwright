@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import testWithChainwright from "@/core/test-with-chainwright";
+import { testWithChainwright } from "@/core/test-with-chainwright";
 import { solflareFixture } from "@/wallets/solflare/solflare-fixture";
 import { solflareWorkerScopeFixture } from "@/wallets/solflare/solflare-worker-scope-fixture";
 import { BASE_URL } from "../utils/base-url";

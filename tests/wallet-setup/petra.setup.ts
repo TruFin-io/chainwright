@@ -1,4 +1,4 @@
-import defineWalletSetup from "@/core/define-wallet-setup";
+import { defineWalletSetup } from "@/core/define-wallet-setup";
 import { Petra } from "@/wallets/petra/petra";
 
 const PASSWORD = "PlayerPetra45!!";

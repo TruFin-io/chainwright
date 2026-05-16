@@ -1,4 +1,4 @@
-import defineWalletSetup from "@/core/define-wallet-setup";
+import { defineWalletSetup } from "@/core/define-wallet-setup";
 import { Meteor } from "@/wallets/meteor";
 
 const PASSWORD = "test1234";

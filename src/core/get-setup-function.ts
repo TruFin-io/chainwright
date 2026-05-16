@@ -4,7 +4,7 @@ import { styleText } from "node:util";
 import { glob } from "glob";
 import type { CLIOptions, GetSetupFunctionFileList, SupportedWallets } from "@/types";
 import extractWalletNameFromPath from "@/utils/wallets/extract-wallet-name-from-path";
-import type defineWalletSetup from "./define-wallet-setup";
+import type { defineWalletSetup } from "./define-wallet-setup";
 
 type SetupFunctionHash = {
     walletSetupDir: string;

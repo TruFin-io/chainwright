@@ -1,4 +1,4 @@
-import defineWalletSetup from "@/core/define-wallet-setup";
+import { defineWalletSetup } from "@/core/define-wallet-setup";
 import { Phantom } from "@/wallets/phantom";
 
 const PASSWORD = "test1234";

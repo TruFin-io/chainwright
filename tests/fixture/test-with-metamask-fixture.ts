@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import testWithChainwright from "@/core/test-with-chainwright";
+import { testWithChainwright } from "@/core/test-with-chainwright";
 import { metamaskFixture } from "@/wallets/metamask/metamask-fixture";
 import { metamaskWorkerScopeFixture } from "@/wallets/metamask/metamask-worker-scope-fixture";
 import { BASE_URL } from "../utils/base-url";

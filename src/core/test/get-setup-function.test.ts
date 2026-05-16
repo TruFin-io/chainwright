@@ -21,7 +21,7 @@ describe("getSetupFunction", () => {
             fs.writeFileSync(
                 path.resolve(WALLET_SETUP_DIR, filename),
                 `
-                    import defineWalletSetup from "@/core/define-wallet-setup";
+                    import { defineWalletSetup } from "@/core/define-wallet-setup";
 
                     export default defineWalletSetup("test1234", async () => {
                         console.info("Setting up ${filename}.....");

@@ -1,4 +1,4 @@
-import defineWalletSetup from "@/core/define-wallet-setup";
+import { defineWalletSetup } from "@/core/define-wallet-setup";
 import { Metamask } from "@/wallets/metamask/metamask";
 
 const PASSWORD = "test1234";

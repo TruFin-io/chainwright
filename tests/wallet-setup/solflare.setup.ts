@@ -1,4 +1,4 @@
-import defineWalletSetup from "@/core/define-wallet-setup";
+import { defineWalletSetup } from "@/core/define-wallet-setup";
 import { Solflare } from "@/wallets/solflare";
 
 const PASSWORD = "test1234"; // Update this password as needed.

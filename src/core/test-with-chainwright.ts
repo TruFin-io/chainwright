@@ -16,7 +16,7 @@ import { test as base, mergeTests } from "@playwright/test";
  * ```
  */
 
-export default function testWithChainwright<CustomFixtures extends Fixtures>(
+export function testWithChainwright<CustomFixtures extends Fixtures>(
     customFixtures: TestType<CustomFixtures, object>,
 ): TestType<CustomFixtures, object> {
     return mergeTests(base, customFixtures);

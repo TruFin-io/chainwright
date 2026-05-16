@@ -24,8 +24,12 @@
     ],
     "exports": {
         ".": {
-            "import": "./dist/wallets/index.js",
-            "types": "./dist/wallets/index.d.ts"
+            "types": "./dist/wallets/index.d.ts",
+            "import": "./dist/wallets/index.js"
+        },
+        "./core": {
+            "types": "./dist/core/index.d.ts",
+            "import": "./dist/core/index.js"
         }
     },
     "main": "./dist/wallets/index.js",
@@ -36,11 +40,15 @@
     "files": [
         "dist"
     ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=22"
+    },
     "scripts": {
-        "clean": "rm -rf dist",
-        "build:dist": "tsup",
-        "build:types": "tsc --emitDeclarationOnly",
-        "build": "pnpm run clean && pnpm run build:dist && pnpm run build:types",
+        "build": "tsup",
+        "prepublishOnly": "pnpm run build",
         "dev": "tsx src/cli/index.ts chainwright ./tests/wallet-setup -f",
         "setup-wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --all",
         "wallets": "tsx src/cli/index.ts chainwright ./tests/wallet-setup --wallets keplr petra",
@@ -51,24 +59,27 @@
         "tests:e2e:ui": "playwright test --config=tests/playwright.config.ts --ui",
         "add:wallet": "tsx scripts/add-wallet.ts"
     },
+    "peerDependencies": {
+        "@playwright/test": "^1.60.0"
+    },
     "devDependencies": {
         "@biomejs/biome": "2.4.15",
-        "@playwright/test": "^1.59.1",
+        "@playwright/test": "^1.60.0",
         "@types/adm-zip": "^0.5.8",
         "@types/cli-progress": "^3.11.6",
-        "@types/node": "^25.6.2",
+        "@types/node": "^25.8.0",
         "adm-zip": "^0.5.17",
+        "commander": "^14.0.3",
         "tsup": "^8.5.1",
-        "tsx": "^4.21.0",
+        "tsx": "^4.22.0",
         "typescript": "^6.0.3",
-        "vitest": "^4.1.5",
-        "zod": "^4.4.3"
+        "vitest": "^4.1.6"
     },
     "dependencies": {
         "@inquirer/checkbox": "^5.1.5",
         "cli-progress": "^3.12.0",
-        "commander": "^14.0.3",
         "glob": "^13.0.6",
-        "prool": "^0.2.4"
+        "prool": "^0.2.4",
+        "zod": "^4.4.3"
     }
 }

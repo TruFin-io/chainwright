@@ -1,4 +1,4 @@
-import defineWalletSetup from "@/core/define-wallet-setup";
+import { defineWalletSetup } from "@/core/define-wallet-setup";
 import { Keplr } from "@/wallets/keplr";
 
 const PASSWORD = "test1234";

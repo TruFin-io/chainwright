@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import testWithChainwright from "@/core/test-with-chainwright";
+import { testWithChainwright } from "@/core/test-with-chainwright";
 import { phantomFixture } from "@/wallets/phantom";
 import { phantomWorkerScopeFixture } from "@/wallets/phantom/phantom-worker-scope-fixture";
 import { BASE_URL } from "../utils/base-url";

@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import testWithChainwright from "@/core/test-with-chainwright";
+import { testWithChainwright } from "@/core/test-with-chainwright";
 import { petraFixture } from "@/wallets/petra/petra-fixture";
 
 export const testWithPetraFixture = petraFixture();

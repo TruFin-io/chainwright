@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import testWithChainwright from "@/core/test-with-chainwright";
+import { testWithChainwright } from "@/core/test-with-chainwright";
 import { keplrFixture } from "@/wallets/keplr/keplr-fixture";
 import { keplrWorkerScopeFixture } from "@/wallets/keplr/keplr-worker-scope-fixture";
 import { BASE_URL } from "../utils/base-url";
