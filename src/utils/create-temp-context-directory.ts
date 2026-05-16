@@ -1,10 +1,6 @@
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const BASE_CONTEXT_DIR = path.resolve(__dirname, "..", "../.wallet-context");
+import { WALLET_CONTEXT_DIR_NAME } from "./constants";
 
 export default async function createTempContextDirectory(testId: string) {
-    return path.resolve(BASE_CONTEXT_DIR, `${testId}`);
+    return path.resolve(process.cwd(), WALLET_CONTEXT_DIR_NAME, testId);
 }

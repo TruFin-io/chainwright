@@ -1,6 +1,7 @@
 import type { SupportedWalletsMap } from "@/types";
 
 export const CACHE_DIR_NAME = ".wallet-cache";
+export const WALLET_CONTEXT_DIR_NAME = ".wallet-context";
 export const WALLET_SETUP_DIR_NAME = "wallet-setup";
 
 const METAMASK_VERSION = "13.22.0";

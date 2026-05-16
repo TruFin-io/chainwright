@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.5.0
+
+### Minor Changes
+
+- Fix Directory import
+
 ## 0.4.0
 
 ### Minor Changes
