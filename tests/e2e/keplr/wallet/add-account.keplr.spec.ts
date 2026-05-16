@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
-import { testWithKeplrWorkerScope } from "@/tests/fixture/test-with-keplr-fixture";
+import { testWithKeplr } from "@/tests/fixture/test-with-keplr-fixture";
 
-const test = testWithKeplrWorkerScope;
+const test = testWithKeplr;
 
 test("Should add an account successfully", async ({ keplr, keplrPage }) => {
     await keplr.addAccount({
