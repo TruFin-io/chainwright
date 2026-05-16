@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.3.2
+
+### Patch Changes
+
+- Fix the "bin" command issue by removing the sub-command in "client-entry.ts"
+
 ## 0.3.1
 
 ### Patch Changes

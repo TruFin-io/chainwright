@@ -36,7 +36,6 @@ export async function clientEntry() {
         .version(styleText("blue", "0.0.0"));
 
     program
-        .command("chainwright")
         .argument("[dir]", "Directory containing the wallet setup functions", path.resolve(BASE_DIR))
         .option(
             "--headless",
@@ -98,10 +97,7 @@ export async function clientEntry() {
                     })
                   : flagValue;
 
-            let walletSetupDir = setupDir;
-            const customDirectory = program.commands[0]?.args ?? [];
-
-            if (customDirectory[0]) walletSetupDir = path.resolve(process.cwd(), customDirectory[0]);
+            const walletSetupDir = path.resolve(process.cwd(), setupDir);
 
             if (flags.headless) process.env.HEADLESS = true;
 
