@@ -8,20 +8,34 @@ type GetPopupPageFromContextArgs = {
 
 export async function getPopupPageFromContext({ context, path, locator }: GetPopupPageFromContextArgs) {
     let popupPage: Page | undefined;
-    await expect
-        .poll(
-            async () => {
-                popupPage = context.pages().find((page) => {
-                    console.info(`Checking page with URL: ${page.url()} for path: ${path}`);
-                    return page.url().match(path);
-                });
-                return !!popupPage;
-            },
-            {
-                timeout: 30_000,
-            },
-        )
-        .toBe(true);
+    try {
+        await expect
+            .poll(
+                async () => {
+                    popupPage = context
+                        .pages()
+                        .filter((_page) => _page.url().startsWith("chrome-extension://"))
+                        .find((page) => {
+                            console.info(`Checking page with URL: ${page.url()} for path: ${path}`);
+                            return page.url().match(path);
+                        });
+                    return !!popupPage;
+                },
+                {
+                    timeout: 30_000,
+                },
+            )
+            .toBe(true);
+    } catch {
+        const urls = context
+            .pages()
+            .filter((_page) => _page.url().startsWith("chrome-extension://"))
+            .map((p) => p.url());
+        throw new Error(
+            `Popup page with path "${path}" not found in context after 30s. ` +
+                `Pages in context: ${JSON.stringify(urls)}`,
+        );
+    }
 
     if (!popupPage) {
         throw new Error(`Popup page with path ${path} not found in context.`);
