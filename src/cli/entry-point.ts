@@ -1,5 +1,4 @@
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { styleText } from "node:util";
 import checkbox from "@inquirer/checkbox";
 import { Command } from "commander";
@@ -9,9 +8,7 @@ import { triggerCacheCreation } from "@/core/trigger-cache-creation";
 import type { CLIOptions, SupportedWallets } from "@/types";
 import { WALLET_SETUP_DIR_NAME } from "../utils/constants";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const BASE_DIR = path.join(__dirname, "..", "tests", WALLET_SETUP_DIR_NAME);
+const BASE_DIR = path.resolve(process.cwd(), "tests", WALLET_SETUP_DIR_NAME);
 const MAX_RETRIES = 2;
 
 type ActionOptions = {

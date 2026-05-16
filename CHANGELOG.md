@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.3.3
+
+### Patch Changes
+
+- Fix import path when running the chainwright command
+
 ## 0.3.2
 
 ### Patch Changes
