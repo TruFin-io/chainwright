@@ -8,7 +8,7 @@ const ARCHIVED_WALLET_BASE_URL = `https://github.com/amaify/chainwright/releases
 
 export const METAMASK_DOWNLOAD_URL = `https://github.com/MetaMask/metamask-extension/releases/download/v${METAMASK_VERSION}/metamask-chrome-${METAMASK_VERSION}.zip`;
 export const SOLFLARE_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}solflare-wallet-extension-v2.19.1.zip`;
-export const PETRA_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}petra-wallet-extension-v2.2.2.zip`;
+export const PETRA_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}petra-wallet-extension-v2.4.8.zip`;
 export const PHANTOM_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}phantom-wallet-extension-v26.10.0.zip`;
 export const METEOR_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}meteor-wallet-extension-v0.7.0.zip`;
 export const KEPLR_DOWNLOAD_URL = `${ARCHIVED_WALLET_BASE_URL}keplr-wallet-extension-v0.13.3.zip`;

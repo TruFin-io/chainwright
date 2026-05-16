@@ -46,7 +46,7 @@ export default async function onboard({ page, ...args }: Onboard) {
         await skipCopyRecoveryPhraseButton.click();
 
         await getStartedButton.click();
-        await expect(onboardingCompleteText).toBeVisible();
+        await expect(onboardingCompleteText).toBeVisible({ timeout: 25_000 });
         await page.goto(await petraProfile.indexUrl());
 
         await expect(page.locator(homepageSelectors.depositButton)).toBeVisible({ timeout: IS_VISIBLE_TIMEOUT });
@@ -71,7 +71,7 @@ export default async function onboard({ page, ...args }: Onboard) {
         await continueButton.click();
         await getStartedButton.click();
 
-        await expect(onboardingCompleteText).toBeVisible();
+        await expect(onboardingCompleteText).toBeVisible({ timeout: 25_000 });
         await page.goto(await petraProfile.indexUrl());
 
         await waitForStablePage(page);
@@ -101,7 +101,7 @@ export default async function onboard({ page, ...args }: Onboard) {
 
         await continueButton.click();
         await getStartedButton.click();
-        await expect(onboardingCompleteText).toBeVisible();
+        await expect(onboardingCompleteText).toBeVisible({ timeout: 25_000 });
         await page.goto(await petraProfile.indexUrl());
 
         await expect(page.locator(homepageSelectors.depositButton)).toBeVisible({ timeout: IS_VISIBLE_TIMEOUT });
@@ -118,6 +118,6 @@ export default async function onboard({ page, ...args }: Onboard) {
         await switchAccount(page, args.accountName);
     }
 
-    await sleep(3_000);
+    await sleep(1_500);
     console.info(styleText("greenBright", "✨ Petra onboarding completed successfully", { validateStream: false }));
 }
