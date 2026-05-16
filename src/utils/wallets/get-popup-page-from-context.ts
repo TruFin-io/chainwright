@@ -11,7 +11,10 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
     await expect
         .poll(
             async () => {
-                popupPage = context.pages().find((page) => page.url().match(path));
+                popupPage = context.pages().find((page) => {
+                    console.info(`Checking page with URL: ${page.url()} for path: ${path}`);
+                    return page.url().match(path);
+                });
                 return !!popupPage;
             },
             {
