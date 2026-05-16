@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.3.1
+
+### Patch Changes
+
+- Fix failing bin command execution
+
 ## 0.3.0
 
 ### Minor Changes
