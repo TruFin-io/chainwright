@@ -36,4 +36,12 @@ export async function connectToApp(page: Page, account?: string) {
     const confirmButton = page.getByTestId("page-container-footer-next");
     await confirmButton.waitFor({ state: "visible", timeout: 25_000 });
     await confirmButton.click();
+    await page
+        .waitForEvent("close", {
+            predicate: () => true,
+            timeout: 25_000,
+        })
+        .catch(() =>
+            console.error("Extension popup did not close within the timeout period when connecting to the DApp."),
+        );
 }

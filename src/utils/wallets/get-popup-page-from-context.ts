@@ -15,10 +15,7 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
                     popupPage = context
                         .pages()
                         .filter((_page) => _page.url().startsWith("chrome-extension://"))
-                        .find((page) => {
-                            console.info(`Checking page with URL: ${page.url()} for path: ${path}`);
-                            return page.url().match(path);
-                        });
+                        .find((page) => page.url().match(path));
                     return !!popupPage;
                 },
                 {
