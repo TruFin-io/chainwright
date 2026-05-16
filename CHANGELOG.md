@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.6.0
+
+### Minor Changes
+
+- Fixing wallet setup function import
+
 ## 0.5.0
 
 ### Minor Changes

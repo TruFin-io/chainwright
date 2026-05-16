@@ -2,7 +2,6 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { styleText } from "node:util";
 import { glob } from "glob";
-import { tsImport } from "tsx/esm/api";
 import type { CLIOptions, GetSetupFunctionFileList, SupportedWallets } from "@/types";
 import extractWalletNameFromPath from "@/utils/wallets/extract-wallet-name-from-path";
 import type { defineWalletSetup } from "./define-wallet-setup";
@@ -23,7 +22,7 @@ const createGlobPattern = (walletSetupDir: string) => {
 
 const importSetupFile = (filePath: string) => {
     const importUrl = new URL(pathToFileURL(filePath)).href;
-    return filePath.endsWith(".ts") ? tsImport(importUrl, import.meta.url) : import(importUrl);
+    return import(importUrl);
 };
 
 export default async function getSetupFunction({ walletSetupDir, selectedWallets }: SetupFunctionHash) {
