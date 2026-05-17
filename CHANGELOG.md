@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.6.1-alpha.2
+
+### Patch Changes
+
+- Fix worker scope imports
+
 ## 0.6.1-alpha.1
 
 ### Patch Changes
