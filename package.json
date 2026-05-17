@@ -1,6 +1,6 @@
 {
     "name": "@tobelabs/chainwright",
-    "version": "0.6.0",
+    "version": "0.6.1-alpha.0",
     "description": "An end-to-end testing framework built on top of Playwright for Web3 wallet interactions",
     "type": "module",
     "license": "MIT",

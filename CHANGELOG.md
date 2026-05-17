@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.6.1-alpha.0
+
+### Patch Changes
+
+- Begin alpha pre-release series.
+
 ## 0.6.0
 
 ### Minor Changes
