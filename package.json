@@ -1,6 +1,6 @@
 {
     "name": "@tobelabs/chainwright",
-    "version": "0.6.1-alpha.0",
+    "version": "0.6.1-alpha.1",
     "description": "An end-to-end testing framework built on top of Playwright for Web3 wallet interactions",
     "type": "module",
     "license": "MIT",
@@ -23,17 +23,35 @@
         "dapp"
     ],
     "exports": {
-        "./wallets": {
-            "types": "./dist/wallets/index.d.ts",
-            "import": "./dist/wallets/index.js"
+        "./keplr": {
+            "types": "./dist/wallets/keplr/index.d.ts",
+            "import": "./dist/wallets/keplr/index.js"
+        },
+        "./metamask": {
+            "types": "./dist/wallets/metamask/index.d.ts",
+            "import": "./dist/wallets/metamask/index.js"
+        },
+        "./meteor": {
+            "types": "./dist/wallets/meteor/index.d.ts",
+            "import": "./dist/wallets/meteor/index.js"
+        },
+        "./petra": {
+            "types": "./dist/wallets/petra/index.d.ts",
+            "import": "./dist/wallets/petra/index.js"
+        },
+        "./phantom": {
+            "types": "./dist/wallets/phantom/index.d.ts",
+            "import": "./dist/wallets/phantom/index.js"
+        },
+        "./solflare": {
+            "types": "./dist/wallets/solflare/index.d.ts",
+            "import": "./dist/wallets/solflare/index.js"
         },
         "./core": {
             "types": "./dist/core/index.d.ts",
             "import": "./dist/core/index.js"
         }
     },
-    "main": "./dist/wallets/index.js",
-    "types": "./dist/wallets/index.d.ts",
     "bin": {
         "chainwright": "dist/cli/index.js"
     },

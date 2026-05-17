@@ -5,6 +5,7 @@
     "@tobelabs/chainwright": "0.6.0"
   },
   "changesets": [
-    "begin-alpha-series"
+    "begin-alpha-series",
+    "twenty-olives-grin"
   ]
 }

@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.6.1-alpha.1
+
+### Patch Changes
+
+- Separate wallets into their separate modules
+
 ## 0.6.1-alpha.0
 
 ### Patch Changes

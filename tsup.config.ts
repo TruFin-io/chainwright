@@ -2,17 +2,17 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
     name: "chainwright",
-    entry: ["src/cli/index.ts", "src/core/index.ts", "src/wallets/index.ts"],
-    external: [
-        "@inquirer/checkbox",
-        "@playwright/test",
-        "adm-zip",
-        "cli-progress",
-        "commander",
-        "glob",
-        "tsx",
-        "zod",
+    entry: [
+        "src/cli/index.ts",
+        "src/core/index.ts",
+        "src/wallets/keplr/index.ts",
+        "src/wallets/metamask/index.ts",
+        "src/wallets/meteor/index.ts",
+        "src/wallets/petra/index.ts",
+        "src/wallets/phantom/index.ts",
+        "src/wallets/solflare/index.ts",
     ],
+    external: ["@inquirer/checkbox", "@playwright/test", "adm-zip", "cli-progress", "commander", "glob", "tsx", "zod"],
     outDir: "dist",
     format: "esm",
     platform: "node",
