@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.5
+
+### Patch Changes
+
+- Update README.md file
+
 ## 0.8.4
 
 ### Patch Changes

@@ -2,13 +2,13 @@
 <br>
 <picture>
    <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
-   <img src="./.github/logo-light.svg" alt="chainwright" width="400">
+   <img src="./.github/logo-light.svg" alt="chainwright" width="500">
 </picture>
 <br><br>
 <a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/v/chainwright"></a> <a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/dm/chainwright"></a>
 </h1>
 
-<p align="center">
+<p align="center" style="font-size: 24px; font-weight: bold;">
 Test, automate, and verify every wallet interaction, with the precision your users expect.
 </p>
 
