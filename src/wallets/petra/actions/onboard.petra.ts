@@ -110,8 +110,8 @@ export default async function onboard({ page, ...args }: Onboard) {
 
     await renameAccount({ page, newAccountName: args.accountName });
 
-    if (args.addWallet && args.addWallet.length > 0) {
-        for (const { ...addAccountArgs } of args.addWallet) {
+    if (args.additionalAccounts && args.additionalAccounts.length > 0) {
+        for (const { ...addAccountArgs } of args.additionalAccounts) {
             await addAccount({ page, ...addAccountArgs });
         }
 

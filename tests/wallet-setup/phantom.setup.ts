@@ -15,7 +15,7 @@ export default defineWalletSetup(PASSWORD, async ({ walletPage }) => {
             chain: "Solana",
             network: "Solana Devnet",
         },
-        addWallet: [
+        additionalAccounts: [
             {
                 accountName: "Delta",
                 chain: "Ethereum",

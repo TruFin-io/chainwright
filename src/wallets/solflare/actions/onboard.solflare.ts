@@ -9,7 +9,7 @@ import { switchNetwork } from "./switch-network.solflare";
 
 type Onboard = OnboardingArgs & { page: Page };
 
-export async function onboard({ page, recoveryPhrase, network, walletName, addWallet }: Onboard) {
+export async function onboard({ page, recoveryPhrase, network, walletName, additionalAccounts }: Onboard) {
     console.info(styleText("yellowBright", `\n Solflare onboarding started...`, { validateStream: false }));
 
     const PASSWORD = await getWalletPasswordFromCache("solflare");
@@ -48,8 +48,8 @@ export async function onboard({ page, recoveryPhrase, network, walletName, addWa
     // If network is provided, switch to it.
     if (network) await switchNetwork(page, network);
 
-    if (addWallet && addWallet?.length > 0) {
-        for (const { privateKey, walletName } of addWallet) {
+    if (additionalAccounts && additionalAccounts.length > 0) {
+        for (const { privateKey, walletName } of additionalAccounts) {
             await addAccount({ page, privateKey, walletName });
         }
     }

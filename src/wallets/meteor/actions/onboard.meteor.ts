@@ -13,7 +13,7 @@ import { switchNetwork } from "./switch-network.meteor";
 
 type Onboard = OnboardingArgs & { page: Page };
 
-export default async function onboard({ page, privateKey, network, accountName, addWallet }: Onboard) {
+export default async function onboard({ page, privateKey, network, accountName, additionalAccounts }: Onboard) {
     console.info(styleText("yellowBright", `\n Meteor onboarding started...`, { validateStream: false }));
 
     const PASSWORD = await getWalletPasswordFromCache("meteor");
@@ -115,8 +115,8 @@ export default async function onboard({ page, privateKey, network, accountName, 
 
     await renameAccount({ page, newAccountName: accountName });
 
-    if (addWallet && addWallet.length > 0) {
-        for (const { privateKey, accountName, network } of addWallet) {
+    if (additionalAccounts && additionalAccounts.length > 0) {
+        for (const { privateKey, accountName, network } of additionalAccounts) {
             await addAccount({ page, privateKey, accountName, network });
         }
 

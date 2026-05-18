@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.0
+
+### Minor Changes
+
+- Rename the "addWallet" args in the onboarding action to "additionalAccounts"
+
 ## 0.7.0
 
 ### Minor Changes

@@ -6,13 +6,13 @@ export type OnboardingArgs =
           mode: "create";
           accountName: string;
           toggleNetworkMode?: SwitchNetwork;
-          addWallet?: Array<AddAccountArgs>;
+          additionalAccounts?: Array<AddAccountArgs>;
       }
     | {
           mode: "recovery phrase";
           secretRecoveryPhrase: string;
           toggleNetworkMode?: SwitchNetwork;
-          addWallet?: Array<AddAccountArgs>;
+          additionalAccounts?: Array<AddAccountArgs>;
       }
     | {
           mode: "private key";
@@ -20,7 +20,7 @@ export type OnboardingArgs =
           accountName: string;
           chain: "Ethereum" | "Solana" | "Base" | "Sui" | "Bitcoin" | "Polygon" | "HyperEVM";
           toggleNetworkMode?: SwitchNetwork;
-          addWallet?: Array<AddAccountArgs>;
+          additionalAccounts?: Array<AddAccountArgs>;
       };
 
 export type RenameAccountArgs = {

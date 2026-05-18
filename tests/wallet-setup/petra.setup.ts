@@ -11,7 +11,7 @@ export default defineWalletSetup(PASSWORD, async ({ walletPage }) => {
         mode: "importMnemonic",
         accountName: "Default",
         secretRecoveryPhrase: SECRET_PHRASE,
-        addWallet: [
+        additionalAccounts: [
             {
                 accountName: "Echo",
                 mode: "privateKey",

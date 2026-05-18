@@ -14,7 +14,7 @@ export default defineWalletSetup(
             network: "Testnet",
             privateKey: PRIVATE_KEY,
             accountName: "Default",
-            addWallet: [
+            additionalAccounts: [
                 {
                     accountName: "Alpha",
                     network: "Testnet",

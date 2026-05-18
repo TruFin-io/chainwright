@@ -5,19 +5,19 @@ export type OnboardingArgs =
     | {
           mode: "create";
           accountName: string;
-          addWallet?: Array<AddAccount>;
+          additionalAccounts?: Array<AddAccount>;
       }
     | {
           mode: "importMnemonic";
           accountName: string;
           secretRecoveryPhrase: string;
-          addWallet?: Array<AddAccount>;
+          additionalAccounts?: Array<AddAccount>;
       }
     | {
           mode: "importPrivateKey";
           accountName: string;
           privateKey: string;
-          addWallet?: Array<AddAccount>;
+          additionalAccounts?: Array<AddAccount>;
       };
 
 export type SwitchNetwork = "Mainnet" | "Testnet" | "Devnet" | "Shelbynet" | "Netna";

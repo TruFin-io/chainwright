@@ -23,7 +23,7 @@ type TargetInfo = {
     browserContextId: string;
 };
 
-export default async function onboard({ page, addWallet, ...args }: Onboarding) {
+export default async function onboard({ page, additionalAccounts, ...args }: Onboarding) {
     console.info(styleText("yellowBright", `\n Phantom onboarding started...`, { validateStream: false }));
 
     const PASSWORD = await getWalletPasswordFromCache("phantom");
@@ -184,13 +184,13 @@ export default async function onboard({ page, addWallet, ...args }: Onboarding) 
         await renameAccount({ page: newPage, newAccountName: accountName, currentAccountName: "Account 1" });
     }
 
-    if (addWallet && addWallet.length > 0) {
+    if (additionalAccounts && additionalAccounts.length > 0) {
         let cancelled = false;
         const isCancelled = () => cancelled;
 
         autoClosePhantomNotification(newPage, isCancelled).catch((error) => console.error({ error }));
 
-        for (const { accountName, chain, privateKey } of addWallet) {
+        for (const { accountName, chain, privateKey } of additionalAccounts) {
             await addAccount({ page: newPage, privateKey, accountName, chain });
             cancelled = true;
         }

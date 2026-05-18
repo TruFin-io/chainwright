@@ -6,7 +6,7 @@ export type OnboardingArgs = {
     recoveryPhrase: string;
     walletName: string;
     network?: "Mainnet" | "Devnet" | "Testnet";
-    addWallet?: Array<AddAccountArgs>;
+    additionalAccounts?: Array<AddAccountArgs>;
 };
 
 export type SwitchNetwork = Omit<Required<OnboardingArgs>, "recoveryPhrase">["network"];
