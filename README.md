@@ -20,6 +20,7 @@ Chainwright is an end-to-end testing toolkit for Web3 dapps built on top of Play
 - Playwright fixtures for wallet + Dapp testing
 - Support for multiple wallet profiles per wallet
 - Wallet action APIs for onboarding, account switching, transaction confirmation, and more
+- Multiple wallet profile caching
 
 ## Supported Wallets
 
@@ -44,23 +45,21 @@ pnpm add -D @tobelabs/chainwright @playwright/test
 bun add -D @tobelabs/chainwright @playwright/test
 ```
 ```bash
-npm install @tobelabs/chainwright @playwright/test --save-dev
+npm install --save-dev @tobelabs/chainwright @playwright/test
 ```
 ```bash
-yarn add @tobelabs/chainwright @playwright/test -D
+yarn add -D @tobelabs/chainwright @playwright/test
 ```
 
-## Package Entry Points
+After installation, make sure Playwright browsers are installed in your machine.
 
-Use subpath imports:
+```bash
+npx playwright install --chromium #Optional
+```
 
-- `@tobelabs/chainwright/core`
-- `@tobelabs/chainwright/metamask`
-- `@tobelabs/chainwright/solflare`
-- `@tobelabs/chainwright/petra`
-- `@tobelabs/chainwright/phantom`
-- `@tobelabs/chainwright/meteor`
-- `@tobelabs/chainwright/keplr`
+```bash
+bunx playwright install --chromium #Optional
+```
 
 ## Quick Start
 
