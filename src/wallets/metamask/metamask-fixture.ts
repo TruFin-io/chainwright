@@ -12,7 +12,7 @@ import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-exte
 import unlock from "./actions/unlock.metamask";
 import { Metamask } from "./metamask";
 import { MetamaskProfile } from "./metamask-profile";
-import type { MetamaskFixture } from "./types";
+import type { AnvilNodeOptions, CreateAnvilNodeResult, MetamaskFixture } from "./types";
 
 let _metamaskPage: Page;
 
@@ -85,7 +85,7 @@ export const metamaskFixture = ({ slowMo = 0, profileName }: WalletProfileFixtur
             const poolId = testInfo.workerIndex;
             let pool: Pool.define.ReturnType<number> | undefined;
 
-            await use(async (options?: Instance.anvil.Parameters) => {
+            await use(async (options?: AnvilNodeOptions): Promise<CreateAnvilNodeResult> => {
                 pool = Pool.define({
                     instance: Instance.anvil(options),
                 });

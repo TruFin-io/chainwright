@@ -1,5 +1,19 @@
 # @tobelabs/chainwright
 
+## 0.7.0
+
+### Minor Changes
+
+- Fix pnding Typescript issues happening in metamaskFixture export
+
+## 0.6.1
+
+### Patch Changes
+
+- b511b3f: Begin alpha pre-release series.
+- 82a1736: Fix worker scope imports
+- 1bee870: Separate wallets into their separate modules
+
 ## 0.6.1-alpha.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
     "name": "@tobelabs/chainwright",
-    "version": "0.6.1-alpha.2",
+    "version": "0.7.0",
     "description": "An end-to-end testing framework built on top of Playwright for Web3 wallet interactions",
     "type": "module",
     "license": "MIT",
@@ -23,10 +23,6 @@
         "dapp"
     ],
     "exports": {
-        "./wallet": {
-            "types": "./dist/wallets/index.d.ts",
-            "import": "./dist/wallets/index.js"
-        },
         "./keplr": {
             "types": "./dist/wallets/keplr/index.d.ts",
             "import": "./dist/wallets/keplr/index.js"
@@ -84,7 +80,7 @@
         "add:wallet": "tsx scripts/add-wallet.ts"
     },
     "peerDependencies": {
-        "@playwright/test": "^1.60.0"
+        "@playwright/test": "1.60.0"
     },
     "devDependencies": {
         "@biomejs/biome": "2.4.15",

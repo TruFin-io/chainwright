@@ -4,7 +4,7 @@ import type { WorkerScopeFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Metamask } from "./metamask";
-import type { MetamaskFixture } from "./types";
+import type { AnvilNodeOptions, CreateAnvilNodeResult, MetamaskFixture } from "./types";
 import { workerScopeContextMetamask } from "./worker-scope-context.metamask";
 
 export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: WorkerScopeFixtureArgs = {}) => {
@@ -51,7 +51,7 @@ export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: Wor
             const poolId = testInfo.workerIndex;
             let pool: Pool.define.ReturnType<number> | undefined;
 
-            await use(async (options?: Instance.anvil.Parameters) => {
+            await use(async (options?: AnvilNodeOptions): Promise<CreateAnvilNodeResult> => {
                 pool = Pool.define({
                     instance: Instance.anvil(options),
                 });

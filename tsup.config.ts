@@ -5,7 +5,6 @@ export default defineConfig({
     entry: [
         "src/cli/index.ts",
         "src/core/index.ts",
-        "src/wallets/index.ts",
         "src/wallets/keplr/index.ts",
         "src/wallets/metamask/index.ts",
         "src/wallets/meteor/index.ts",
