@@ -1,16 +1,18 @@
-<h1 align="center">
+<span align="center">
 <br>
 <picture>
    <source media="(prefers-color-scheme: dark)" srcset="./.github/logo-dark.svg">
    <img src="./.github/logo-light.svg" alt="chainwright" width="500">
 </picture>
-<br><br>
-<a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/v/chainwright"></a> <a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/dm/chainwright"></a>
-</h1>
-
-<h2 align="center" style="font-size: 24px; font-weight: bold;">
+<br>
+<h2>
 Test, automate, and verify every wallet interaction, with the precision your users expect.
 </h2>
+<br>
+<a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/v/chainwright"></a> <a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/dm/chainwright"></a>
+</span>
+
+
 
 Chainwright is an end-to-end testing toolkit for Web3 dapps built on top of Playwright. It helps you prebuild browser extension wallet state, then reuse it in tests through ready-made fixtures.
 
