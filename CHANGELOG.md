@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.1
+
+### Patch Changes
+
+- Fix bug that prevents the creation of multiple wallet profile if the CLI force flag is set to true
+
 ## 0.8.0
 
 ### Minor Changes

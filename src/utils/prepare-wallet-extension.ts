@@ -22,7 +22,7 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
     const zipFilePath = path.join(CACHE_DIR_NAME, `${name}-extension.zip`);
     const outputPath = path.join(CACHE_DIR_NAME, `${name}-extension`);
 
-    if (force && fs.existsSync(CACHE_DIR_NAME)) {
+    if (force && fs.existsSync(CACHE_DIR_NAME) && !IS_EXECUTED) {
         fs.rmSync(CACHE_DIR_NAME, { recursive: true });
         console.info(
             styleText("magenta", `🧹 Removed ${walletName} because of the force flag`, { validateStream: false }),
