@@ -2,7 +2,7 @@
 <br>
 <picture>
    <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
-   <img src="./.github/logo-dark.svg" alt="chainwright" width="160">
+   <img src="./.github/logo-dark.svg" alt="chainwright" width="400">
 </picture>
 <br><br>
 <a href="https://npm.im/@tobelabs/chainwright"><img src="https://badgen.net/npm/v/@tobelabs/chainwright"></a> <a href="https://npm.im/@tobelabs/chainwright"><img src="https://badgen.net/npm/dm/@tobelabs/chainwright"></a>
