@@ -4,7 +4,7 @@
    <source media="(prefers-color-scheme: dark)" srcset="./.github/logo-dark.svg">
    <img src="./.github/logo-light.svg" alt="chainwright" width="500">
 </picture>
-<br>
+<br><br>
 <span align="center">
 Test, automate, and verify every wallet interaction, with the precision your users expect.
 </span>
