@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.3
+
+### Patch Changes
+
+- Rename the package from "@tobelabs/chainwright" to "chainwright"
+
 ## 0.8.2
 
 ### Patch Changes

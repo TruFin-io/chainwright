@@ -5,7 +5,7 @@
    <img src="./.github/logo-dark.svg" alt="chainwright" width="400">
 </picture>
 <br><br>
-<a href="https://npm.im/@tobelabs/chainwright"><img src="https://badgen.net/npm/v/@tobelabs/chainwright"></a> <a href="https://npm.im/@tobelabs/chainwright"><img src="https://badgen.net/npm/dm/@tobelabs/chainwright"></a>
+<a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/v/chainwright"></a> <a href="https://npm.im/chainwright"><img src="https://badgen.net/npm/dm/chainwright"></a>
 </h1>
 
 <p align="center">
@@ -39,16 +39,16 @@ Chainwright is an end-to-end testing toolkit for Web3 dapps built on top of Play
 ## Installation
 
 ```bash
-pnpm add -D @tobelabs/chainwright @playwright/test
+pnpm add -D chainwright @playwright/test
 ```
 ```bash
-bun add -D @tobelabs/chainwright @playwright/test
+bun add -D chainwright @playwright/test
 ```
 ```bash
-npm install --save-dev @tobelabs/chainwright @playwright/test
+npm install --save-dev chainwright @playwright/test
 ```
 ```bash
-yarn add -D @tobelabs/chainwright @playwright/test
+yarn add -D chainwright @playwright/test
 ```
 
 After installation, make sure Playwright browsers are installed in your machine.
@@ -75,8 +75,8 @@ Each file should export `default defineWalletSetup(...)`.
 
 ```ts
 // tests/wallet-setup/metamask.setup.ts
-import { defineWalletSetup } from "@tobelabs/chainwright/core";
-import { Metamask } from "@tobelabs/chainwright/metamask";
+import { defineWalletSetup } from "chainwright/core";
+import { Metamask } from "chainwright/metamask";
 
 const PASSWORD = "test1234";
 const SEED_PHRASE = "debris dress width prepare table repair index athlete divide avoid month member";
@@ -122,8 +122,8 @@ Cache is stored under:
 
 ```ts
 import { expect } from "@playwright/test";
-import { testWithChainwright } from "@tobelabs/chainwright/core";
-import { metamaskFixture } from "@tobelabs/chainwright/metamask";
+import { testWithChainwright } from "chainwright/core";
+import { metamaskFixture } from "chainwright/metamask";
 
 const test = testWithChainwright(
   metamaskFixture({
@@ -143,7 +143,7 @@ test("connect wallet to dapp", async ({ page, metamask }) => {
 Use worker-scoped fixtures when you want one wallet context per worker and a prepared `dappPage`.
 
 ```ts
-import { metamaskWorkerScopeFixture } from "@tobelabs/chainwright/metamask";
+import { metamaskWorkerScopeFixture } from "chainwright/metamask";
 
 export const test = metamaskWorkerScopeFixture({
   profileName: "default",
