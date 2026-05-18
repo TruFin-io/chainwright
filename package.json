@@ -1,6 +1,6 @@
 {
     "name": "@tobelabs/chainwright",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "description": "An end-to-end testing framework built on top of Playwright for Web3 wallet interactions",
     "type": "module",
     "license": "MIT",
@@ -102,5 +102,16 @@
         "prool": "^0.2.4",
         "tsx": "^4.22.0",
         "zod": "^4.4.3"
+    },
+    "overrides": {
+        "tar": "^7.5.15"
+    },
+    "resolutions": {
+        "tar": "^7.5.15"
+    },
+    "pnpm": {
+        "overrides": {
+            "tar": "^7.5.15"
+        }
     }
 }

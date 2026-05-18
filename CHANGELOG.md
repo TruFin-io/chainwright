@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.2
+
+### Patch Changes
+
+- Fix installation issues with "yarn" and "npm"
+
 ## 0.8.1
 
 ### Patch Changes
