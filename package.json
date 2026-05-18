@@ -1,6 +1,6 @@
 {
     "name": "chainwright",
-    "version": "0.8.3",
+    "version": "0.8.4",
     "description": "An end-to-end testing framework built on top of Playwright for Web3 wallet interactions",
     "type": "module",
     "license": "MIT",

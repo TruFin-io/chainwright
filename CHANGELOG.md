@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.4
+
+### Patch Changes
+
+- Fix deployment issue
+
 ## 0.8.3
 
 ### Patch Changes
