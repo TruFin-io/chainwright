@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.10
+
+### Patch Changes
+
+- Update the "release.yml" file
+
 ## 0.8.9
 
 ### Patch Changes
