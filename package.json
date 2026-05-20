@@ -1,7 +1,7 @@
 {
     "name": "chainwright",
-    "version": "0.8.8",
-    "description": "An end-to-end testing framework built on top of Playwright for Web3 wallet interactions",
+    "version": "0.8.9",
+    "description": "Playwright Web3 wallet testing framework for end-to-end dApp automation with MetaMask, Phantom, Solflare, Petra, Meteor, and Keplr",
     "type": "module",
     "license": "MIT",
     "author": "Tobechukwu Ugwuanyi",
@@ -14,13 +14,23 @@
         "url": "https://github.com/amaify/chainwright/issues"
     },
     "keywords": [
+        "chainwright",
         "playwright",
         "e2e",
-        "testing",
+        "end-to-end testing",
+        "web3 testing",
+        "wallet automation",
+        "wallet testing",
+        "dapp testing",
+        "dapp e2e testing",
         "web3",
-        "wallet",
         "blockchain",
-        "dapp"
+        "metamask",
+        "phantom",
+        "solflare",
+        "petra",
+        "meteor wallet",
+        "keplr"
     ],
     "exports": {
         "./keplr": {
