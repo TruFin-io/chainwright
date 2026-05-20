@@ -1,12 +1,12 @@
 import { test as base } from "@playwright/test";
-import type { WorkerScopeFixtureArgs } from "@/types";
+import type { WalletProfileFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import { type WorkerScopeFixture, workerScopeContext } from "../utils/worker-scope-context";
 import { Meteor } from "./meteor";
 import { MeteorProfile } from "./meteor-profile";
 import type { MeteorFixture } from "./types";
 
-export const meteorWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
+export const meteorWorkerScopeFixture = ({ slowMo, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<MeteorFixture, WorkerScopeFixture<Meteor>>({
         workerScopeContents: [
             async ({ browser: _ }, use, workerInfo) => {
@@ -35,23 +35,5 @@ export const meteorWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worke
             },
             { scope: "worker" },
         ],
-        dappPage: [
-            async ({ workerScopeContents }, use) => {
-                const { context } = workerScopeContents;
-                const dappPage = await context.newPage();
-                if (dappUrl) {
-                    await dappPage.goto(dappUrl);
-                }
-                await use(dappPage);
-            },
-            { scope: "worker" },
-        ],
-        meteorPage: async ({ workerScopeContents }, use) => {
-            await use(workerScopeContents.walletPage);
-        },
-        meteor: async ({ workerScopeContents }, use) => {
-            const meteorInstance = new Meteor(workerScopeContents.walletPage);
-            await use(meteorInstance);
-        },
     });
 };

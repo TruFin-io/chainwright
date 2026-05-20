@@ -5,10 +5,7 @@ import { phantomWorkerScopeFixture } from "@/wallets/phantom/phantom-worker-scop
 import { BASE_URL } from "../utils/base-url";
 
 export const testWithPhantomFixture = phantomFixture();
-export const testWithPhantom = testWithChainwright(phantomFixture());
-export const testWithPhantomWorkerScope = phantomWorkerScopeFixture({
-    dappUrl: `${BASE_URL}/solana`,
-});
+export const testWithPhantom = testWithChainwright(phantomFixture({}));
 
 type TestDappFixture = {
     dappPage: Page;
@@ -19,4 +16,16 @@ export const testDappFixture = testWithPhantom.extend<TestDappFixture>({
         await page.goto(`${baseURL}/solana`);
         await use(page);
     },
+});
+
+export const testWithPhantomWorkerScopeDapp = phantomWorkerScopeFixture().extend<TestDappFixture>({
+    dappPage: [
+        async ({ workerScopeContents }, use) => {
+            const { context } = workerScopeContents;
+            const _dappPage = await context.newPage();
+            await _dappPage.goto(`${BASE_URL}/solana`);
+            await use(_dappPage);
+        },
+        { scope: "worker" },
+    ],
 });

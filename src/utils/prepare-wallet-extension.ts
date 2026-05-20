@@ -14,6 +14,7 @@ type Args = {
 };
 
 let IS_EXECUTED = false;
+let PREVIOUS_WALLET_NAME = "";
 
 export async function prepareWalletExtension({ downloadUrl, name, force }: Args) {
     const CACHE_DIR_NAME = getCacheDirectory(name);
@@ -21,6 +22,15 @@ export async function prepareWalletExtension({ downloadUrl, name, force }: Args)
     const walletName = supportedWallet.extensionName;
     const zipFilePath = path.join(CACHE_DIR_NAME, `${name}-extension.zip`);
     const outputPath = path.join(CACHE_DIR_NAME, `${name}-extension`);
+
+    if (!IS_EXECUTED) {
+        PREVIOUS_WALLET_NAME = walletName;
+    } else {
+        if (PREVIOUS_WALLET_NAME !== walletName && IS_EXECUTED) {
+            IS_EXECUTED = false;
+            PREVIOUS_WALLET_NAME = walletName;
+        }
+    }
 
     if (force && fs.existsSync(CACHE_DIR_NAME) && !IS_EXECUTED) {
         fs.rmSync(CACHE_DIR_NAME, { recursive: true });

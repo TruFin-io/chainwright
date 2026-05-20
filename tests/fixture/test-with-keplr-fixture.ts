@@ -6,9 +6,6 @@ import { BASE_URL } from "../utils/base-url";
 
 export const testWithKeplrFixture = keplrFixture();
 export const testWithKeplr = testWithChainwright(keplrFixture());
-export const testWithKeplrWorkerScope = keplrWorkerScopeFixture({
-    dappUrl: `${BASE_URL}/injective`,
-});
 
 type TestDappFixture = {
     dappPage: Page;
@@ -19,4 +16,16 @@ export const testDappFixture = testWithKeplr.extend<TestDappFixture>({
         await page.goto(`${baseURL}/injective`);
         await use(page);
     },
+});
+
+export const testWorkerScopeDappFixture = keplrWorkerScopeFixture().extend<TestDappFixture>({
+    dappPage: [
+        async ({ workerScopeContents }, use) => {
+            const { context } = workerScopeContents;
+            const _dappPage = await context.newPage();
+            await _dappPage.goto(`${BASE_URL}/injective`);
+            await use(_dappPage);
+        },
+        { scope: "worker" },
+    ],
 });

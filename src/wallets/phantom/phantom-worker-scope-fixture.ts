@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import type { WorkerScopeFixtureArgs } from "@/types";
+import type { WalletProfileFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Phantom } from "./phantom";
@@ -7,7 +7,7 @@ import type { PhantomFixture } from "./types";
 import { autoClosePhantomNotification } from "./utils";
 import { workerScopeContextPhantom } from "./worker-scope-context.phantom";
 
-export const phantomWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
+export const phantomWorkerScopeFixture = ({ slowMo, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<PhantomFixture, WorkerScopeFixture<Phantom>>({
         workerScopeContents: [
             async ({ browser: _ }, use, workerInfo) => {
@@ -35,24 +35,6 @@ export const phantomWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Work
             },
             { scope: "worker" },
         ],
-        dappPage: [
-            async ({ workerScopeContents }, use) => {
-                const { context } = workerScopeContents;
-                const dappPage = await context.newPage();
-                if (dappUrl) {
-                    await dappPage.goto(dappUrl);
-                }
-                await use(dappPage);
-            },
-            { scope: "worker" },
-        ],
-        phantomPage: async ({ workerScopeContents }, use) => {
-            await use(workerScopeContents.walletPage);
-        },
-        phantom: async ({ workerScopeContents }, use) => {
-            const phantomInstance = new Phantom(workerScopeContents.walletPage);
-            await use(phantomInstance);
-        },
         autoCloseNotification: [
             async ({ workerScopeContents }, use) => {
                 let cancelled = false;

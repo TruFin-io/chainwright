@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.11
+
+### Patch Changes
+
+- Update and improve the worker scope fixture across all supported wallets
+
 ## 0.8.10
 
 ### Patch Changes

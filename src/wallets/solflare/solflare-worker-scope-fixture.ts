@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import type { WorkerScopeFixtureArgs } from "@/types";
+import type { WalletProfileFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Solflare } from "./solflare";
@@ -7,7 +7,7 @@ import type { SolflareFixture } from "./types";
 import { autoCloseSolflareNotification } from "./utils";
 import { workerScopeContextSolana } from "./worker-scope-context.solflare";
 
-export const solflareWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
+export const solflareWorkerScopeFixture = ({ slowMo, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<SolflareFixture, WorkerScopeFixture<Solflare>>({
         workerScopeContents: [
             async ({ browser: _ }, use, workerInfo) => {
@@ -29,24 +29,6 @@ export const solflareWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Wor
             },
             { scope: "worker" },
         ],
-        dappPage: [
-            async ({ workerScopeContents }, use) => {
-                const { context } = workerScopeContents;
-                const dappPage = await context.newPage();
-                if (dappUrl) {
-                    await dappPage.goto(dappUrl);
-                }
-                await use(dappPage);
-            },
-            { scope: "worker" },
-        ],
-        solflarePage: async ({ workerScopeContents }, use) => {
-            await use(workerScopeContents.walletPage);
-        },
-        solflare: async ({ workerScopeContents }, use) => {
-            const solflareInstance = new Solflare(workerScopeContents.walletPage);
-            await use(solflareInstance);
-        },
         autoCloseNotification: [
             async ({ workerScopeContents }, use) => {
                 let cancelled = false;

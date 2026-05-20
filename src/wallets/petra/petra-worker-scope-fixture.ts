@@ -1,12 +1,12 @@
 import { test as base } from "@playwright/test";
-import type { WorkerScopeFixtureArgs } from "@/types";
+import type { WalletProfileFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import { type WorkerScopeFixture, workerScopeContext } from "../utils/worker-scope-context";
 import { Petra } from "./petra";
 import { PetraProfile } from "./petra-profile";
 import type { PetraFixture } from "./types";
 
-export const petraWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: WorkerScopeFixtureArgs = {}) => {
+export const petraWorkerScopeFixture = ({ slowMo, profileName }: WalletProfileFixtureArgs = {}) => {
     return base.extend<PetraFixture, WorkerScopeFixture<Petra>>({
         workerScopeContents: [
             async ({ browser: _ }, use, workerInfo) => {
@@ -36,23 +36,5 @@ export const petraWorkerScopeFixture = ({ slowMo, profileName, dappUrl }: Worker
             },
             { scope: "worker" },
         ],
-        dappPage: [
-            async ({ workerScopeContents }, use) => {
-                const { context } = workerScopeContents;
-                const dappPage = await context.newPage();
-                if (dappUrl) {
-                    await dappPage.goto(dappUrl);
-                }
-                await use(dappPage);
-            },
-            { scope: "worker" },
-        ],
-        petraPage: async ({ workerScopeContents }, use) => {
-            await use(workerScopeContents.walletPage);
-        },
-        petra: async ({ workerScopeContents }, use) => {
-            const petraInstance = new Petra(workerScopeContents.walletPage);
-            await use(petraInstance);
-        },
     });
 };

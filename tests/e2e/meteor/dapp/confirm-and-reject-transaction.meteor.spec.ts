@@ -1,11 +1,12 @@
-import { testWithMeteorWorkerScope } from "@/tests/fixture/test-with-meteor-fixture";
+import { testWithWorkderScopeDappFixture } from "@/tests/fixture/test-with-meteor-fixture";
 import { fillForm } from "@/tests/utils/transaction-form";
 import { connectWallet } from "../utils";
 
-const test = testWithMeteorWorkerScope;
+const test = testWithWorkderScopeDappFixture;
 
 test.describe("Confirm and reject transaction E2E tests", () => {
-    test("Should confirm transaction successfully", async ({ dappPage, meteor }) => {
+    test("Should confirm transaction successfully", async ({ dappPage, workerScopeContents }) => {
+        const { wallet: meteor } = workerScopeContents;
         const navigation = dappPage.getByRole("navigation");
         await navigation.waitFor({ state: "attached", timeout: 15_000 });
 
@@ -18,7 +19,8 @@ test.describe("Confirm and reject transaction E2E tests", () => {
         await meteor.confirmTransaction();
     });
 
-    test("Should reject transaction successfully", async ({ dappPage, meteor }) => {
+    test("Should reject transaction successfully", async ({ dappPage, workerScopeContents }) => {
+        const { wallet: meteor } = workerScopeContents;
         await connectWallet(dappPage, meteor);
         await fillForm({
             appPage: dappPage,

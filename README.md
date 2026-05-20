@@ -16,7 +16,7 @@ Test, automate, and verify every wallet interaction, with the precision your use
 
 
 
-Chainwright is an end-to-end testing toolkit for Web3 dapps built on top of Playwright. It helps you prebuild browser extension wallet state, then reuse it in tests through ready-made fixtures.
+Chainwright is an end-to-end testing toolkit for Web3 dapps built on top of Playwright. It helps you prebuild browser extension wallet state, then reuse it in your end-to-end tests through ready-made fixtures.
 
 ## Features
 
@@ -75,15 +75,15 @@ Create a setup directory (default: `tests/wallet-setup`) and add `*.setup.ts` fi
 - `petra.setup.ts`
 - `phantom-team-a.setup.ts`
 
-Each file should export `default defineWalletSetup(...)`.
+Each file must export `default defineWalletSetup(...)`.
 
 ```ts
 // tests/wallet-setup/metamask.setup.ts
 import { defineWalletSetup } from "chainwright/core";
 import { Metamask } from "chainwright/metamask";
 
-const PASSWORD = "test1234";
-const SEED_PHRASE = "debris dress width prepare table repair index athlete divide avoid month member";
+const PASSWORD = "test1234"; // For Petra wallet, you have to use a strong password. e.g. PlayerPetra45!!
+const SEED_PHRASE = "test test test test test test test test test test test test test";
 
 export default defineWalletSetup(
   PASSWORD,
@@ -97,25 +97,71 @@ export default defineWalletSetup(
     });
   },
   {
-    profileName: "default", // optional
-    slowMo: 200, // optional
+    ...//Optional prarmeters here
   },
+);
+```
+
+**For Wallets with additional accounts**
+
+```ts
+// tests/wallet-setup/metamask.setup.ts
+import { defineWalletSetup } from "chainwright/core";
+import { Petra } from "chainwright/petra";
+
+const PASSWORD = "PlayerPetra45!!";
+
+export default defineWalletSetup(
+  PASSWORD,
+  async ({ walletPage }) => {
+    const petra = new Petra(walletPage);
+
+    await petra.onboard({
+      mode: "importMnemonic",
+      accountName: "default",
+      secretRecoveryPhrase: "test test test...", // Seed phrase for the main account
+      additionalAccounts: [
+        {
+          accountName: "nw-account",
+          mode: "mnemonic",
+          mnemonicPhrase: "test test test..." // Seed Phrase for this account
+        },
+      ]
+    });
+  },
+  {
+    ...//Optional prarmeters here
+  }
 );
 ```
 
 ### 2. Build wallet cache
 
-Run setup with the CLI:
+Run setup with the CLI (Supports npx, bun, pnpm, and yarn):
+
+> NB: By default, Chainwright looks for `tests/wallet-setup` in your base directory. However, you can specify the directory you want Chainwright to get your setup files from.
 
 ```bash
-chainwright ./tests/wallet-setup --wallets metamask
+bun chainwright --wallets metamask
+```
+
+To specify a directory:
+
+```bash
+bun chainwright <directory path> <wallet> -f #Optional flag
 ```
 
 Useful flags:
 
 - `-f, --force` overwrite existing cache
-- `--wallets <wallets...>` select wallets (`metamask`, `solflare`, `petra`, `phantom`, `meteor`, `keplr`)
+- `--wallets <wallets...>` select wallets (`metamask`, `solflare`, `petra`, `phantom`, `meteor`, `keplr`). Setup multiple wallets at  the same time.
 - `-a, --all` setup all wallets
+- `--kp, --keplr` setup keplr wallet
+- `-m, --metamask` setup metamask wallet
+- `--mt, --meteor` setup the meteor wallet
+- `--pt, --petra` setup petra wallet
+- `--ph, --phantom` setup phantom wallet
+- `-s, --solflare` setup solflare wallet
 
 Cache is stored under:
 
@@ -129,22 +175,45 @@ import { expect } from "@playwright/test";
 import { testWithChainwright } from "chainwright/core";
 import { metamaskFixture } from "chainwright/metamask";
 
-const test = testWithChainwright(
-  metamaskFixture({
-    profileName: "default",
-  }),
-);
+// Fixture
+export const testWithMetamask = testWithChainwright(metamaskFixture());
+
+// Extend Chainwright's metamaskFixture to suit your need
+export const testDappFixture = testWithMetamask.extend<TestDappFixture>({
+    context: async({ context: _ }, use) => {
+    //...Context content here
+    },
+    dappPage: async ({ page, baseURL }, use) => {
+        await page.goto(`dApp's url`);
+        await use(page);
+    },
+});
 
 test("connect wallet to dapp", async ({ page, metamask }) => {
   await page.goto("https://your-dapp.example");
+  const connectButton = page.getByRole("button", { name: /Connect/i})
+  await connectButton.click();
   await metamask.connectToApp("Account 1");
   await expect(page.getByText("Connected")).toBeVisible();
 });
 ```
+> N.B: The wallet fixture will make use of the `default` wallet profile. If you specified a `profile-name` at the point of setting up, make sure to include it in the fixture.
+
+```ts
+// No profile name is specified at setup time
+const testWithFixture = testWithChainwright(fixture())
+
+// If a profile name is specified at setup time.
+const testWithFixture = testWithChainwright(fixture({ profileName: "profile name" }))
+```
+
+`Wallet fixture parameters` (Optinoal):
+- `profileName`: string,
+- `slowMo`: number
 
 ## Worker-Scoped Fixture
 
-Use worker-scoped fixtures when you want one wallet context per worker and a prepared `dappPage`.
+Use worker-scoped fixtures when you want one wallet context for the duration of a test suite. This is important for saving time on the setup and teardown cost when running tests in CI
 
 ```ts
 import { metamaskWorkerScopeFixture } from "chainwright/metamask";
@@ -160,13 +229,13 @@ test("confirm transaction", async ({ dappPage, metamask }) => {
 });
 ```
 
-`WorkerScopeFixtureArgs`:
+`Worker scoped fixture parameters` (Optional):
 
 - `profileName?: string`
 - `slowMo?: number`
 - `dappUrl?: string`
 
-## Wallet Fixtures By Module
+## Wallets By Module
 
 Each wallet module exports:
 
@@ -233,12 +302,6 @@ Additional wallet-specific actions are available, for example:
 - Phantom: `switchNetwork`, `toggleOptionalChains`
 - Petra/Solflare/Meteor: `switchNetwork`
 - Meteor: `openSettings`
-
-## Troubleshooting
-
-- `Cache for <wallet> ... not found`: run `chainwright` setup first.
-- Setup file not detected: ensure file matches `*.setup.ts` or `*.setup.js` and includes a wallet name.
-- Existing profile conflict: use `--force` or a unique `profileName`.
 
 ## License
 

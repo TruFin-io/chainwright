@@ -1,4 +1,4 @@
-export type { WalletProfileFixtureArgs, WorkerScopeFixtureArgs } from "@/types";
+export type { WalletProfileFixtureArgs } from "@/types";
 export * from "../utils/worker-scope-context";
 export * from "./phantom";
 export * from "./phantom-fixture";

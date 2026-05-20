@@ -1,13 +1,13 @@
 import { test as base } from "@playwright/test";
 import { Instance, Pool } from "prool";
-import type { WorkerScopeFixtureArgs } from "@/types";
+import type { WalletProfileFixtureArgs } from "@/types";
 import { teardownContext } from "@/utils/teardown-context";
 import type { WorkerScopeFixture } from "../utils/worker-scope-context";
 import { Metamask } from "./metamask";
 import type { AnvilNodeOptions, CreateAnvilNodeResult, MetamaskFixture } from "./types";
 import { workerScopeContextMetamask } from "./worker-scope-context.metamask";
 
-export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: WorkerScopeFixtureArgs = {}) => {
+export const metamaskWorkerScopeFixture = ({ profileName, slowMo }: WalletProfileFixtureArgs = {}) => {
     return base.extend<MetamaskFixture, WorkerScopeFixture<Metamask>>({
         workerScopeContents: [
             async ({ browser: _ }, use, workerInfo) => {
@@ -29,24 +29,6 @@ export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: Wor
             },
             { scope: "worker" },
         ],
-        dappPage: [
-            async ({ workerScopeContents }, use) => {
-                const { context } = workerScopeContents;
-                const dappPage = await context.newPage();
-                if (dappUrl) {
-                    await dappPage.goto(dappUrl);
-                }
-                await use(dappPage);
-            },
-            { scope: "worker" },
-        ],
-        metamaskPage: async ({ workerScopeContents }, use) => {
-            await use(workerScopeContents.walletPage);
-        },
-        metamask: async ({ workerScopeContents }, use) => {
-            const metamaskInstance = new Metamask(workerScopeContents.walletPage);
-            await use(metamaskInstance);
-        },
         createAnvilNode: async ({ context: _ }, use, testInfo) => {
             const poolId = testInfo.workerIndex;
             let pool: Pool.define.ReturnType<number> | undefined;
@@ -68,10 +50,11 @@ export const metamaskWorkerScopeFixture = ({ profileName, dappUrl, slowMo }: Wor
                 await pool.stop(poolId);
             }
         },
-        connectToAnvil: async ({ context: _, metamask, createAnvilNode }, use) => {
+        connectToAnvil: async ({ context: _, createAnvilNode, workerScopeContents }, use) => {
             await use(async () => {
+                const { wallet } = workerScopeContents;
                 const { chainId, rpcUrl } = await createAnvilNode({ chainId: 2251 });
-                await metamask.addCustomNetwork({
+                await wallet.addCustomNetwork({
                     chainId,
                     currencySymbol: "ETH",
                     networkName: "Anvil Localnet",

@@ -1,10 +1,11 @@
 import { expect } from "@playwright/test";
-import { metamaskWorkerScopeFixture } from "@/wallets/metamask/metamask-worker-scope-fixture";
+import { testWorkerScopeDappFixture } from "@/tests/fixture/test-with-metamask-fixture";
 import { homepageSelectors } from "@/wallets/metamask/selectors/homepage-selectors.metamask";
 
-const test = metamaskWorkerScopeFixture();
+const test = testWorkerScopeDappFixture;
 
-test("Should rename account successfully", async ({ metamask, metamaskPage }) => {
+test("Should rename account successfully", async ({ workerScopeContents }) => {
+    const { wallet: metamask, walletPage: metamaskPage } = workerScopeContents;
     const OLD_ACCOUNT = "Gamify";
     const NEW_ACCOUNT = "New account";
 

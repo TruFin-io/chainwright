@@ -1,10 +1,11 @@
 import { expect } from "@playwright/test";
-import { solflareWorkerScopeFixture } from "@/wallets/solflare/solflare-worker-scope-fixture";
+import { testWithSolflareWorkerScopeDapp } from "@/tests/fixture/test-with-solflare-fixture";
 
-const test = solflareWorkerScopeFixture();
+const test = testWithSolflareWorkerScopeDapp;
 
 test.describe("Switch network E2E tests", () => {
-    test("Should successfully switch network to Devnet", async ({ solflare, solflarePage }) => {
+    test("Should successfully switch network to Devnet", async ({ workerScopeContents }) => {
+        const { wallet: solflare, walletPage: solflarePage } = workerScopeContents;
         await solflare.switchNetwork("Devnet");
 
         const toasContainer = solflarePage.getByTestId("toast-container");
@@ -16,7 +17,8 @@ test.describe("Switch network E2E tests", () => {
         }
     });
 
-    test("Should successfully switch network to Testnet", async ({ solflare, solflarePage }) => {
+    test("Should successfully switch network to Testnet", async ({ workerScopeContents }) => {
+        const { wallet: solflare, walletPage: solflarePage } = workerScopeContents;
         await solflare.switchNetwork("Testnet");
 
         const toasContainer = solflarePage.getByTestId("toast-container");
@@ -28,7 +30,8 @@ test.describe("Switch network E2E tests", () => {
         }
     });
 
-    test("Should successfully switch network to Mainnet", async ({ solflare, solflarePage }) => {
+    test("Should successfully switch network to Mainnet", async ({ workerScopeContents }) => {
+        const { wallet: solflare, walletPage: solflarePage } = workerScopeContents;
         await solflare.switchNetwork("Mainnet");
         const toasContainer = solflarePage.getByTestId("toast-container");
         const isToastContainerVisible = await toasContainer.isVisible().catch(() => false);
@@ -39,7 +42,8 @@ test.describe("Switch network E2E tests", () => {
         }
     });
 
-    test("Should not switch if the network is already active", async ({ solflare, solflarePage }) => {
+    test("Should not switch if the network is already active", async ({ workerScopeContents }) => {
+        const { wallet: solflare, walletPage: solflarePage } = workerScopeContents;
         await solflare.switchNetwork("Mainnet");
 
         const header = solflarePage.getByTestId("section-header");

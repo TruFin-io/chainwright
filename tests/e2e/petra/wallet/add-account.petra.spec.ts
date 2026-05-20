@@ -1,11 +1,12 @@
 import { expect } from "@playwright/test";
-import { petraWorkerScopeFixture } from "@/wallets/petra/petra-worker-scope-fixture";
+import { testWithPetraWorkerScope } from "@/tests/fixture/test-with-petra-fixture";
 import { accountSelectors } from "@/wallets/petra/selectors/homepage-selectors.petra";
 
-const test = petraWorkerScopeFixture();
+const test = testWithPetraWorkerScope;
 
 test.describe("E2E For Adding account in Petra wallet", () => {
-    test("Should add account via private key", async ({ petra, petraPage }) => {
+    test("Should add account via private key", async ({ workerScopeContents }) => {
+        const { wallet: petra, walletPage: petraPage } = workerScopeContents;
         // PK --> Private Key
         const accountName = "PK account";
 
@@ -22,7 +23,8 @@ test.describe("E2E For Adding account in Petra wallet", () => {
         expect(splitValue?.includes(accountName)).toBeTruthy();
     });
 
-    test("Should add account via Mnemonic phrase", async ({ petra, petraPage }) => {
+    test("Should add account via Mnemonic phrase", async ({ workerScopeContents }) => {
+        const { wallet: petra, walletPage: petraPage } = workerScopeContents;
         // MP --> Mnemonic Phrase
         const accountName = "MP account";
 

@@ -5,9 +5,6 @@ import { BASE_URL } from "../utils/base-url";
 
 export const testWithMeteorFixture = meteorFixture();
 export const testFixtureWithNetworkProfile = meteorFixture({ profileName: "multiple-network" });
-export const testWithMeteorWorkerScope = meteorWorkerScopeFixture({
-    dappUrl: `${BASE_URL}/near`,
-});
 
 export const testDappFixture = testWithMeteorFixture.extend<{
     dappPage: Page;
@@ -16,4 +13,18 @@ export const testDappFixture = testWithMeteorFixture.extend<{
         await page.goto(`${baseURL}/near`);
         await use(page);
     },
+});
+
+export const testWithWorkderScopeDappFixture = meteorWorkerScopeFixture().extend<{
+    dappPage: Page;
+}>({
+    dappPage: [
+        async ({ workerScopeContents }, use) => {
+            const { context } = workerScopeContents;
+            const _dappPage = await context.newPage();
+            await _dappPage.goto(`${BASE_URL}/near`);
+            await use(_dappPage);
+        },
+        { scope: "worker" },
+    ],
 });

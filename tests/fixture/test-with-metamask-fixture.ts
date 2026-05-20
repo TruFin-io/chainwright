@@ -6,9 +6,7 @@ import { BASE_URL } from "../utils/base-url";
 
 export const testWithMetamaskFixture = metamaskFixture();
 export const testWithMetamask = testWithChainwright(metamaskFixture());
-export const testWithMetamaskWorkerScope = metamaskWorkerScopeFixture({
-    dappUrl: `${BASE_URL}/polygon`,
-});
+export const testWithMetamaskWorkerScope = metamaskWorkerScopeFixture();
 
 type TestDappFixture = {
     dappPage: Page;
@@ -19,4 +17,16 @@ export const testDappFixture = testWithMetamask.extend<TestDappFixture>({
         await page.goto(`${baseURL}/polygon`);
         await use(page);
     },
+});
+
+export const testWorkerScopeDappFixture = testWithMetamaskWorkerScope.extend<TestDappFixture>({
+    dappPage: [
+        async ({ workerScopeContents }, use) => {
+            const { context } = workerScopeContents;
+            const _dappPage = await context.newPage();
+            await _dappPage.goto(`${BASE_URL}/polygon`);
+            await use(_dappPage);
+        },
+        { scope: "worker" },
+    ],
 });

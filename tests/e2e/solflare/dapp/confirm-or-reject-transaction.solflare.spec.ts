@@ -1,11 +1,12 @@
-import { testWithSolflareWorkerScope } from "@/tests/fixture/test-with-solflare-fixture";
+import { testWithSolflareWorkerScopeDapp } from "@/tests/fixture/test-with-solflare-fixture";
 import { fillForm } from "@/tests/utils/transaction-form";
 import { connectWallet } from "../utils";
 
-const test = testWithSolflareWorkerScope;
+const test = testWithSolflareWorkerScopeDapp;
 
 test.describe("Confirm and reject transaction E2E tests", () => {
-    test("Should confirm transaction successfully", async ({ dappPage, solflare }) => {
+    test("Should confirm transaction successfully", async ({ dappPage, workerScopeContents }) => {
+        const { wallet: solflare } = workerScopeContents;
         await connectWallet(dappPage, solflare);
         await fillForm({
             appPage: dappPage,
@@ -15,7 +16,8 @@ test.describe("Confirm and reject transaction E2E tests", () => {
         await solflare.confirmTransaction();
     });
 
-    test("Should reject transaction successfully", async ({ dappPage, solflare }) => {
+    test("Should reject transaction successfully", async ({ dappPage, workerScopeContents }) => {
+        const { wallet: solflare } = workerScopeContents;
         await connectWallet(dappPage, solflare);
         await fillForm({
             appPage: dappPage,

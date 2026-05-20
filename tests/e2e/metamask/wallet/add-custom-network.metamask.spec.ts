@@ -1,11 +1,12 @@
 import { expect } from "@playwright/test";
-import { metamaskWorkerScopeFixture } from "@/wallets/metamask/metamask-worker-scope-fixture";
+import { testWorkerScopeDappFixture } from "@/tests/fixture/test-with-metamask-fixture";
 import { homepageSelectors } from "@/wallets/metamask/selectors/homepage-selectors.metamask";
 
-const test = metamaskWorkerScopeFixture();
+const test = testWorkerScopeDappFixture;
 
 test.describe("Add custom network", () => {
-    test("Should add custom network successfully", async ({ metamask, metamaskPage }) => {
+    test("Should add custom network successfully", async ({ workerScopeContents }) => {
+        const { wallet: metamask, walletPage: metamaskPage } = workerScopeContents;
         await metamask.addCustomNetwork({
             networkName: "Gnosis",
             rpcUrl: "https://gnosis.oat.farm",
@@ -20,9 +21,9 @@ test.describe("Add custom network", () => {
 
     test("Should add and connect to the local Anvil network successfully", async ({
         createAnvilNode,
-        metamask,
-        metamaskPage,
+        workerScopeContents,
     }) => {
+        const { wallet: metamask, walletPage: metamaskPage } = workerScopeContents;
         const { chainId, rpcUrl } = await createAnvilNode({ chainId: 2251 });
         await metamask.addCustomNetwork({
             networkName: "Anvil Localnet",

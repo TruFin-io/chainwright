@@ -1,11 +1,12 @@
-import { testWithPhantomWorkerScope } from "@/tests/fixture/test-with-phantom-fixture";
+import { testWithPhantomWorkerScopeDapp } from "@/tests/fixture/test-with-phantom-fixture";
 import { fillForm } from "@/tests/utils/transaction-form";
 import { connectWallet } from "../utils";
 
-const test = testWithPhantomWorkerScope;
+const test = testWithPhantomWorkerScopeDapp;
 
 test.describe("Reject transaction E2E tests", () => {
-    test("Should reject transaction successfully", async ({ dappPage, phantom }) => {
+    test("Should reject transaction successfully", async ({ dappPage, workerScopeContents }) => {
+        const { wallet: phantom } = workerScopeContents;
         const navigation = dappPage.getByRole("navigation");
         await navigation.waitFor({ state: "attached", timeout: 15_000 });
 
@@ -20,8 +21,9 @@ test.describe("Reject transaction E2E tests", () => {
 
     test("Should reject transaction successfully if there is a confirm anyway warning", async ({
         dappPage,
-        phantom,
+        workerScopeContents,
     }) => {
+        const { wallet: phantom } = workerScopeContents;
         await connectWallet(dappPage, phantom);
         await fillForm({
             appPage: dappPage,

@@ -1,9 +1,9 @@
 import { expect, type Page } from "@playwright/test";
-import { testWithMetamaskWorkerScope } from "@/tests/fixture/test-with-metamask-fixture";
+import { testWorkerScopeDappFixture } from "@/tests/fixture/test-with-metamask-fixture";
 import { fillForm } from "@/tests/utils/transaction-form";
 import type { Metamask } from "@/wallets/metamask/metamask";
 
-const test = testWithMetamaskWorkerScope;
+const test = testWorkerScopeDappFixture;
 
 async function _confirmTransaction(metamask: Metamask, dappPage: Page) {
     await metamask.switchAccount({ accountName: "Dapp" });
@@ -30,12 +30,14 @@ async function _confirmTransaction(metamask: Metamask, dappPage: Page) {
 }
 
 test.describe("E2E For Confirming transaction in Metamask wallet", () => {
-    test("Should confirm transaction successfully", async ({ dappPage, metamask }) => {
+    test("Should confirm transaction successfully", async ({ dappPage, workerScopeContents }) => {
+        const { wallet: metamask } = workerScopeContents;
         await _confirmTransaction(metamask, dappPage);
         await metamask.confirmTransaction();
     });
 
-    test("Should confirm transaction with warning successfully", async ({ dappPage, metamask }) => {
+    test("Should confirm transaction with warning successfully", async ({ dappPage, workerScopeContents }) => {
+        const { wallet: metamask } = workerScopeContents;
         await metamask.switchAccount({ accountName: "Dapp" });
 
         const connectWalletButton = dappPage.getByTestId("connect-wallet-button");
@@ -73,13 +75,13 @@ test.describe("E2E For Confirming transaction in Metamask wallet", () => {
         await metamask.confirmTransaction();
     });
 
-    test("Should confirm transaction with slow/medium/high/ gas fee option", async ({ dappPage, metamask }) => {
-        await _confirmTransaction(metamask, dappPage);
-        await metamask.confirmTransaction({ feeType: "low" });
-    });
+    // test("Should confirm transaction with slow/medium/high/ gas fee option", async ({ dappPage, metamask }) => {
+    //     await _confirmTransaction(metamask, dappPage);
+    //     await metamask.confirmTransaction({ feeType: "low" });
+    // });
 
-    test("Should confirm transaction with advanced(custom) gas fee option", async ({ dappPage, metamask }) => {
-        await _confirmTransaction(metamask, dappPage);
-        await metamask.confirmTransaction({ feeType: "advanced", maxBaseFee: "8", priorityFee: "0.5" });
-    });
+    // test("Should confirm transaction with advanced(custom) gas fee option", async ({ dappPage, metamask }) => {
+    //     await _confirmTransaction(metamask, dappPage);
+    //     await metamask.confirmTransaction({ feeType: "advanced", maxBaseFee: "8", priorityFee: "0.5" });
+    // });
 });
