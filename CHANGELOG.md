@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.14
+
+### Patch Changes
+
+- Finalize docs
+
 ## 0.8.13
 
 ### Patch Changes

@@ -437,3 +437,8 @@ Additional wallet-specific actions are available, for example:
 ## License
 
 MIT
+
+---
+
+Built by **Tobechukwu**. ([github](https://github.com/amaify))
+Contributions are welcome: see [CONTRIBUTING.md](./CONTRIBUTING.md) to get involved.
