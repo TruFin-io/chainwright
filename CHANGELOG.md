@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.13
+
+### Patch Changes
+
+- Minor update to the docs "README.md"
+
 ## 0.8.12
 
 ### Patch Changes

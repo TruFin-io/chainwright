@@ -6,7 +6,7 @@
 </picture>
 <br><br>
 <span align="center">
-Test, automate, and verify every wallet interaction, with the precision your users expect.
+Test, automate, and verify every wallet interaction with the precision, your users expect.
 </span>
 <br><br>
 <span align="center">
@@ -309,7 +309,7 @@ test.describe("Example test", () => {
 - `profileName?: string`
 - `slowMo?: number`
 
-### 4. Using in CI (GitHub Actions)
+### 4. Running in CI (GitHub Actions)
 Running Chainwright in CI is very similar to running Playwright in CI. The only additional requirement is a cache-build step before executing tests, as shown below:
 
 Why we make use of **xvfb**:
