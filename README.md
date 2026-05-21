@@ -182,7 +182,7 @@ export default defineWalletSetup(
 Run setup with the CLI (Supports **npx**, **bun**, **pnpm**, and **yarn**):
 
 >[!NOTE]
-> By default, Chainwright looks for `tests/wallet-setup` in your base directory. However, you can specify the directory you want Chainwright to get your setup files from.
+By default, Chainwright looks for `tests/wallet-setup` in your base directory. However, you can specify the directory you want Chainwright to get your setup files from.
 
 ```bash
 bun chainwright --wallets <Wallets you want to support>
@@ -242,7 +242,7 @@ test.describe("Example tests", () => {
 })
 ```
 > [!NOTE]
-> The wallet fixture will make use of the `default` wallet profile. If you specified a `profile-name` at the point of setting up, make sure to include it in the fixture.
+The wallet fixture will make use of the `default` wallet profile. If you specified a `profile-name` at the point of setting up, make sure to include it in the fixture.
 
 ```ts
 // No profile name is specified at setup time
@@ -314,7 +314,7 @@ Running Chainwright in CI is very similar to running Playwright in CI. The only 
 
 Why we make use of **xvfb**:
 > [!IMPORTANT]
-> Browser extensions don't load in headless Chromium, so the tests have to run in headed mode. CI machines have no display, so launching a headed browser fails. xvfb provides a fake virtual display, letting Chromium run headed in CI as if a screen were attached. 
+Browser extensions don't load in headless Chromium, so the tests have to run in headed mode. CI machines have no display, so launching a headed browser fails. xvfb provides a fake virtual display, letting Chromium run headed in CI as if a screen were attached. 
 
 ```yml
 name: CI
