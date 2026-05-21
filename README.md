@@ -16,7 +16,7 @@ Test, automate, and verify every wallet interaction, with the precision your use
 
 
 
-Chainwright is an end-to-end testing toolkit for Web3 dapps built on top of Playwright. It helps you prebuild browser extension wallet state, then reuse it in your end-to-end tests through ready-made fixtures.
+Chainwright is an end-to-end testing toolkit for Web3 dapps built on Playwright. It helps you build and cache browser wallet extension state, then reuse it in your end-to-end tests through ready-made fixtures.
 
 ## Features
 
@@ -24,23 +24,40 @@ Chainwright is an end-to-end testing toolkit for Web3 dapps built on top of Play
 - Playwright fixtures for wallet + Dapp testing
 - Support for multiple wallet profiles per wallet
 - Wallet action APIs for onboarding, account switching, transaction confirmation, and more
-- Multiple wallet profile caching
 
 ## Supported Wallets
 
+- Keplr
 - MetaMask
-- Solflare
+- Meteor
 - Petra
 - Phantom
-- Meteor
-- Keplr
+- Solflare
 
 ## Requirements
 
 - Node.js `>=22`
 - `@playwright/test@1.60.0` (peer dependency)
 
+## Operating Systems
+Supports the following operating systems:
+- MacOS
+- Linux
+- Windows
+
 ## Installation
+
+Before installing Chainwright, ensure to install Playwright's browser using the command below.
+
+```bash
+npx playwright install chromium
+```
+
+```bash
+bunx playwright install chromium
+```
+
+After Installing Playwright's browser, install `Chainwright` and `@playwright/test`
 
 ```bash
 pnpm add -D chainwright @playwright/test
@@ -55,23 +72,14 @@ npm install --save-dev chainwright @playwright/test
 yarn add -D chainwright @playwright/test
 ```
 
-After installation, make sure Playwright browsers are installed in your machine.
-
-```bash
-npx playwright install --chromium #Optional
-```
-
-```bash
-bunx playwright install --chromium #Optional
-```
-
 ## Quick Start
 
 ### 1. Create wallet setup files
 
 Create a setup directory (default: `tests/wallet-setup`) and add `*.setup.ts` files with a wallet name in the filename, for example:
 
-- `metamask.setup.ts`
+- `base.setup.ts`
+- `base-two.setup.ts`
 - `petra.setup.ts`
 - `phantom-team-a.setup.ts`
 
@@ -135,14 +143,49 @@ export default defineWalletSetup(
 );
 ```
 
+To support multiple profiles in a single wallet (for example, MetaMask), only setup files from the second profile onward need an explicit, distinct profile name.
+
+`main.setup.ts` can use the default profile, while `main-two.setup.ts` (and any additional setup files) should declare a unique profile name. Then, in any fixture that should use that profile, pass the exact same profileName value.
+
+Example:
+- `main.setup.ts`: uses the default profile
+- `main-two.setup.ts`: defines `profileName: "profile two"`
+- Fixture usage: `metamaskFixture({ profileName: "profile two" })`
+
+```ts
+// tests/wallet-setup/main-two.setup.ts
+import { defineWalletSetup } from "chainwright/core";
+import { Metamask } from "chainwright/metamask";
+
+const PASSWORD = "test1234"; // For Petra wallet, you have to use a strong password. e.g. PlayerPetra45!!
+const SEED_PHRASE = "test test test test test test test test test test test test test";
+
+export default defineWalletSetup(
+  PASSWORD,
+  async ({ walletPage }) => {
+    const metamask = new Metamask(walletPage);
+
+    await metamask.onboard({
+      mode: "import",
+      secretRecoveryPhrase: SEED_PHRASE,
+      mainAccountName: "Main",
+    });
+  },
+  {
+    profileName: "profile two"
+  },
+);
+```
+
 ### 2. Build wallet cache
 
-Run setup with the CLI (Supports npx, bun, pnpm, and yarn):
+Run setup with the CLI (Supports **npx**, **bun**, **pnpm**, and **yarn**):
 
-> NB: By default, Chainwright looks for `tests/wallet-setup` in your base directory. However, you can specify the directory you want Chainwright to get your setup files from.
+>[!NOTE]
+> By default, Chainwright looks for `tests/wallet-setup` in your base directory. However, you can specify the directory you want Chainwright to get your setup files from.
 
 ```bash
-bun chainwright --wallets metamask
+bun chainwright --wallets <Wallets you want to support>
 ```
 
 To specify a directory:
@@ -153,6 +196,7 @@ bun chainwright <directory path> <wallet> -f #Optional flag
 
 Useful flags:
 
+- `-h, --help` shows you all the commands
 - `-f, --force` overwrite existing cache
 - `--wallets <wallets...>` select wallets (`metamask`, `solflare`, `petra`, `phantom`, `meteor`, `keplr`). Setup multiple wallets at  the same time.
 - `-a, --all` setup all wallets
@@ -163,7 +207,7 @@ Useful flags:
 - `--ph, --phantom` setup phantom wallet
 - `-s, --solflare` setup solflare wallet
 
-Cache is stored under:
+Wallet profile cache is stored under:
 
 - `.wallet-cache/<wallet>/wallet-data` (default profile)
 - `.wallet-cache/<wallet>/<profileName>` (custom profile)
@@ -171,33 +215,34 @@ Cache is stored under:
 ### 3. Use wallet fixtures in Playwright tests
 
 ```ts
-import { expect } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { testWithChainwright } from "chainwright/core";
 import { metamaskFixture } from "chainwright/metamask";
 
-// Fixture
+// Chainwright's Fixture
 export const testWithMetamask = testWithChainwright(metamaskFixture());
 
 // Extend Chainwright's metamaskFixture to suit your need
-export const testDappFixture = testWithMetamask.extend<TestDappFixture>({
-    context: async({ context: _ }, use) => {
-    //...Context content here
-    },
+export const testDappFixture = testWithMetamask.extend<{dAppPage: Page}>({
     dappPage: async ({ page, baseURL }, use) => {
-        await page.goto(`dApp's url`);
+        await page.goto(`https://your-dapp.example`);
         await use(page);
     },
 });
 
-test("connect wallet to dapp", async ({ page, metamask }) => {
-  await page.goto("https://your-dapp.example");
-  const connectButton = page.getByRole("button", { name: /Connect/i})
-  await connectButton.click();
-  await metamask.connectToApp("Account 1");
-  await expect(page.getByText("Connected")).toBeVisible();
-});
+// Then in your tests do:
+const test = testDappFixture;
+test.describe("Example tests", () => {
+  test("connect wallet to dapp", async ({ dappPage, metamask }) => {
+    const connectButton = dappPage.getByRole("button", { name: /Connect/i})
+    await connectButton.click();
+    await metamask.connectToApp("Account 1");
+    await expect(dappPage.getByText("Connected")).toBeVisible();
+  });
+})
 ```
-> N.B: The wallet fixture will make use of the `default` wallet profile. If you specified a `profile-name` at the point of setting up, make sure to include it in the fixture.
+> [!NOTE]
+> The wallet fixture will make use of the `default` wallet profile. If you specified a `profile-name` at the point of setting up, make sure to include it in the fixture.
 
 ```ts
 // No profile name is specified at setup time
@@ -207,33 +252,119 @@ const testWithFixture = testWithChainwright(fixture())
 const testWithFixture = testWithChainwright(fixture({ profileName: "profile name" }))
 ```
 
-`Wallet fixture parameters` (Optinoal):
-- `profileName`: string,
-- `slowMo`: number
+`Wallet fixture parameters`:
+- `profileName`?: string,
+- `slowMo`?: number
 
 ## Worker-Scoped Fixture
 
-Use worker-scoped fixtures when you want one wallet context for the duration of a test suite. This is important for saving time on the setup and teardown cost when running tests in CI
+Use worker-scoped fixtures when tests in a `test.describe()` block can safely share a wallet context. Setup and teardown run once per worker instead of per test, which speeds up CI runs and reduces flakiness caused by repeated wallet initialization.
 
 ```ts
+import { type Page } from "@playwright/test";
+import { testWithChainwright } from "chainwright/core";
 import { metamaskWorkerScopeFixture } from "chainwright/metamask";
 
-export const test = metamaskWorkerScopeFixture({
-  profileName: "default",
-  dappUrl: "https://your-dapp.example",
-});
+// Chainwright's worker scoped fixture
+export const testWithFixture = testWithChainwright(metamaskWorkerScopeFixture());
 
-test("confirm transaction", async ({ dappPage, metamask }) => {
-  await dappPage.getByRole("button", { name: "Send Tx" }).click();
-  await metamask.confirmTransaction();
-});
+// Your worker scoped fixture that extends Chainwright's worker scoped fixture
+export const workerScopedFixture = testWithFixture.extend<{dAppPage: Page}>({
+  dappPage: [
+    async ({ workerScopeContents }, use) => {
+        const { context, wallet, walletPage } = workerScopeContents;
+        /** N.B:
+         * wallet represents -> metamask, phantom, keplr, etc...
+         * walletPage represents -> metamask wallet page, phantom wallet page, keplr wallet page, etc...
+        */
+        const _dappPage = await context.newPage();
+        await _dappPage.goto(`http://example-site.com`);
+        await use(_dappPage);
+    },
+    { scope: "worker" },
+  ],
+})
+
+// Then in your tests do:
+const test = workerScopedFixture;
+
+test.describe("Example test", () => {
+  test("Should confirm transaction", ({ dappPage, workerScopeContents}) => {
+    const { wallet: metamask } = workerScopeContents
+    await dappPage.getByRole("button", { name: "Send Tx" }).click();
+    await metamask.confirmTransaction();
+  });
+
+  test("Should reject transaction", async ({ dappPage, workerScopeContents })=> {
+    const { wallet: metamask } = workerScopeContents
+    await dappPage.getByRole("button", { name: "Send Tx" }).click();
+    await metamask.rejectTransaction();
+  });
+})
+
 ```
 
-`Worker scoped fixture parameters` (Optional):
+`Worker scoped fixture parameters`:
 
 - `profileName?: string`
 - `slowMo?: number`
-- `dappUrl?: string`
+
+### 4. Using in CI (GitHub Actions)
+Running Chainwright in CI is very similar to running Playwright in CI. The only additional requirement is a cache-build step before executing tests, as shown below:
+
+Why we make use of **xvfb**:
+> [!IMPORTANT]
+> Browser extensions don't load in headless Chromium, so the tests have to run in headed mode. CI machines have no display, so launching a headed browser fails. xvfb provides a fake virtual display, letting Chromium run headed in CI as if a screen were attached. 
+
+```yml
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: "recursive"
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - name: Use Node LTS
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install XVFB
+        run: sudo apt-get install -y xvfb
+
+      - name: Install Playwright browsers
+        run: pnpx playwright install chromium
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Build cache
+        run: xvfb-run pnpm run setup-wallets
+
+      - name: Run end-to-end tests (Headful)
+        run: xvfb-run pnpm playwright test --config=tests/playwright.config.ts
+```
 
 ## Wallets By Module
 
@@ -269,9 +400,9 @@ Extra Phantom/Solflare fixtures:
 defineWalletSetup(password, setupFn, config?)
 ```
 
-- `password: string` wallet unlock password saved in cache metadata
-- `setupFn: ({ context, walletPage }) => Promise<void>` runs onboarding/import flow
-- `config?: { profileName?: string; slowMo?: number }`
+- `password: string` - wallet unlock password saved in cache metadata
+- `setupFn: ({ context, walletPage }) => Promise<void>` - runs onboarding/import flow
+- `config?: { profileName?: string; slowMo?: number }` - useful for setting up multiple wallet profiles and running the setup in slow motion `slowMo`.
 
 ### `testWithChainwright`
 
