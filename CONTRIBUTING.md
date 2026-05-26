@@ -24,6 +24,18 @@ If you are on MacOS or Linux, you don't have to do anything extra. For windows u
 2. Install dependencies:
    - `pnpm install`
 
+## Branch Strategy
+
+This repository uses two main long-lived branches:
+
+- `main`
+- `dev` (base branch)
+
+When contributing:
+
+- Create your feature/fix branch from `dev`.
+- Open pull requests targeting `dev` (not `main`).
+
 ## Project Structure
 
 - `src/`: core library, wallet modules, CLI
