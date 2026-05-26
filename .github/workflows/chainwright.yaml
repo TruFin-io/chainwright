@@ -3,12 +3,12 @@ name: Continous Integration
 on:
   workflow_dispatch:
   push:
-    branches: ["main"]
+    branches: ["main", "dev"]
     paths:
       - "tests/e2e/**/*.spec.ts"
       - "src/wallets/**/actions/**/*.ts"
   pull_request:
-    branches: ["main"]
+    branches: ["main", "dev"]
     paths:
       - "tests/e2e/**/*.spec.ts"
       - "src/wallets/**/actions/**/*.ts"
