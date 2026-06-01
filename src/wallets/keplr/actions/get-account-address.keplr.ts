@@ -77,6 +77,8 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
     await addressElement.scrollIntoViewIfNeeded();
     await addressElement.click();
 
+    await addressElement.waitFor({ state: "detached", timeout: 7_000 });
+
     const accountAddress = await page.evaluate(async () => await navigator.clipboard.readText());
     return accountAddress;
 }

@@ -24,5 +24,15 @@ export async function getAccountAddress(page: Page, network: GetAccountAddressCh
     const accountAddressDiv = accountAddressDialog.locator("div > p[data-testid='account-address']");
     const accountAddress = await accountAddressDiv.textContent();
 
+    if (!accountAddress) {
+        throw new Error("Account address not found");
+    }
+
+    const closeButton = page.getByLabel("Close", { exact: true });
+    await closeButton.click();
+
+    const addressListBackButton = page.getByTestId("multichain-account-address-list-page-back-button");
+    await addressListBackButton.click();
+
     return accountAddress;
 }

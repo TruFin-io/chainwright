@@ -1,6 +1,6 @@
 {
     "name": "chainwright",
-    "version": "0.8.15",
+    "version": "0.8.16",
     "description": "Playwright Web3 wallet testing framework for end-to-end dApp automation with MetaMask, Phantom, Solflare, Petra, Meteor, and Keplr",
     "type": "module",
     "license": "MIT",
@@ -80,6 +80,7 @@
         "version-package": "changeset version",
         "release": "pnpm run build && changeset publish",
         "dev": "tsx src/cli/index.ts ./tests/wallet-setup",
+        "setup-wallets": "tsx src/cli/index.ts ./tests/wallet-setup --all",
         "tests": "vitest --exclude '**/*.spec.ts'",
         "lint": "biome check ./src",
         "format": "biome format --write ./src",
