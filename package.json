@@ -80,6 +80,7 @@
         "version-package": "changeset version",
         "release": "pnpm run build && changeset publish",
         "dev": "tsx src/cli/index.ts ./tests/wallet-setup",
+        "setup-wallets": "tsx src/cli/index.ts ./tests/wallet-setup --all",
         "tests": "vitest --exclude '**/*.spec.ts'",
         "lint": "biome check ./src",
         "format": "biome format --write ./src",
