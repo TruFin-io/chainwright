@@ -160,14 +160,11 @@ export class Metamask extends MetamaskProfile {
 
     /**
      * Connects to an app by clicking on the "Connect to app" button.
-     * If an account is provided, it will be selected before connecting to the app.
-     * @param {string} [account] - The account to select before connecting to the app.
-     * @example
      * const metamask = new Metamask(page);
-     * await metamask.connectToApp("Account 1");
+     * await metamask.connectToApp();
      */
-    async connectToApp(account?: string) {
-        await connectToApp(await this.promptPage(this.page.context()), account);
+    async connectToApp() {
+        await connectToApp(await this.promptPage(this.page.context()));
     }
 
     /**

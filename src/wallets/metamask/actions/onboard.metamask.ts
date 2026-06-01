@@ -91,6 +91,9 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
         await confirmPasswordCheckbox.click();
 
         await createPasswordButton.click();
+
+        const passKeyMaybeLaterButton = page.getByTestId("passkey-maybe-later-button");
+        await passKeyMaybeLaterButton.click();
         await metamaskMetricsIAgreeButton.click();
 
         const walletReadyBox = page.getByTestId("wallet-ready");

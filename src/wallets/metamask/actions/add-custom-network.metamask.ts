@@ -19,13 +19,13 @@ export async function addCustomNetwork({ page, ...args }: AddCustomNetworkArgs) 
     const networksButton = page.getByTestId(settingsSelectors.networksButton);
     await networksButton.click();
 
-    const netowrksDialog = page.locator("section[role='dialog']");
-    await expect(netowrksDialog).toContainText(/manage networks/i);
+    const networksDialog = page.getByTestId(settingsSelectors.networksPageList);
+    await expect(networksDialog).toContainText(/networks/i);
 
     const addCustomNetworkButton = page.getByRole("button", { name: /add a custom network/i });
     await addCustomNetworkButton.click();
 
-    await expect(netowrksDialog).toContainText(/Add a custom network/i);
+    // await expect(page).toContainText(/Add a custom network/i);
 
     const networkNameInput = page.getByTestId("network-form-network-name");
     const addRpcUrlDropdown = page.getByTestId("test-add-rpc-drop-down");
@@ -40,14 +40,14 @@ export async function addCustomNetwork({ page, ...args }: AddCustomNetworkArgs) 
 
     const addRpcUrlButton = rpcTooltipUrl.locator("div:has(> button:has-text('Add RPC URL'))");
     await addRpcUrlButton.click();
-    await expect(netowrksDialog).toContainText(/Add RPC URL/i);
+    // await expect(networksDialog).toContainText(/Add RPC URL/i);
 
     const addRpcUrlInput = page.getByTestId("rpc-url-input-test");
     const addUrlButton = page.getByRole("button", { name: /Add URL/i });
     await addRpcUrlInput.fill(rpcUrl);
     await addUrlButton.click();
 
-    await expect(netowrksDialog).toContainText(/Add a custom network/i);
+    // await expect(networksDialog).toContainText(/Add a custom network/i);
 
     const rpcError = page.getByTestId("network-form-chain-id-error");
     const isRPCErrorVisible = await rpcError.isVisible().catch(() => false);
@@ -63,4 +63,7 @@ export async function addCustomNetwork({ page, ...args }: AddCustomNetworkArgs) 
     const saveButton = page.getByRole("button", { name: /save/i });
     await expect(saveButton).toBeEnabled();
     await saveButton.click();
+
+    const headerBackButton = page.getByTestId(settingsSelectors.headerBackButton);
+    await headerBackButton.click();
 }

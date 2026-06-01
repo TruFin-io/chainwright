@@ -75,13 +75,21 @@ test.describe("E2E For Confirming transaction in Metamask wallet", () => {
         await metamask.confirmTransaction();
     });
 
-    // test("Should confirm transaction with slow/medium/high/ gas fee option", async ({ dappPage, metamask }) => {
-    //     await _confirmTransaction(metamask, dappPage);
-    //     await metamask.confirmTransaction({ feeType: "low" });
-    // });
+    test("Should confirm transaction with slow/medium/high/ gas fee option", async ({
+        workerScopeContents,
+        dappPage,
+    }) => {
+        const { wallet: metamask } = workerScopeContents;
+        await _confirmTransaction(metamask, dappPage);
+        await metamask.confirmTransaction({ feeType: "low" });
+    });
 
-    // test("Should confirm transaction with advanced(custom) gas fee option", async ({ dappPage, metamask }) => {
-    //     await _confirmTransaction(metamask, dappPage);
-    //     await metamask.confirmTransaction({ feeType: "advanced", maxBaseFee: "8", priorityFee: "0.5" });
-    // });
+    test("Should confirm transaction with advanced(custom) gas fee option", async ({
+        workerScopeContents,
+        dappPage,
+    }) => {
+        const { wallet: metamask } = workerScopeContents;
+        await _confirmTransaction(metamask, dappPage);
+        await metamask.confirmTransaction({ feeType: "advanced", maxBaseFee: "8", priorityFee: "0.5" });
+    });
 });

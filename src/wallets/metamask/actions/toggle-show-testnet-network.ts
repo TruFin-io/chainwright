@@ -8,29 +8,34 @@ export async function toggleShowTestnetNetwork({ page }: { page: Page }) {
     const networksButton = page.getByTestId(settingsSelectors.networksButton);
     await networksButton.click();
 
-    const netowrksDialog = page.locator("section[role='dialog']");
-    await expect(netowrksDialog).toBeVisible();
-    await expect(netowrksDialog).toContainText(/manage networks/i);
+    const networksDialog = page.getByTestId("networks-page-list");
+    await expect(networksDialog).toBeVisible();
+    await expect(networksDialog).toContainText(/networks/i);
 
     const networkSwitchToggle = "div:has(> p:has-text('Show test networks'))";
-    await netowrksDialog.locator(networkSwitchToggle).scrollIntoViewIfNeeded();
+    await networksDialog.locator(networkSwitchToggle).scrollIntoViewIfNeeded();
 
-    const showTestnetNetworkToggle = netowrksDialog.locator(networkSwitchToggle);
+    const showTestnetNetworkToggle = networksDialog.locator(networkSwitchToggle);
     const isNetworkSwitchOffToggleVisible = await showTestnetNetworkToggle
         .locator("label[class='toggle-button toggle-button--off']")
         .isVisible()
         .catch(() => false);
 
+    const headerBackButton = page.getByTestId("settings-header-back-button");
+    const drawerCloseButton = page.getByTestId("drawer-close-button");
+
     if (!isNetworkSwitchOffToggleVisible) {
-        await netowrksDialog.getByRole("button", { name: /close/i }).click();
+        await headerBackButton.click();
+        await drawerCloseButton.click();
         console.info("Testnet networks are already visible.");
         return;
     }
+
     await showTestnetNetworkToggle.locator("label[class='toggle-button toggle-button--off']").click();
 
     await page.getByTestId("Sepolia").scrollIntoViewIfNeeded();
     await expect(page.getByTestId("Sepolia")).toBeVisible();
 
-    const closeButton = netowrksDialog.getByRole("button", { name: /close/i });
-    await closeButton.click();
+    await headerBackButton.click();
+    await drawerCloseButton.click();
 }
