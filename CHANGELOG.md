@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.8.16
+
+### Patch Changes
+
+- Fix the "getAccountAddress" bug in Metamask and Keplr wallets
+
 ## 0.8.15
 
 ### Patch Changes
