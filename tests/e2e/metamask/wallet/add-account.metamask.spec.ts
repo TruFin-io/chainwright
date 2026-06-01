@@ -3,7 +3,7 @@ import { testWithMetamaskFixture } from "@/tests/fixture/test-with-metamask-fixt
 
 const test = testWithMetamaskFixture;
 
-test("Should add account successfully via import wallet", async ({ metamask, metamaskPage }) => {
+test("Should add account successfully via private key", async ({ metamask, metamaskPage }) => {
     await metamask.addAccount({
         privateKey: "df47c5bf98f2b01720914cde200ad63eb32663c10348b44c403305ac35f2dcf0",
         accountName: "Gamify",
