@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.1
+
+### Patch Changes
+
+- Update the "testWithChainwright" function to fix Type-safety
+
 ## 0.9.0
 
 ### Minor Changes

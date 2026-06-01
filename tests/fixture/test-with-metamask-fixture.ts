@@ -6,7 +6,7 @@ import { BASE_URL } from "../utils/base-url";
 
 export const testWithMetamaskFixture = metamaskFixture();
 export const testWithMetamask = testWithChainwright(metamaskFixture());
-export const testWithMetamaskWorkerScope = metamaskWorkerScopeFixture();
+export const testWithMetamaskWorkerScope = testWithChainwright(metamaskWorkerScopeFixture());
 
 type TestDappFixture = {
     dappPage: Page;
