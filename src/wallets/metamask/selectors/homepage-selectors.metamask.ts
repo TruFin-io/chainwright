@@ -15,6 +15,8 @@ export const homepageSelectors = {
 export const settingsSelectors = {
     lockButton: "global-menu-lock",
     networksButton: "global-menu-networks",
+    networksPageList: "networks-page-list",
+    headerBackButton: "settings-header-back-button",
 };
 
 export const unlockWalletSelectors = {
@@ -32,6 +34,6 @@ export const accountSelectors = {
     backButton: "back",
     addMultichainAccountButton: "add-multichain-account-button",
     addWalletButton: "account-list-add-wallet-button",
-    importWalletButton: "add-wallet-modal-import-wallet",
-    importAccountButton: "add-wallet-modal-import-account",
+    importWalletButton: "choose-wallet-type-import-wallet",
+    importAccountButton: "choose-wallet-type-import-account",
 };

@@ -31,8 +31,8 @@ export async function addAccount({ page, privateKey, accountName }: AddAccount) 
     await expect(addWalletButton).toBeEnabled({ timeout: 60_000 });
     await addWalletButton.click();
 
-    const addWalletModal = page.getByRole("dialog");
-    await expect(addWalletModal).toContainText(/add wallet/i);
+    const addWalletModal = page.getByTestId("multichain-page");
+    await expect(addWalletModal).toContainText(/add a wallet/i);
 
     const importAccountButton = page.getByTestId(accountSelectors.importAccountButton);
     await importAccountButton.click();
@@ -51,11 +51,14 @@ export async function addAccount({ page, privateKey, accountName }: AddAccount) 
         skip(isErrorVisible, `${(await importSRPError.textContent())?.split(".")[0]}`);
     }
 
-    const activeAccount = page.locator(
-        "div:has(> div[data-testid^='multichain-account-cell-keyring'][class*='mm-box--background-color-background-muted'])",
-    );
+    const _backButton = page.locator("button[aria-label='Back']").first();
+    await _backButton.click();
 
-    const activeAccountName = (await activeAccount.textContent())?.split("$")[0];
+    const activeAccount = page.locator("div[data-testid^='multichain-account-cell-keyring'][class*='is-selected']");
+
+    const activeAccountName = await activeAccount
+        .locator("p[class*='multichain-account-cell__account-name']")
+        .textContent();
 
     if (activeAccountName) {
         await renameImportedAccount({
@@ -107,9 +110,7 @@ async function renameImportedAccount({
 
     await dialog.waitFor({ state: "detached", timeout: 20_000 });
 
-    const activeAccount = page.locator(
-        "div:has(> div[data-testid^='multichain-account-cell-keyring'][class*='mm-box--background-color-background-muted'])",
-    );
+    const activeAccount = page.locator("div[data-testid^='multichain-account-cell-keyring'][class*='is-selected']");
 
     await expect(activeAccount).toContainText(accountName);
 }

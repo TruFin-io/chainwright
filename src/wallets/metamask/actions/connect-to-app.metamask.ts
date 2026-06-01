@@ -1,16 +1,34 @@
 import { expect, type Page } from "@playwright/test";
-import { switchAccount } from "./switch-account.metamask";
 
 /**
  * By default, the last account will be selected. If you want to select a specific account, pass an `account` parameter.
  */
-export async function connectToApp(page: Page, account?: string) {
-    if (account) {
-        await switchAccount({ page, accountName: account });
-    }
 
+export async function connectToApp(page: Page) {
     const connectButton = page.getByRole("button", { name: "Connect", exact: true });
     await connectButton.waitFor({ state: "visible", timeout: 25_000 });
+
+    const editAccountsButton = page.getByRole("button", { name: "Edit accounts" });
+    await editAccountsButton.click();
+
+    const bb = page.getByTestId("modal-page");
+    await bb.waitFor({ state: "visible", timeout: 25_000 });
+
+    const allAccounts = await page.locator("[data-testid^='multichain-account-cell-entropy:']").all();
+
+    for (const accountRow of allAccounts) {
+        const isChecked = await accountRow
+            .locator("input[type='checkbox']")
+            .isChecked()
+            .catch(() => false);
+
+        if (!isChecked) {
+            await accountRow.click();
+        }
+    }
+
+    const connectMoreAccountsButton = bb.getByTestId("connect-more-accounts-button");
+    await connectMoreAccountsButton.click();
 
     await connectButton.click();
 

@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.0
+
+### Minor Changes
+
+- Update MetaMask from v13.22.0 to v13.33.0
+
 ## 0.8.16
 
 ### Patch Changes

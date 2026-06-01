@@ -14,9 +14,17 @@ test.describe("Add custom network", () => {
             currencySymbol: "XDAI",
         });
 
-        await expect(metamaskPage.getByTestId("app-header-logo").first()).toBeVisible();
         const networkButton = metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton);
-        await expect(networkButton).toContainText("Gnosis", { timeout: 15_000 });
+        await networkButton.click();
+
+        const customTabSelector = metamaskPage.getByRole("tab", { name: "Custom" });
+        await customTabSelector.click();
+
+        const tabPanel = metamaskPage.getByRole("tabpanel").filter({ hasText: "Custom" });
+        await expect(tabPanel).toContainText("Gnosis", { timeout: 15_000 });
+
+        const modalCloseButton = metamaskPage.getByTestId("modal-header-close-button");
+        await modalCloseButton.click();
     });
 
     test("Should add and connect to the local Anvil network successfully", async ({
@@ -32,8 +40,16 @@ test.describe("Add custom network", () => {
             currencySymbol: "ETH",
         });
 
-        await expect(metamaskPage.getByTestId("app-header-logo").first()).toBeVisible();
         const networkButton = metamaskPage.getByTestId(homepageSelectors.openNetworkSelectorButton);
-        await expect(networkButton).toContainText("Anvil Localnet", { timeout: 15_000 });
+        await networkButton.click();
+
+        const customTabSelector = metamaskPage.getByRole("tab", { name: "Custom" });
+        await customTabSelector.click();
+
+        const tabPanel = metamaskPage.getByRole("tabpanel").filter({ hasText: "Custom" });
+        await expect(tabPanel).toContainText("Anvil Localnet", { timeout: 15_000 });
+
+        const modalCloseButton = metamaskPage.getByTestId("modal-header-close-button");
+        await modalCloseButton.click();
     });
 });
