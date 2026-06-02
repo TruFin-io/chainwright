@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.4
+
+### Patch Changes
+
+- 16adff1: Make the "walletName" property optional for Onboarding in Solflare wallet
+
 ## 0.9.3
 
 ### Patch Changes
