@@ -187,10 +187,15 @@ export default async function onboard({ page, additionalAccounts, ...args }: Onb
     }
 
     const initialAccountName = await newPage.getByTestId("home-header-account-name").textContent();
-    const shouldRename = args.mode === "create";
+
+    if (!initialAccountName) {
+        throw new Error("Cannot find initial account name");
+    }
+
+    const shouldRename = args.mode === "create" || args.mode === "recovery phrase";
     if (shouldRename) {
         const { accountName } = args;
-        await renameAccount({ page: newPage, newAccountName: accountName, currentAccountName: "Account 1" });
+        await renameAccount({ page: newPage, newAccountName: accountName, currentAccountName: initialAccountName });
     }
 
     if (additionalAccounts && additionalAccounts.length > 0) {
@@ -204,11 +209,7 @@ export default async function onboard({ page, additionalAccounts, ...args }: Onb
             cancelled = true;
         }
 
-        const lastAddedAccountName = args.mode === "create" ? args.accountName : initialAccountName;
-
-        if (lastAddedAccountName) {
-            await switchAccount(newPage, lastAddedAccountName);
-        }
+        await switchAccount(newPage, args.accountName);
     }
 
     if (args.toggleNetworkMode) {
