@@ -96,6 +96,15 @@ export default async function onboard({ page, additionalAccounts, ...args }: Onb
         const loadingButton = continueButton.locator("> div > svg");
         await loadingButton.waitFor({ state: "detached", timeout: 30_000 });
 
+        const createUserNameTextBox = page.getByRole("textbox", { name: "Username @ Clear", exact: true });
+        await createUserNameTextBox
+            .waitFor({ state: "attached", timeout: 5_000 })
+            .then(async () => {
+                const continuButton = page.getByRole("button", { name: "Continue", exact: true });
+                await continuButton.click();
+            })
+            .catch(() => void 0);
+
         const getStartedButton = page.locator(onboardingSelectors.getStartedButton).last();
         await getStartedButton.click();
     }

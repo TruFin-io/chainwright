@@ -7,7 +7,7 @@ import { homepageSelectors } from "../selectors/homepage-selectors.metamask";
 import { onboardSelectors } from "../selectors/onboard-selectors.metamask";
 import type { OnboardingArgs } from "../types";
 import { switchAccount } from "./switch-account.metamask";
-import { toggleShowTestnetNetwork } from "./toggle-show-testnet-network";
+import { toggleShowTestnetNetwork } from "./toggle-show-testnet-network.metamask";
 
 type Onboard = OnboardingArgs & {
     page: Page;

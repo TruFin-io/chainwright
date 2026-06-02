@@ -1,7 +1,7 @@
 import { expect, type Page } from "@playwright/test";
 import { homepageSelectors } from "../selectors/homepage-selectors.metamask";
 import type { SwitchNetwork } from "../types";
-import { toggleShowTestnetNetwork } from "./toggle-show-testnet-network";
+import { toggleShowTestnetNetwork } from "./toggle-show-testnet-network.metamask";
 
 type SwitchNetworkArgs = SwitchNetwork & {
     page: Page;
