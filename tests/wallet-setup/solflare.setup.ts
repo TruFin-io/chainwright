@@ -16,6 +16,6 @@ export default defineWalletSetup(PASSWORD, async ({ walletPage }) => {
         recoveryPhrase,
         network: "Devnet",
         walletName: "Default",
-        additionalAccounts: [{ walletName: "Gamify", privateKey: PRIVATE_KEY }],
+        additionalAccounts: [{ walletName: "Gamify", privateKey: `${PRIVATE_KEY}` }],
     });
 });
