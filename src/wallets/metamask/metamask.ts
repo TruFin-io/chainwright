@@ -10,7 +10,7 @@ import { rejectTransaction } from "./actions/reject-transaction.metamask";
 import { type RenameAccount, renameAccount } from "./actions/rename-account.metamask";
 import { type SwitchAccount, switchAccount } from "./actions/switch-account.metamask";
 import { switchNetwork } from "./actions/switch-network.metamask";
-import { toggleShowTestnetNetwork } from "./actions/toggle-show-testnet-network";
+import { toggleShowTestnetNetwork } from "./actions/toggle-show-testnet-network.metamask";
 import unlock from "./actions/unlock.metamask";
 import { MetamaskProfile } from "./metamask-profile";
 import type {

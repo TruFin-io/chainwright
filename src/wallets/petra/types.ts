@@ -5,17 +5,20 @@ export type OnboardingArgs =
     | {
           mode: "create";
           accountName: string;
+          network: SwitchNetwork;
           additionalAccounts?: Array<AddAccount>;
       }
     | {
           mode: "importMnemonic";
           accountName: string;
+          network: SwitchNetwork;
           secretRecoveryPhrase: string;
           additionalAccounts?: Array<AddAccount>;
       }
     | {
           mode: "importPrivateKey";
           accountName: string;
+          network: SwitchNetwork;
           privateKey: string;
           additionalAccounts?: Array<AddAccount>;
       };
