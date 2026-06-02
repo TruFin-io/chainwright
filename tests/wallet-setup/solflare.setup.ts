@@ -15,7 +15,6 @@ export default defineWalletSetup(PASSWORD, async ({ walletPage }) => {
     await solflare.onboard({
         recoveryPhrase,
         network: "Devnet",
-        walletName: "Default",
         additionalAccounts: [{ walletName: "Gamify", privateKey: `${PRIVATE_KEY}` }],
     });
 });
