@@ -127,6 +127,7 @@ export default defineWalletSetup(
     await petra.onboard({
       mode: "importMnemonic",
       accountName: "default",
+      network: "Testnet",
       secretRecoveryPhrase: "test test test...", // Seed phrase for the main account
       additionalAccounts: [
         {

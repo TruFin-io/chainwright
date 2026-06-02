@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.5
+
+### Patch Changes
+
+- Fix wallet issues in Petra and Phantom.
+
 ## 0.9.4
 
 ### Patch Changes

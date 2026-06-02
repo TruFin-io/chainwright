@@ -10,6 +10,7 @@ import type { OnboardingArgs } from "../types";
 import { addAccount } from "./add-account.petra";
 import { renameAccount } from "./rename-account.petra";
 import { switchAccount } from "./switch-account.petra";
+import { switchNetwork } from "./switch-network.petra";
 
 type Onboard = OnboardingArgs & {
     page: Page;
@@ -17,7 +18,7 @@ type Onboard = OnboardingArgs & {
 
 const IS_VISIBLE_TIMEOUT = 30_000;
 
-export default async function onboard({ page, ...args }: Onboard) {
+export default async function onboard({ page, network, ...args }: Onboard) {
     console.info(styleText("yellowBright", `\n Petra onboarding started...`, { validateStream: false }));
 
     const petraProfile = new PetraProfile();
@@ -117,6 +118,8 @@ export default async function onboard({ page, ...args }: Onboard) {
 
         await switchAccount(page, args.accountName);
     }
+
+    await switchNetwork(page, network);
 
     await sleep(1_500);
     console.info(styleText("greenBright", "✨ Petra onboarding completed successfully", { validateStream: false }));
