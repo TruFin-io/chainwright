@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.2
+
+### Patch Changes
+
+- Fix TypeScript issue with Solflare's onboarding args
+
 ## 0.9.1
 
 ### Patch Changes
