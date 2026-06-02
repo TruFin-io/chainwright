@@ -10,6 +10,7 @@ export type OnboardingArgs =
       }
     | {
           mode: "recovery phrase";
+          accountName: string;
           secretRecoveryPhrase: string;
           toggleNetworkMode?: SwitchNetwork;
           additionalAccounts?: Array<AddAccountArgs>;

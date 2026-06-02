@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.6
+
+### Patch Changes
+
+- Add "accountName" property for the "onboarding" action in Phantom wallet
+
 ## 0.9.5
 
 ### Patch Changes
