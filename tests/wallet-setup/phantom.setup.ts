@@ -9,6 +9,7 @@ export default defineWalletSetup(PASSWORD, async ({ walletPage }) => {
 
     await phantom.onboard({
         mode: "recovery phrase",
+        accountName: "Gamer800",
         secretRecoveryPhrase: "leisure trust warrior unable skirt version oil debate burst shiver code stairs",
         toggleNetworkMode: {
             mode: "on",
