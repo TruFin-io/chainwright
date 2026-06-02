@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.3
+
+### Patch Changes
+
+- Fix the "rename" action for Solflare where current and new account name are the same.
+
 ## 0.9.2
 
 ### Patch Changes
