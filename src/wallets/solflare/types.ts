@@ -4,7 +4,7 @@ import type { Solflare } from "./solflare";
 
 export type OnboardingArgs = {
     recoveryPhrase: string;
-    walletName: string;
+    walletName?: string;
     network?: "Mainnet" | "Devnet" | "Testnet";
     additionalAccounts?: Array<AddAccountArgs>;
 };

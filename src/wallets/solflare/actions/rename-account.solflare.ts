@@ -5,6 +5,13 @@ import type { RenameAccountArgs } from "../types";
 type RenameAccount = RenameAccountArgs & { page: Page };
 
 export async function renameAccount({ page, currentAccountName, newAccountName }: RenameAccount) {
+    if (currentAccountName === newAccountName) {
+        console.warn(
+            `\n \n Current account name and new account name are the same: "${currentAccountName}". Skipping rename.`,
+        );
+        return;
+    }
+
     const openWalletSelectorMenu = page.getByTestId(navigationMenuSelectors.walletSelectorButton);
     await openWalletSelectorMenu.click();
 

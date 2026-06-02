@@ -42,8 +42,10 @@ export async function onboard({ page, recoveryPhrase, network, walletName, addit
     const IAgreeButton = page.getByTestId(onboardingSelectors.IAgreeButton);
     await IAgreeButton.click();
 
-    // "Main Wallet" is the default wallet name for the fist wallet in Solflare.
-    await renameAccount({ page, currentAccountName: "Main Wallet", newAccountName: walletName });
+    if (walletName) {
+        // "Main Wallet" is the default wallet name for the fist wallet in Solflare.
+        await renameAccount({ page, currentAccountName: "Main Wallet", newAccountName: walletName });
+    }
 
     // If network is provided, switch to it.
     if (network) await switchNetwork(page, network);
