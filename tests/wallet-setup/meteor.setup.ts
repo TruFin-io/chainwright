@@ -12,6 +12,7 @@ export default defineWalletSetup(PASSWORD, async ({ walletPage }) => {
     const meteor = new Meteor(walletPage);
     await meteor.onboard({
         network: "Testnet",
+        mode: "privateKey",
         privateKey: PK_TWO,
         accountName: "Default",
     });

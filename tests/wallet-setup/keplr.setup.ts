@@ -11,11 +11,13 @@ export default defineWalletSetup(PASSWORD, async ({ walletPage }) => {
     await keplr.onboard([
         {
             chains: ["Injective", "Injective (Testnet)"],
+            mode: "privateKey",
             privateKey: PK,
             walletName: "Default",
         },
         {
             chains: ["Injective", "Injective (Testnet)"],
+            mode: "privateKey",
             privateKey: PK_TWO,
             walletName: "Nino",
         },

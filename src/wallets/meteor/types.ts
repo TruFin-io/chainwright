@@ -3,22 +3,44 @@ import type { Meteor } from "./meteor";
 
 export type MeteorNetwork = "Mainnet" | "Testnet";
 
-export type OnboardingArgs = {
+type SharedOnboardArgs = {
     network: MeteorNetwork;
-    privateKey: string;
     accountName: string;
     additionalAccounts?: Array<AddAccountArgs>;
 };
+
+export type OnboardingArgs = (
+    | {
+          mode: "privateKey";
+          privateKey: string;
+      }
+    | {
+          mode: "secretPhrase";
+          secretPhrase: string;
+      }
+) &
+    SharedOnboardArgs;
 
 export type RenameAccountArgs = {
     newAccountName: string;
 };
 
-export type AddAccountArgs = {
-    privateKey: string;
+type AddAccountCommonArgs = {
     accountName: string;
     network: MeteorNetwork;
 };
+
+export type AddAccountArgs = (
+    | {
+          privateKey: string;
+          mode: "privateKey";
+      }
+    | {
+          secretPhrase: string;
+          mode: "secretPhrase";
+      }
+) &
+    AddAccountCommonArgs;
 
 export type MeteorFixture = {
     contextPath: string;
