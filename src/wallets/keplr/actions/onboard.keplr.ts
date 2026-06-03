@@ -65,7 +65,7 @@ export default async function onboard({ page, onboard }: Onboard) {
 
         const accountsToAdd = onboard.slice(1);
 
-        for (const { ...args } of accountsToAdd) {
+        for (const [index, args] of accountsToAdd.entries()) {
             const onboardingPage = await goToOnboardingPage(page);
 
             if (args.mode === "privateKey") {
@@ -88,6 +88,12 @@ export default async function onboard({ page, onboard }: Onboard) {
                     chains,
                     mode: "add-account-single",
                 });
+            }
+
+            if (index !== accountsToAdd.length - 1) {
+                const headingContainer = page.locator("div", { hasText: "Select Wallet" }).last().locator("../../..");
+                const backButton = headingContainer.locator("div > svg");
+                await backButton.click();
             }
         }
 

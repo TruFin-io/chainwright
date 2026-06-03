@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.8
+
+### Patch Changes
+
+- Fix bug in Keplr's onboarding flow that prevents onboarding more than two accounts
+
 ## 0.9.7
 
 ### Patch Changes
