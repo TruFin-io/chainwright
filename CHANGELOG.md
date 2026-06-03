@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.10
+
+### Patch Changes
+
+- BugFix: Fix bug that prevents wallet actions after copying wallet address
+
 ## 0.9.9
 
 ### Patch Changes
