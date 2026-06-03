@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.9
+
+### Patch Changes
+
+- Add "confirmDisconnect" action for the Meteor wallet
+
 ## 0.9.8
 
 ### Patch Changes
