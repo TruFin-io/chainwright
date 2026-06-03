@@ -13,14 +13,34 @@ const keplrChains = [
 
 type KeplrChains = (typeof keplrChains)[number];
 
-type AddAndOnboardingArgs = {
-    walletName: string;
-    privateKey: string;
-    chains: Array<KeplrChains>;
-};
+type AddAndOnboardingArgs =
+    | {
+          walletName: string;
+          seedPhrase: string;
+          mode: "seedPhrase";
+          chains: Array<KeplrChains>;
+      }
+    | {
+          walletName: string;
+          privateKey: string;
+          mode: "privateKey";
+          chains: Array<KeplrChains>;
+      };
 
 export type OnboardingArgs = Array<AddAndOnboardingArgs>;
-export type AddAccountArgs = AddAndOnboardingArgs & { mode: "add-account-multiple" | "add-account-single" | "onboard" };
+
+export type AddAccount = {
+    walletName: string;
+    chains: Array<KeplrChains>;
+} & { mode: "add-account-multiple" | "add-account-single" | "onboard" };
+
+export interface AddAccountViaPrivateKey extends AddAccount {
+    privateKey: string;
+}
+
+export interface AddAccountViaSeedPhrase extends AddAccount {
+    seedPhrase: string;
+}
 
 export const getAccountAddressSchema = z.discriminatedUnion("chain", [
     z.object({

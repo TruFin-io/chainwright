@@ -12,17 +12,20 @@ export default defineWalletSetup(
         const meteor = new Meteor(walletPage);
         await meteor.onboard({
             network: "Testnet",
+            mode: "privateKey",
             privateKey: PRIVATE_KEY,
             accountName: "Default",
             additionalAccounts: [
                 {
                     accountName: "Alpha",
                     network: "Testnet",
+                    mode: "privateKey",
                     privateKey: PK_TWO,
                 },
                 {
                     accountName: "Beta",
                     network: "Mainnet",
+                    mode: "privateKey",
                     privateKey: PK_MAIN,
                 },
             ],

@@ -32,8 +32,8 @@ export class Meteor extends MeteorProfile {
      * const meteor = new Meteor(page);
      * await meteor.onboard({ mode: "importPrivateKey", password: "password", privateKey: "private key" });
      */
-    async onboard({ network, privateKey, accountName, additionalAccounts }: OnboardingArgs) {
-        await onboard({ page: this.page, network, privateKey, accountName, additionalAccounts });
+    async onboard({ network, accountName, additionalAccounts, ...args }: OnboardingArgs) {
+        await onboard({ page: this.page, network, accountName, additionalAccounts, ...args });
     }
 
     /**
@@ -113,8 +113,8 @@ export class Meteor extends MeteorProfile {
      * const meteor = new Meteor(page);
      * await meteor.addAccount(TBD);
      */
-    async addAccount({ accountName, network, privateKey }: AddAccountArgs) {
-        await addAccount({ page: this.page, accountName, network, privateKey });
+    async addAccount({ accountName, network, ...args }: AddAccountArgs) {
+        await addAccount({ page: this.page, accountName, network, ...args });
     }
 
     /**

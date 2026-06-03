@@ -4,9 +4,13 @@ import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { KeplrProfile } from "./keplr-profile";
 import { onboardingSelectors } from "./selectors/onboard-selectors.keplr";
-import type { AddAccountArgs } from "./types";
+import type { AddAccount, AddAccountViaPrivateKey, AddAccountViaSeedPhrase } from "./types";
 
-type AddWalletViaPrivateKey = AddAccountArgs & {
+type AddWalletViaPrivateKey = AddAccountViaPrivateKey & {
+    page: Page;
+};
+
+type AddWalletViaSeedPhrase = AddAccountViaSeedPhrase & {
     page: Page;
 };
 
@@ -21,8 +25,6 @@ export async function addWalletViaPrivateKey({
     chains,
     mode = "onboard",
 }: AddWalletViaPrivateKey) {
-    const PASSWORD = await getWalletPasswordFromCache("keplr");
-    const walletProfile = new KeplrProfile();
     const importExistingWalletButton = page.locator(onboardingSelectors.importExistingWalletButton);
     await importExistingWalletButton.click();
 
@@ -34,6 +36,66 @@ export async function addWalletViaPrivateKey({
 
     const privateKeyInput = page.locator(onboardingSelectors.privateKeyInput);
     await privateKeyInput.fill(privateKey);
+
+    await addAccountFlow({
+        page,
+        walletName,
+        mode,
+        chains,
+    });
+}
+
+export async function addWalletViaSeedPhrase({
+    page,
+    seedPhrase,
+    walletName,
+    chains,
+    mode = "onboard",
+}: AddWalletViaSeedPhrase) {
+    const importExistingWalletButton = page.locator(onboardingSelectors.importExistingWalletButton);
+    await importExistingWalletButton.click();
+
+    const usePrivateKeyButton = page.locator(onboardingSelectors.usePrivateKeyButton);
+    await usePrivateKeyButton.click();
+
+    const seedPhraseTabButton = page.getByRole("button", { name: "12 words", exact: true });
+    await seedPhraseTabButton.click();
+
+    const seedPhraseInput = page.locator("input[type='password']");
+    const _seedPhrase = seedPhrase.split(" ");
+
+    await seedPhraseInput.first().fill(_seedPhrase[0] as string);
+    await seedPhraseInput.first().press("Tab");
+
+    for (let i = 1; i < _seedPhrase.length; i++) {
+        const seedPhraseElement = seedPhraseInput.nth(i);
+        const seedPhraseText = _seedPhrase[i];
+
+        await seedPhraseElement.fill(seedPhraseText as string);
+
+        if (i < _seedPhrase.length - 1) {
+            await seedPhraseElement.press("Tab");
+        }
+    }
+
+    await addAccountFlow({
+        page,
+        walletName,
+        mode,
+        chains,
+    });
+}
+
+type AddAccountFlow = {
+    page: Page;
+    walletName: string;
+    mode: AddAccount["mode"];
+    chains: AddAccount["chains"];
+};
+
+async function addAccountFlow({ page, walletName, mode, chains }: AddAccountFlow) {
+    const walletProfile = new KeplrProfile();
+    const PASSWORD = await getWalletPasswordFromCache("keplr");
 
     const importButton = page.getByRole("button", { name: "Import", exact: true });
     await importButton.click();
