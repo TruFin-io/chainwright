@@ -13,7 +13,7 @@ import { switchNetwork } from "./switch-network.meteor";
 
 type Onboard = OnboardingArgs & { page: Page };
 
-export default async function onboard({ page, privateKey, network, accountName, additionalAccounts }: Onboard) {
+export default async function onboard({ page, network, accountName, additionalAccounts, ...args }: Onboard) {
     console.info(styleText("yellowBright", `\n Meteor onboarding started...`, { validateStream: false }));
 
     const PASSWORD = await getWalletPasswordFromCache("meteor");
@@ -45,14 +45,27 @@ export default async function onboard({ page, privateKey, network, accountName, 
     const importExistingWalletButton = page.locator(onboardingSelectors.importExistingWalletButton);
     await importExistingWalletButton.click();
 
-    const privateKeyButton = page.locator(onboardingSelectors.privateKeyButton);
-    await privateKeyButton.click();
+    if (args.mode === "secretPhrase") {
+        const secretPhraseButton = page.locator(onboardingSelectors.secretPhraseButton);
+        await secretPhraseButton.click();
 
-    await continueButton.scrollIntoViewIfNeeded();
-    await continueButton.click();
+        await continueButton.scrollIntoViewIfNeeded();
+        await continueButton.click();
 
-    const privatekeyTextArea = page.locator("textarea:not([disabled])");
-    await privatekeyTextArea.fill(privateKey);
+        const secretPhraseTextArea = page.locator("textarea:not([disabled])");
+        await secretPhraseTextArea.fill(args.secretPhrase);
+    }
+
+    if (args.mode === "privateKey") {
+        const privateKeyButton = page.locator(onboardingSelectors.privateKeyButton);
+        await privateKeyButton.click();
+
+        await continueButton.scrollIntoViewIfNeeded();
+        await continueButton.click();
+
+        const privatekeyTextArea = page.locator("textarea:not([disabled])");
+        await privatekeyTextArea.fill(args.privateKey);
+    }
 
     const findMyAccountButton = page.locator(onboardingSelectors.findMyAccountButton);
     await findMyAccountButton.click();
@@ -116,8 +129,8 @@ export default async function onboard({ page, privateKey, network, accountName, 
     await renameAccount({ page, newAccountName: accountName });
 
     if (additionalAccounts && additionalAccounts.length > 0) {
-        for (const { privateKey, accountName, network } of additionalAccounts) {
-            await addAccount({ page, privateKey, accountName, network });
+        for (const { accountName, network, ...args } of additionalAccounts) {
+            await addAccount({ page, accountName, network, ...args });
         }
 
         // check that the current network is the same as the initial network

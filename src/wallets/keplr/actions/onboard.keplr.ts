@@ -3,7 +3,7 @@ import { expect, type Page } from "@playwright/test";
 import { sleep } from "@/utils/sleep";
 import { homepageSelectors } from "../selectors/homepage-selectors.keplr";
 import type { OnboardingArgs } from "../types";
-import { addWalletViaPrivateKey, goToOnboardingPage } from "../utils";
+import { addWalletViaPrivateKey, addWalletViaSeedPhrase, goToOnboardingPage } from "../utils";
 import { switchAccount } from "./switch-account.keplr";
 
 type Onboard = { onboard: OnboardingArgs } & { page: Page };
@@ -12,10 +12,24 @@ export default async function onboard({ page, onboard }: Onboard) {
     console.info(styleText("yellowBright", `\n Keplr onboarding started...`, { validateStream: false }));
 
     if (onboard.length === 1) {
-        for (const { privateKey, walletName, chains } of onboard) {
+        const _onboard = onboard[0];
+        if (_onboard && _onboard.mode === "privateKey") {
+            const { privateKey, walletName, chains } = _onboard;
+
             await addWalletViaPrivateKey({
                 page,
                 privateKey,
+                walletName,
+                chains,
+                mode: "onboard",
+            });
+        }
+
+        if (_onboard && _onboard.mode === "seedPhrase") {
+            const { seedPhrase, walletName, chains } = _onboard;
+            await addWalletViaSeedPhrase({
+                page,
+                seedPhrase: seedPhrase,
                 walletName,
                 chains,
                 mode: "onboard",
@@ -27,7 +41,7 @@ export default async function onboard({ page, onboard }: Onboard) {
         // Onboard the first wallet normally
         const initalWallet = onboard[0];
 
-        if (initalWallet) {
+        if (initalWallet && initalWallet.mode === "privateKey") {
             const { privateKey, walletName, chains } = initalWallet;
             await addWalletViaPrivateKey({
                 page,
@@ -38,16 +52,43 @@ export default async function onboard({ page, onboard }: Onboard) {
             });
         }
 
-        const accountsToAdd = onboard.slice(1);
-        for (const { privateKey, walletName, chains } of accountsToAdd) {
-            const onboardingPage = await goToOnboardingPage(page);
-            await addWalletViaPrivateKey({
-                page: onboardingPage,
-                privateKey,
+        if (initalWallet && initalWallet.mode === "seedPhrase") {
+            const { seedPhrase, walletName, chains } = initalWallet;
+            await addWalletViaSeedPhrase({
+                page,
+                seedPhrase: seedPhrase,
                 walletName,
                 chains,
-                mode: "add-account-single",
+                mode: "onboard",
             });
+        }
+
+        const accountsToAdd = onboard.slice(1);
+
+        for (const { ...args } of accountsToAdd) {
+            const onboardingPage = await goToOnboardingPage(page);
+
+            if (args.mode === "privateKey") {
+                const { privateKey, walletName, chains } = args;
+                await addWalletViaPrivateKey({
+                    page: onboardingPage,
+                    privateKey,
+                    walletName,
+                    chains,
+                    mode: "add-account-single",
+                });
+            }
+
+            if (args.mode === "seedPhrase") {
+                const { seedPhrase, walletName, chains } = args;
+                await addWalletViaSeedPhrase({
+                    page: onboardingPage,
+                    seedPhrase,
+                    walletName,
+                    chains,
+                    mode: "add-account-single",
+                });
+            }
         }
 
         const headingContainer = page.locator("div", { hasText: "Select Wallet" }).last().locator("../../..");

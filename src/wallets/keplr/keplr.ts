@@ -10,7 +10,13 @@ import { renameAccount } from "./actions/rename-account.keplr";
 import { switchAccount } from "./actions/switch-account.keplr";
 import { unlock } from "./actions/unlock.keplr";
 import { KeplrProfile } from "./keplr-profile";
-import type { AddAccountArgs, GetAccountAddressArgs, OnboardingArgs, RenameAccountArgs } from "./types";
+import type {
+    AddAccountViaPrivateKey,
+    AddAccountViaSeedPhrase,
+    GetAccountAddressArgs,
+    OnboardingArgs,
+    RenameAccountArgs,
+} from "./types";
 
 export class Keplr extends KeplrProfile {
     page: Page;
@@ -102,14 +108,20 @@ export class Keplr extends KeplrProfile {
      * @param {AddAccountArgs} args - The arguments to add the account.
      * @param args.chains - The chains of the account to add.
      * @param args.privateKey - The private key of the account to add, if the mode is "privateKey".
+     * @param args.seedPhrase - The seed phrase of the account to add, if the mode is "seedPhrase".
      * @param args.walletName - The name of the wallet to add the account to.
      * @param args.mode - The mode of adding the account (default: "add-account-multiple").
      * @example
      * const keplr = new Keplr(page);
      * await keplr.addAccount({ chains: ["Testnet"], privateKey: "private key", walletName: "Keplr Wallet", mode: "add-account-multiple" });
      */
-    async addAccount({ chains, privateKey, walletName, mode = "add-account-multiple" }: AddAccountArgs) {
-        await addAccount({ page: this.page, privateKey, walletName, chains, mode });
+    async addAccount({
+        chains,
+        walletName,
+        mode = "add-account-multiple",
+        ...args
+    }: AddAccountViaPrivateKey | AddAccountViaSeedPhrase) {
+        await addAccount({ page: this.page, walletName, chains, mode, ...args });
     }
 
     /**

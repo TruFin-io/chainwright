@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.7
+
+### Patch Changes
+
+- Add support for "secret Phrase" in "Meteor" and "Keplr" wallets
+
 ## 0.9.6
 
 ### Patch Changes

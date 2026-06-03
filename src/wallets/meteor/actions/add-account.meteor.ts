@@ -7,7 +7,7 @@ import { renameAccount } from "./rename-account.meteor";
 
 type AddAccount = AddAccountArgs & { page: Page };
 
-export async function addAccount({ page, privateKey, accountName, network }: AddAccount) {
+export async function addAccount({ page, accountName, network, ...args }: AddAccount) {
     const sidebarMenuButton = page.locator(homepageSelectors.openSidebarMenuButton);
     await sidebarMenuButton.click();
 
@@ -19,15 +19,29 @@ export async function addAccount({ page, privateKey, accountName, network }: Add
     const importExistingWalletButton = page.locator(onboardingSelectors.importExistingWalletButton);
     await importExistingWalletButton.click();
 
-    const privateKeyButton = page.locator(onboardingSelectors.privateKeyButton);
-    await privateKeyButton.click();
-
     const continueButton = page.locator('button:has-text("Continue")');
-    await continueButton.scrollIntoViewIfNeeded();
-    await continueButton.click();
 
-    const privatekeyTextArea = page.locator("textarea:not([disabled])");
-    await privatekeyTextArea.fill(privateKey);
+    if (args.mode === "secretPhrase") {
+        const secretPhraseButton = page.locator(onboardingSelectors.secretPhraseButton);
+        await secretPhraseButton.click();
+
+        await continueButton.scrollIntoViewIfNeeded();
+        await continueButton.click();
+
+        const secretPhraseTextArea = page.locator("textarea:not([disabled])");
+        await secretPhraseTextArea.fill(args.secretPhrase);
+    }
+
+    if (args.mode === "privateKey") {
+        const privateKeyButton = page.locator(onboardingSelectors.privateKeyButton);
+        await privateKeyButton.click();
+
+        await continueButton.scrollIntoViewIfNeeded();
+        await continueButton.click();
+
+        const privatekeyTextArea = page.locator("textarea:not([disabled])");
+        await privatekeyTextArea.fill(args.privateKey);
+    }
 
     const findMyAccountButton = page.locator(onboardingSelectors.findMyAccountButton);
     await findMyAccountButton.click();
