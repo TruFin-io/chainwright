@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import { addAccount } from "./actions/add-account.meteor";
+import { confirmDisconnect } from "./actions/confirm-disconnect.meteor";
 import { confirmTransaction } from "./actions/confirm-transaction.meteor";
 import { connectToApp } from "./actions/connect-to-app.meteor";
 import { getAccountAddress } from "./actions/get-account-address.meteor";
@@ -137,6 +138,16 @@ export class Meteor extends MeteorProfile {
      */
     async connectToApp(account?: string) {
         await connectToApp(await this.promptPage(this.page.context()), account);
+    }
+
+    /**
+     * Confirms the wallet's disconnection from the app.
+     * @example
+     * const meteor = new Meteor(page);
+     * await meteor.confirmDisconnect();
+     */
+    async confirmDisconnect() {
+        await confirmDisconnect(await this.promptPage(this.page.context()));
     }
 
     /**
