@@ -9,7 +9,7 @@ import type { CLIOptions, SupportedWallets } from "@/types";
 import { WALLET_SETUP_DIR_NAME } from "../utils/constants";
 
 const BASE_DIR = path.resolve(process.cwd(), "tests", WALLET_SETUP_DIR_NAME);
-const MAX_RETRIES = 2;
+const MAX_RETRIES = 1;
 
 type ActionOptions = {
     headless: boolean;

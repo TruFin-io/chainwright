@@ -7,7 +7,7 @@ const test = testWithMetamaskFixture;
 test("Should switch account successfully", async ({ metamask, metamaskPage }) => {
     const ACCOUNT_NAME = "Account 3";
 
-    await metamask.switchAccount({ accountName: ACCOUNT_NAME });
+    await metamask.switchAccount(ACCOUNT_NAME);
 
     const accountMenuButton = metamaskPage.getByTestId(homepageSelectors.accountMenuButton);
 

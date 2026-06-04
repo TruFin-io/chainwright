@@ -109,7 +109,7 @@ export async function triggerCacheCreation({
     } catch (error) {
         await context.close();
         fs.rmSync(CACHE_DIR_NAME, { force: true, recursive: true });
-        console.error("Error setting up wallet: ", (error as Error).message);
+        throw Error(`Error setting up wallet: ${(error as Error).message}`);
     }
 
     await context.close();
