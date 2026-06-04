@@ -1,12 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { accountSelectors, homepageSelectors } from "../selectors/homepage-selectors.metamask";
 
-export type SwitchAccount = {
-    page: Page;
-    accountName: string;
-};
-
-export async function switchAccount({ page, accountName }: SwitchAccount) {
+export async function switchAccount(page: Page, accountName: string) {
     const accountMenuButton = page.getByTestId(homepageSelectors.accountMenuButton);
     const accountMenuTextContent = await accountMenuButton.textContent();
 

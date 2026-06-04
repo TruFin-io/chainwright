@@ -8,7 +8,7 @@ import { lockWallet } from "./actions/lock.metamask";
 import onboard from "./actions/onboard.metamask";
 import { rejectTransaction } from "./actions/reject-transaction.metamask";
 import { type RenameAccount, renameAccount } from "./actions/rename-account.metamask";
-import { type SwitchAccount, switchAccount } from "./actions/switch-account.metamask";
+import { switchAccount } from "./actions/switch-account.metamask";
 import { switchNetwork } from "./actions/switch-network.metamask";
 import { toggleShowTestnetNetwork } from "./actions/toggle-show-testnet-network.metamask";
 import unlock from "./actions/unlock.metamask";
@@ -95,14 +95,13 @@ export class Metamask extends MetamaskProfile {
 
     /**
      * Switches the current account to the given account.
-     * @param {Omit<SwitchAccount, "page">} args - The arguments to switch the account.
-     * @param args.accountName - The name of the account to switch to.
+     * @param accountName - The name of the account to switch to.
      * @example
      * const metamask = new Metamask(page);
-     * await metamask.switchAccount({ accountName: "Account 1" });
+     * await metamask.switchAccount("Account 1");
      */
-    async switchAccount({ accountName }: Omit<SwitchAccount, "page">) {
-        await switchAccount({ page: this.page, accountName });
+    async switchAccount(accountName: string) {
+        await switchAccount(this.page, accountName);
     }
 
     /**
@@ -122,9 +121,10 @@ export class Metamask extends MetamaskProfile {
     /**
      * Gets the current account's address.
      * @returns The current account's address as a string.
+     * @param netowrk - Get the address based on the network ("Bitcoin", "Ethereum", "Solana", "Tron")
      * @example
      * const metamask = new Metamask(page);
-     * await metamask.getAccountAddress()
+     * await metamask.getAccountAddress("Ethereum")
      */
     async getAccountAddress(network: GetAccountAddressChains) {
         const address = await getAccountAddress(this.page, network);
