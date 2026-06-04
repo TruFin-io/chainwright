@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.11
+
+### Patch Changes
+
+- Update "Metamask" wallet's "switchAccount" action and fix a minor bug in the client entry point
+
 ## 0.9.10
 
 ### Patch Changes
