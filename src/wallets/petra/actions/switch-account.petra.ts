@@ -19,7 +19,9 @@ export async function switchAccount(page: Page, accountName: string) {
 
     for (const account of accountsButton) {
         const accountText = await account.textContent();
-        if (accountText?.toLowerCase()?.trim().includes(accountName.toLowerCase().trim())) {
+        const formattedText = accountText?.split("0x")[0]?.split("...")[0];
+
+        if (accountName.toLowerCase().includes(formattedText?.toLowerCase() ?? "")) {
             targetAccount = account;
             break;
         }

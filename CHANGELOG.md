@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.9.12
+
+### Patch Changes
+
+- [Petra] - Remove "accountName" character restrictions in the "addAccount" action
+
 ## 0.9.11
 
 ### Patch Changes

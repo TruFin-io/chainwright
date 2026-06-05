@@ -1,19 +1,10 @@
 import type { Page } from "@playwright/test";
-import z from "zod";
 import { accountSelectors } from "../selectors/homepage-selectors.petra";
 import { onboardSelectors } from "../selectors/onboard-selectors.petra";
 import type { AddAccount } from "../types";
 import { renameAccount } from "./rename-account.petra";
 
 export async function addAccount({ page, accountName, mode, ...args }: AddAccount & { page: Page }) {
-    const parsedAccountName = z
-        .string()
-        .max(
-            14,
-            "For switching accounts reason, account name should not be longer than 14 characters. The reason for this is because the name will be truncated. Hence, it will be difficult to select the account.",
-        )
-        .parse(accountName);
-
     const accountMenuButton = page.locator(accountSelectors.accountOptionsMenuButton).first();
     await accountMenuButton.click();
 
@@ -41,10 +32,10 @@ export async function addAccount({ page, accountName, mode, ...args }: AddAccoun
         const errorMessageText = await errorMessage.textContent({ timeout: 3_000 }).catch(() => null);
 
         if (errorMessageText?.includes("Account already exists in wallet")) {
-            throw Error(`Account ${parsedAccountName} already exists in wallet`);
+            throw Error(`Account ${accountName} already exists in wallet`);
         }
 
-        await renameAccount({ page, newAccountName: parsedAccountName });
+        await renameAccount({ page, newAccountName: accountName });
     }
 
     if (mode === "mnemonic") {
@@ -72,9 +63,9 @@ export async function addAccount({ page, accountName, mode, ...args }: AddAccoun
         const errorMessageText = await errorMessage.textContent({ timeout: 3_000 }).catch(() => null);
 
         if (errorMessageText?.includes("Account already exists in wallet")) {
-            throw Error(`Account ${parsedAccountName} already exists in wallet`);
+            throw Error(`Account ${accountName} already exists in wallet`);
         }
 
-        await renameAccount({ page, newAccountName: parsedAccountName });
+        await renameAccount({ page, newAccountName: accountName });
     }
 }
