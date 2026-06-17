@@ -28,9 +28,18 @@ export type GetSetupFunctionFileList = {
     walletName: SupportedWallets;
 };
 
+export type ExtensionSource =
+    | {
+          localPath: string;
+      }
+    | {
+          downloadUrl: string;
+      };
+
 export type WalletSetupConfig = {
     profileName?: string;
     slowMo?: number;
+    extensionSource?: ExtensionSource;
 };
 
 export type WalletProfileFixtureArgs = {
