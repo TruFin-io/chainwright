@@ -6,6 +6,7 @@ import type { CLIOptions, ExtensionSource } from "@/types";
 import { SUPPORTED_WALLETS } from "./constants";
 import { downloadFile } from "./download-file";
 import getCacheDirectory from "./get-cache-directory";
+import { verifyFileIntegrity } from "./verify-file-integrity";
 
 type Args = {
     force: boolean;
@@ -24,8 +25,10 @@ export async function prepareWalletExtension({ downloadUrl, name, force, extensi
     const zipFilePath = path.join(CACHE_DIR_NAME, `${name}-extension.zip`);
     const outputPath = path.join(CACHE_DIR_NAME, `${name}-extension`);
 
-    const urlSource = extensionSource && "downloadUrl" in extensionSource ? extensionSource.downloadUrl : downloadUrl;
+    const isExtensionSource = extensionSource && "downloadUrl" in extensionSource;
+    const urlSource = isExtensionSource ? extensionSource.downloadUrl : downloadUrl;
     const localPath = extensionSource && "localPath" in extensionSource ? extensionSource.localPath : undefined;
+    const expectedSha256 = isExtensionSource ? extensionSource.sha256 : supportedWallet.sha256;
 
     if (!IS_EXECUTED) {
         PREVIOUS_WALLET_NAME = walletName;
@@ -60,6 +63,11 @@ export async function prepareWalletExtension({ downloadUrl, name, force, extensi
                 styleText("cyanBright", `📥 Downloading ${walletName} extension...`, { validateStream: false }),
             );
             await downloadFile({ url: urlSource, destination: zipFilePath });
+            await verifyFileIntegrity({
+                filePath: zipFilePath,
+                expectedSha256,
+                label: `${walletName} extension`,
+            });
             console.info(
                 styleText("green", `✅ ${name.toUpperCase()} Extension downloaded successfully.`, {
                     validateStream: false,

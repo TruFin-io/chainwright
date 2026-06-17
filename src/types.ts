@@ -20,6 +20,7 @@ export type SupportedWalletsMap = {
     [key in SupportedWallets]: {
         downloadUrl: string;
         extensionName: ExtensionName;
+        sha256: string;
     };
 };
 
@@ -34,6 +35,7 @@ export type ExtensionSource =
       }
     | {
           downloadUrl: string;
+          sha256: string;
       };
 
 export type WalletSetupConfig = {
