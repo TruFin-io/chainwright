@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.10.0
+
+### Minor Changes
+
+- Update the wallet setup to support a custom extension source so that users can specify their own download URL or locally hosted wallet extension file
+
 ## 0.9.12
 
 ### Patch Changes
