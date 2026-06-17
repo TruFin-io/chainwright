@@ -5,7 +5,6 @@ type VerifyFileIntegrityArgs = {
     filePath: string;
     expectedSha256: string;
     label: string;
-    removeOnFailure?: boolean;
 };
 
 const SHA256_REGEX = /^[a-f0-9]{64}$/i;
