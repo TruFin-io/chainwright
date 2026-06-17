@@ -40,6 +40,7 @@ export async function triggerCacheCreation({
         downloadUrl,
         name: walletName,
         force,
+        extensionSource: config?.extensionSource,
     });
 
     const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];

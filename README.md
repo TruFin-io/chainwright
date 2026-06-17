@@ -178,6 +178,53 @@ export default defineWalletSetup(
 );
 ```
 
+**For custom wallet extension download URL and local path**
+
+For security reasons, you might choose not to use the same wallet extension source that Chainwright uses internally. To fix this, you can provide your own wallet extension source via a download URL or a locally stored wallet extension.
+
+>[!NOTE]
+You must ensure that the version of the extension you provide matches the one Chainwright uses internally.
+
+These are Chainwright's wallet extensions and their versions:
+  
+  - **MetaMask**: v13.33.0
+  - **Petra**: v2.4.8
+  - **Phantom**: v26.10.0
+  - **Solflare**: v2.19.1
+  - **Meteor**: v0.7.0
+  - **Keplr**: v0.13.3
+
+Example:
+
+```ts
+import { defineWalletSetup } from "chainwright/core";
+import { Metamask } from "chainwright/metamask";
+
+const PASSWORD = "test1234"; // For Petra wallet, you have to use a strong password. e.g. PlayerPetra45!!
+const SEED_PHRASE = "test test test test test test test test test test test test test";
+
+export default defineWalletSetup(
+  PASSWORD,
+  async ({ walletPage }) => {
+    const metamask = new Metamask(walletPage);
+
+    await metamask.onboard({
+      mode: "import",
+      secretRecoveryPhrase: SEED_PHRASE,
+      mainAccountName: "Main",
+    });
+  },
+  {
+    extensionSource: {
+        localPath: "Your local path here",
+        // OR
+        downloadUrl: "Download URL here",
+        sha256: "Expectd SHA-256 hash here"
+    },
+  },
+);
+```
+
 ### 2. Build wallet cache
 
 Run setup with the CLI (Supports **npx**, **bun**, **pnpm**, and **yarn**):

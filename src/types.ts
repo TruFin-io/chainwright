@@ -20,6 +20,7 @@ export type SupportedWalletsMap = {
     [key in SupportedWallets]: {
         downloadUrl: string;
         extensionName: ExtensionName;
+        sha256: string;
     };
 };
 
@@ -28,9 +29,19 @@ export type GetSetupFunctionFileList = {
     walletName: SupportedWallets;
 };
 
+export type ExtensionSource =
+    | {
+          localPath: string;
+      }
+    | {
+          downloadUrl: string;
+          sha256: string;
+      };
+
 export type WalletSetupConfig = {
     profileName?: string;
     slowMo?: number;
+    extensionSource?: ExtensionSource;
 };
 
 export type WalletProfileFixtureArgs = {
