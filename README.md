@@ -219,6 +219,7 @@ export default defineWalletSetup(
         localPath: "Your local path here",
         // OR
         downloadUrl: "Download URL here",
+        sha256: "Expectd SHA-256 hash here"
     },
   },
 );
