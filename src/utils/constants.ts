@@ -5,7 +5,7 @@ export const WALLET_CONTEXT_DIR_NAME = ".wallet-context";
 export const WALLET_SETUP_DIR_NAME = "wallet-setup";
 
 const METAMASK_VERSION = "13.33.0";
-const KEPLR_VERSION = "0.13.3";
+const KEPLR_VERSION = "0.13.39";
 
 const ARCHIVED_WALLET_BASE_URL = `https://github.com/amaify/chainwright/releases/download/v0.1.0/`;
 const KEPLR_WALLET_BASE_URL = `https://github.com/chainapsis/keplr-wallet/releases/download/v${KEPLR_VERSION}/`;
@@ -47,6 +47,6 @@ export const SUPPORTED_WALLETS: SupportedWalletsMap = {
     keplr: {
         downloadUrl: KEPLR_DOWNLOAD_URL,
         extensionName: "Keplr",
-        sha256: "df601d806aea6b345ab0fc53504c58ecae1aa0c108d8b3f02dd743e0fcbb0751",
+        sha256: "15811192edf86074e351c4e4e569ec1282054f316f6d958fa6c5485e23aa47b6",
     },
 };
