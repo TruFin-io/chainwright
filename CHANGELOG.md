@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.10.1
+
+### Patch Changes
+
+- Update READEME.md and fix flakiness in Metamask when onboarding a user
+
 ## 0.10.0
 
 ### Minor Changes
