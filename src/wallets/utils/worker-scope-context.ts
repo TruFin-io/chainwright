@@ -5,6 +5,7 @@ import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
 import type { BaseWallet } from "./base-wallet";
+import { getBrowserArgs } from "./get-browser-args";
 
 type WorkerScopeContext<W> = {
     workerInfo: WorkerInfo;
@@ -40,9 +41,10 @@ export async function workerScopeContext<T extends BaseWallet>({
     fs.cpSync(walletDataDir, contextPath, { recursive: true, force: true });
     const walletPath = await getWalletExtensionPathFromCache(wallet.name);
 
+    const browserArgs = getBrowserArgs(walletPath, slowMo ?? 0);
     const context = await chromium.launchPersistentContext(contextPath, {
         headless: false,
-        args: [`--disable-extensions-except=${walletPath}`],
+        args: browserArgs,
         slowMo: process.env.HEADLESS ? 0 : slowMo,
     });
 

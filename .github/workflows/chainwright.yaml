@@ -73,7 +73,7 @@ jobs:
         run: sudo apt-get install -y xvfb
 
       - name: Install Playwright browsers
-        run: pnpx playwright install chromium
+        run: pnpm exec playwright install chromium
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
@@ -97,3 +97,14 @@ jobs:
       - name: Skip e2e tests (no relevant file changes)
         if: github.event_name != 'workflow_dispatch' && steps.changed-tests.outputs.test_files == ''
         run: echo "No relevant test files changed - skipping tests"
+
+      - name: Upload Playwright artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-test-results
+          path: |
+            test-results/
+            tests/test-results/
+          retention-days: 4
+          if-no-files-found: ignore

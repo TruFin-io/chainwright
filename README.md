@@ -192,7 +192,7 @@ These are Chainwright's wallet extensions and their versions:
   - **Phantom**: v26.10.0
   - **Solflare**: v2.19.1
   - **Meteor**: v0.7.0
-  - **Keplr**: v0.13.3
+  - **Keplr**: v0.13.39
 
 Example:
 

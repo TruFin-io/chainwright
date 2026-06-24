@@ -6,7 +6,7 @@ import type { Metamask } from "@/wallets/metamask/metamask";
 const test = testWorkerScopeDappFixture;
 
 async function _confirmTransaction(metamask: Metamask, dappPage: Page) {
-    await metamask.switchAccount({ accountName: "Dapp" });
+    await metamask.switchAccount("Dapp");
 
     const connectWalletButton = dappPage.getByTestId("connect-wallet-button");
     const isConnectWalletButtonVisible = await connectWalletButton.isVisible().catch(() => false);
@@ -38,7 +38,7 @@ test.describe("E2E For Confirming transaction in Metamask wallet", () => {
 
     test("Should confirm transaction with warning successfully", async ({ dappPage, workerScopeContents }) => {
         const { wallet: metamask } = workerScopeContents;
-        await metamask.switchAccount({ accountName: "Dapp" });
+        await metamask.switchAccount("Dapp");
 
         const connectWalletButton = dappPage.getByTestId("connect-wallet-button");
         const isConnectWalletButtonVisible = await connectWalletButton.isVisible().catch(() => false);

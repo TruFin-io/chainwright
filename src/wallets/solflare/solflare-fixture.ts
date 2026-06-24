@@ -8,6 +8,7 @@ import getPageFromContext from "@/utils/get-page-from-context";
 import persistLocalStorage from "@/utils/persist-local-storage";
 import { teardownContext } from "@/utils/teardown-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
+import { getBrowserArgs } from "../utils/get-browser-args";
 import { unlock } from "./actions/unlock.solflare";
 import { Solflare } from "./solflare";
 import { SolflareProfile } from "./solflare-profile";
@@ -35,18 +36,10 @@ export const solflareFixture = ({ slowMo = 0, profileName }: WalletProfileFixtur
 
             await fs.promises.cp(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
-            const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];
-            if (process.env.HEADLESS) {
-                browserArgs.push("--headless=new");
-
-                if (slowMo > 0) {
-                    console.warn("⚠️ Slow motion makes no sense in headless mode. It will be ignored!");
-                }
-            }
-
+            const browserArgs = getBrowserArgs(extensionPath, slowMo);
             const walletPageContext = await chromium.launchPersistentContext(tempWalletDataDir, {
                 headless: false,
-                args: [`--disable-extensions-except=${extensionPath}`],
+                args: browserArgs,
                 slowMo: process.env.HEADLESS ? 0 : slowMo,
             });
 
@@ -54,7 +47,7 @@ export const solflareFixture = ({ slowMo = 0, profileName }: WalletProfileFixtur
 
             const { cookies, origins } = await currentContext.storageState();
             if (cookies) await walletPageContext.addCookies(cookies);
-            if (origins && origins.length > 0) persistLocalStorage(origins, walletPageContext);
+            if (origins && origins.length > 0) await persistLocalStorage(origins, walletPageContext);
 
             const indexUrl = await wallet.indexUrl();
             const formatedIndexUrl = indexUrl.split("#")[0] ?? "";
