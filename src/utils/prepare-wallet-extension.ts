@@ -63,11 +63,6 @@ export async function prepareWalletExtension({ downloadUrl, name, force, extensi
                 styleText("cyanBright", `📥 Downloading ${walletName} extension...`, { validateStream: false }),
             );
             await downloadFile({ url: urlSource, destination: zipFilePath });
-            await verifyFileIntegrity({
-                filePath: zipFilePath,
-                expectedSha256,
-                label: `${walletName} extension`,
-            });
             console.info(
                 styleText("green", `✅ ${name.toUpperCase()} Extension downloaded successfully.`, {
                     validateStream: false,
@@ -84,8 +79,15 @@ export async function prepareWalletExtension({ downloadUrl, name, force, extensi
 
     // Unzip the archive if not already extracted
     if (!fs.existsSync(outputPath)) {
+        const _filePath = !localPath ? zipFilePath : localPath;
+        console.info(`🚨 Verifying file integrity...`);
+        await verifyFileIntegrity({
+            filePath: _filePath,
+            expectedSha256,
+            label: `${walletName} extension`,
+        });
         console.info(`📦 Extracting extension...`);
-        const zip = new AdmZip(!localPath ? zipFilePath : localPath);
+        const zip = new AdmZip(_filePath);
         zip.extractAllTo(outputPath, true);
         console.info(`✅ ${walletName} Extension extracted successfully.`);
     } else {
