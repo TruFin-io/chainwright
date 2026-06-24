@@ -99,10 +99,12 @@ jobs:
         run: echo "No relevant test files changed - skipping tests"
 
       - name: Upload Playwright artifacts
-        if: ${{ !failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-test-results
-          path: tests/test-results/
+          path: |
+            test-results/
+            tests/test-results/
           retention-days: 4
           if-no-files-found: ignore
