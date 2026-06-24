@@ -216,6 +216,5 @@ export default async function onboard({ page, additionalAccounts, ...args }: Onb
         await switchNetwork({ page: newPage, ...args.toggleNetworkMode });
     }
 
-    await sleep(3_000);
     console.info(styleText("greenBright", "✨ Phantom onboarding completed successfully", { validateStream: false }));
 }

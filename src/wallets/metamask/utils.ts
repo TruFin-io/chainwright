@@ -1,4 +1,4 @@
-import { errors, type Page } from "@playwright/test";
+import { errors, expect, type Page } from "@playwright/test";
 import { sleep } from "@/utils/sleep";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { loadingSelectors } from "./selectors/loading-selectors.metamask";
@@ -35,3 +35,53 @@ export const waitForMetaMaskLoad = async (page: Page) => {
 
     return page;
 };
+
+export async function ensureMetaMaskOnboardingCompleted(page: Page) {
+    const extensionUrl = new URL(page.url());
+    const extensionOrigin = `${extensionUrl.protocol}//${extensionUrl.host}`;
+    const context = page.context();
+
+    const serviceWorker =
+        context.serviceWorkers().find((worker) => worker.url().startsWith(extensionOrigin)) ??
+        (await context.waitForEvent("serviceworker", {
+            predicate: (worker) => worker.url().startsWith(extensionOrigin),
+            timeout: 60_000,
+        }));
+
+    await expect
+        .poll(
+            async () => {
+                try {
+                    return await serviceWorker.evaluate(
+                        `(async () => {
+                            const state = await chrome.storage.local.get([
+                                "OnboardingController",
+                                "KeyringController",
+                                "PreferencesController",
+                            ]);
+                            const record = (value) => value && typeof value === "object" ? value : {};
+
+                            const onboarding = record(state.OnboardingController);
+                            const keyring = record(state.KeyringController);
+                            const preferencesController = record(state.PreferencesController);
+                            const preferences = record(preferencesController.preferences);
+
+                            return (
+                                onboarding.completedOnboarding === true &&
+                                typeof keyring.vault === "string" &&
+                                keyring.vault.length > 0 &&
+                                preferences.showTestNetworks === true
+                            );
+                        })()`,
+                    );
+                } catch {
+                    return false;
+                }
+            },
+            {
+                message: "MetaMask onboarding state was not persisted to extension storage",
+                timeout: 60_000,
+            },
+        )
+        .toBe(true);
+}

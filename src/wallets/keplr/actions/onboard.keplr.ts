@@ -1,6 +1,5 @@
 import { styleText } from "node:util";
 import { expect, type Page } from "@playwright/test";
-import { sleep } from "@/utils/sleep";
 import { homepageSelectors } from "../selectors/homepage-selectors.keplr";
 import type { OnboardingArgs } from "../types";
 import { addWalletViaPrivateKey, addWalletViaSeedPhrase, goToOnboardingPage } from "../utils";
@@ -115,6 +114,5 @@ export default async function onboard({ page, onboard }: Onboard) {
         }
     }
 
-    await sleep(3_000);
     console.info(styleText("greenBright", "✨ Keplr onboarding completed successfully", { validateStream: false }));
 }

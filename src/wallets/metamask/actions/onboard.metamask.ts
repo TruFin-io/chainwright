@@ -1,11 +1,11 @@
 import { styleText } from "node:util";
 import { expect, type Page } from "@playwright/test";
-import { sleep } from "@/utils/sleep";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { MetamaskProfile } from "../metamask-profile";
 import { homepageSelectors } from "../selectors/homepage-selectors.metamask";
 import { onboardSelectors } from "../selectors/onboard-selectors.metamask";
 import type { OnboardingArgs } from "../types";
+import { ensureMetaMaskOnboardingCompleted } from "../utils";
 import { switchAccount } from "./switch-account.metamask";
 import { toggleShowTestnetNetwork } from "./toggle-show-testnet-network.metamask";
 
@@ -142,6 +142,6 @@ export default async function onboard({ page, mainAccountName, ...args }: Onboar
         await switchAccount(page, mainAccountName);
     }
 
-    await sleep(5_000);
+    await ensureMetaMaskOnboardingCompleted(page);
     console.info(styleText("greenBright", "✨ MetaMask onboarding completed successfully", { validateStream: false }));
 }
