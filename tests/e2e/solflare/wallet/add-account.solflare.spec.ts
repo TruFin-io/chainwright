@@ -11,7 +11,7 @@ const test = testWithsolflareFixture;
 
 test("Should add account successfully", async ({ solflare, solflarePage }) => {
     const WALLET_NAME = "Alpha";
-    await solflare.addAccount({ privateKey: PRIVATE_KEY, walletName: WALLET_NAME });
+    await solflare.addAccount({ privateKey: `${PRIVATE_KEY}`, walletName: WALLET_NAME });
 
     const openWalletSelectorMenu = solflarePage.getByTestId("icon-section-wallet-picker-arrow-right");
     await openWalletSelectorMenu.click();

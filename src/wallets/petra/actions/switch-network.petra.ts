@@ -9,7 +9,7 @@ export async function switchNetwork(page: Page, networkName: SwitchNetwork) {
     const networkOptionButton = page.locator(settingsMenuSelectors.networkSection);
     await networkOptionButton.click();
 
-    const networkOption = page.locator(`div:has(> span:has-text("${networkName}"))`).first();
+    const networkOption = page.locator(`div:has(> span:has-text("${networkName}"))`).last();
     await networkOption.click();
 
     const backButton = page.locator(settingsMenuSelectors.backButton);

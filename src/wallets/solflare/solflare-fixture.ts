@@ -54,7 +54,7 @@ export const solflareFixture = ({ slowMo = 0, profileName }: WalletProfileFixtur
 
             const { cookies, origins } = await currentContext.storageState();
             if (cookies) await walletPageContext.addCookies(cookies);
-            if (origins && origins.length > 0) persistLocalStorage(origins, walletPageContext);
+            if (origins && origins.length > 0) await persistLocalStorage(origins, walletPageContext);
 
             const indexUrl = await wallet.indexUrl();
             const formatedIndexUrl = indexUrl.split("#")[0] ?? "";

@@ -55,7 +55,7 @@ export const keplrFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureAr
 
             const { cookies, origins } = await currentContext.storageState();
             if (cookies) await walletPageContext.addCookies(cookies);
-            if (origins && origins.length > 0) persistLocalStorage(origins, walletPageContext);
+            if (origins && origins.length > 0) await persistLocalStorage(origins, walletPageContext);
 
             const indexUrl = await wallet.indexUrl();
             const homePage = walletPageContext.pages().find((page) => page.url().startsWith(indexUrl));
