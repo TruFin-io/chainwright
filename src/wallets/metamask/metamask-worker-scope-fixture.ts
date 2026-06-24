@@ -20,7 +20,6 @@ export const metamaskWorkerScopeFixture = ({ profileName, slowMo }: WalletProfil
                     profileName,
                     slowMo,
                 });
-                await context.grantPermissions(["clipboard-read"]);
                 const metamask = new Metamask(walletPageFromContext);
                 await metamask.unlock();
 

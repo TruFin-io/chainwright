@@ -52,5 +52,8 @@ export async function workerScopeContextMetamask({ workerInfo, profileName, slow
         }
     }
 
+    const loadingSpinner = page.locator("img[class='loading-spinner']");
+    await loadingSpinner.waitFor({ state: "detached" });
+
     return { context, walletPage: page, contextPath };
 }

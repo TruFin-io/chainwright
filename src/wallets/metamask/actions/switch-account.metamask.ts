@@ -40,5 +40,7 @@ export async function switchAccount(page: Page, accountName: string) {
         throw Error(`Account with name "${accountName}" not found.`);
     }
 
-    await currentAccount?.click();
+    await currentAccount.click();
+    const loadingSpinner = page.locator("div[class='spinner loading-overlay__spinner']");
+    await loadingSpinner.waitFor({ state: "detached" });
 }
