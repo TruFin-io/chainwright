@@ -9,6 +9,7 @@ import persistLocalStorage from "@/utils/persist-local-storage";
 import { teardownContext } from "@/utils/teardown-context";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
+import { getBrowserArgs } from "../utils/get-browser-args";
 import { unlock } from "./actions/unlock.keplr";
 import { Keplr } from "./keplr";
 import { KeplrProfile } from "./keplr-profile";
@@ -36,15 +37,7 @@ export const keplrFixture = ({ slowMo = 0, profileName }: WalletProfileFixtureAr
 
             fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
-            const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];
-            if (process.env.HEADLESS) {
-                browserArgs.push("--headless=new");
-
-                if (slowMo > 0) {
-                    console.warn("⚠️ Slow motion makes no sense in headless mode. It will be ignored!");
-                }
-            }
-
+            const browserArgs = getBrowserArgs(extensionPath, slowMo);
             const walletPageContext = await chromium.launchPersistentContext(tempWalletDataDir, {
                 headless: false,
                 args: browserArgs,

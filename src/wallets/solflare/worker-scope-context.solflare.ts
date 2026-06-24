@@ -5,6 +5,7 @@ import createTempContextDirectory from "@/utils/create-temp-context-directory";
 import getCacheDirectory from "@/utils/get-cache-directory";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
+import { getBrowserArgs } from "../utils/get-browser-args";
 import { SolflareProfile } from "./solflare-profile";
 
 type WorkerScopeContext = {
@@ -27,9 +28,10 @@ export async function workerScopeContextSolana({ workerInfo, profileName, slowMo
     fs.cpSync(walletDataDir, contextPath, { recursive: true, force: true });
     const walletPath = await getWalletExtensionPathFromCache(wallet.name);
 
+    const browserArgs = getBrowserArgs(walletPath, slowMo ?? 0);
     const context = await chromium.launchPersistentContext(contextPath, {
         headless: false,
-        args: [`--disable-extensions-except=${walletPath}`],
+        args: browserArgs,
         slowMo: process.env.HEADLESS ? 0 : slowMo,
     });
 

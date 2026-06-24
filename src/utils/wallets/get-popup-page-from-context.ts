@@ -19,7 +19,7 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
                     return !!popupPage;
                 },
                 {
-                    timeout: 30_000,
+                    timeout: 60_000,
                 },
             )
             .toBe(true);

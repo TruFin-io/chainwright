@@ -1,6 +1,5 @@
 import { styleText } from "node:util";
 import { expect, type Page } from "@playwright/test";
-import { sleep } from "@/utils/sleep";
 import waitForStablePage from "@/utils/wait-for-stable-page";
 import { getWalletPasswordFromCache } from "@/utils/wallets/get-wallet-password-from-cache";
 import { PetraProfile } from "../petra-profile";
@@ -121,6 +120,5 @@ export default async function onboard({ page, network, ...args }: Onboard) {
 
     await switchNetwork(page, network);
 
-    await sleep(1_500);
     console.info(styleText("greenBright", "✨ Petra onboarding completed successfully", { validateStream: false }));
 }

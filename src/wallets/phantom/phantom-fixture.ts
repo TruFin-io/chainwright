@@ -8,6 +8,7 @@ import getPageFromContext from "@/utils/get-page-from-context";
 import persistLocalStorage from "@/utils/persist-local-storage";
 import { teardownContext } from "@/utils/teardown-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
+import { getBrowserArgs } from "../utils/get-browser-args";
 import { unlock } from "./actions/unlock.phantom";
 import { Phantom } from "./phantom";
 import { PhantomProfile } from "./phantom-profile";
@@ -36,15 +37,10 @@ export const phantomFixture = ({ slowMo = 0, profileName }: WalletProfileFixture
 
             fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
-            if (process.env.HEADLESS) {
-                if (slowMo > 0) {
-                    console.warn("⚠️ Slow motion makes no sense in headless mode. It will be ignored!");
-                }
-            }
-
+            const browserArgs = getBrowserArgs(extensionPath, slowMo);
             const walletPageContext = await chromium.launchPersistentContext(tempWalletDataDir, {
                 headless: false,
-                args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
+                args: browserArgs,
                 slowMo: process.env.HEADLESS ? 0 : slowMo,
             });
 

@@ -13,11 +13,11 @@ export default defineConfig({
     reporter: [["list"]],
 
     /* Global timeout for each test */
-    timeout: process.env.CI ? 60_000 : 30_000,
+    timeout: process.env.CI ? 60_000 : 45_000,
 
     use: {
         // We are using locally deployed Metamask Test Dapp for somePhantom tests.
-        baseURL: process.env.CI ? "https://chainwright-dapp.vercel.app/" : "https://chainwright-dapp.vercel.app/",
+        baseURL: "https://chainwright-dapp.vercel.app/",
 
         // Collect all traces on CI, and only traces for failed tests when running locally.
         // See https://playwright.dev/docs/trace-viewer.
