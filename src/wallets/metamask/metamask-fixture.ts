@@ -9,6 +9,7 @@ import getPageFromContext from "@/utils/get-page-from-context";
 import persistLocalStorage from "@/utils/persist-local-storage";
 import { teardownContext } from "@/utils/teardown-context";
 import { getWalletExtensionPathFromCache } from "@/utils/wallets/get-wallet-extension-path-from-cache";
+import { getBrowserArgs } from "../utils/get-browser-args";
 import unlock from "./actions/unlock.metamask";
 import { Metamask } from "./metamask";
 import { MetamaskProfile } from "./metamask-profile";
@@ -35,18 +36,10 @@ export const metamaskFixture = ({ slowMo = 0, profileName }: WalletProfileFixtur
 
             fs.cpSync(walletDataDir, tempWalletDataDir, { recursive: true, force: true });
 
-            const browserArgs = [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`];
-            if (process.env.HEADLESS) {
-                browserArgs.push("--headless=new");
-
-                if (slowMo > 0) {
-                    console.warn("⚠️ Slow motion makes no sense in headless mode. It will be ignored!");
-                }
-            }
-
+            const browserArgs = getBrowserArgs(extensionPath, slowMo);
             const walletPageContext = await chromium.launchPersistentContext(tempWalletDataDir, {
                 headless: false,
-                args: [`--disable-extensions-except=${extensionPath}`],
+                args: browserArgs,
                 slowMo: process.env.HEADLESS ? 0 : slowMo,
             });
 
@@ -68,7 +61,7 @@ export const metamaskFixture = ({ slowMo = 0, profileName }: WalletProfileFixtur
             }
 
             const loadingSpinner = _metamaskPage.locator("img[class='loading-spinner']");
-            await loadingSpinner.waitFor({ state: "detached" });
+            await loadingSpinner.waitFor({ state: "detached", timeout: 45_000 });
 
             await unlock(_metamaskPage);
             await use(walletPageContext);
