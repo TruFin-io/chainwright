@@ -97,3 +97,12 @@ jobs:
       - name: Skip e2e tests (no relevant file changes)
         if: github.event_name != 'workflow_dispatch' && steps.changed-tests.outputs.test_files == ''
         run: echo "No relevant test files changed - skipping tests"
+
+      - name: Upload Playwright artifacts
+        if: ${{ !failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: tests/test-results/
+          retention-days: 4
+          if-no-files-found: ignore
