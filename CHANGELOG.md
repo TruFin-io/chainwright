@@ -1,5 +1,12 @@
 # @tobelabs/chainwright
 
+## 0.10.2
+
+### Patch Changes
+
+- dab664a: Fix Keplr account onboarding when importing accounts with a seed phrase or private key.
+- Fix the bug in the Keplr wallet onboarding flow that prevents onboarding a new wallet using the seed phrase
+
 ## 0.10.1
 
 ### Patch Changes
