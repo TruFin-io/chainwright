@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.10.5
+
+### Patch Changes
+
+- Fix bug in "renameAccount" action for the Meteor wallet
+
 ## 0.10.4
 
 ### Patch Changes
