@@ -20,6 +20,9 @@ export async function renameAccount({ page, newAccountName }: RenameAccount) {
         );
         const closeButton = page.locator("section[role='dialog'] > button[aria-label='Close']");
         await closeButton.click();
+
+        const closeMenuButton = page.locator("div[id='root'] button[aria-label='Close']");
+        await closeMenuButton.click();
         return;
     }
 
