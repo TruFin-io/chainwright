@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 import { homepageSelectors } from "../selectors/homepage-selectors.meteor";
 import type { RenameAccountArgs } from "../types";
 
@@ -12,10 +12,19 @@ export async function renameAccount({ page, newAccountName }: RenameAccount) {
     await accountName.click();
 
     const accountNameInput = page.locator("input[placeholder='Ex. My Meteor Wallet']");
+    const inputValue = await accountNameInput.inputValue();
+
+    if (inputValue.toLowerCase() === newAccountName.toLowerCase()) {
+        console.info(
+            `Can't rename account. Current account name: ${inputValue} is the same with the new account name: ${newAccountName}`,
+        );
+        const closeButton = page.locator("section[role='dialog'] > button[aria-label='Close']");
+        await closeButton.click();
+        return;
+    }
+
     const updateButton = page.locator("button[type='submit']:has-text('Update')");
     await accountNameInput.fill(newAccountName);
-
-    await expect(updateButton).toBeEnabled({ timeout: 30_000 });
     await updateButton.click();
 
     const closeMenuButton = page.locator("div[id='root'] button[aria-label='Close']");
