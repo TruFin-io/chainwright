@@ -1,5 +1,12 @@
 # @tobelabs/chainwright
 
+## 0.10.4
+
+### Patch Changes
+
+- Fix "renameAccount" method in Meteor
+- 31c6fd6: [Meteor] - Update the "renameAction" to make sure the "update" button is enabled.
+
 ## 0.10.3
 
 ### Patch Changes
