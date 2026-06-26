@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.10.3
+
+### Patch Changes
+
+- Fix viewport sizing for Meteor wallet
+
 ## 0.10.2
 
 ### Patch Changes
