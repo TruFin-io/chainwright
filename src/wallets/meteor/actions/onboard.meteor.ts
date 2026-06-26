@@ -19,6 +19,7 @@ export default async function onboard({ page, network, accountName, additionalAc
     const PASSWORD = await getWalletPasswordFromCache("meteor");
     const meteorProfile = new MeteorProfile();
     const indexUrl = await meteorProfile.indexUrl();
+    await page.setViewportSize({ width: 380, height: 600 });
     await page.goto(indexUrl);
 
     const switchNetworkButton = page.locator(onboardingSelectors.switchNetworkButton);
