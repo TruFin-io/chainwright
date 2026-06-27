@@ -52,7 +52,7 @@ export async function connectToApp(page: Page) {
         .catch(() => console.error("Notice dialog did not appear within the timeout period."));
 
     const confirmButton = page.getByTestId("page-container-footer-next");
-    await confirmButton.waitFor({ state: "visible", timeout: 25_000 });
+    await confirmButton.waitFor({ state: "visible", timeout: 60_000 });
     await confirmButton.click();
     await page
         .waitForEvent("close", {

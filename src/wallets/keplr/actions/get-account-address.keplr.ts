@@ -38,6 +38,7 @@ export async function getAccountAddress({ page, ...args }: GetAccountAddress) {
     await popoverSearchInput.fill(parsedData.chain);
 
     const _chains = popoverContainer.locator("div[cursor='pointer']", { hasText: parsedData.chain });
+    await expect(_chains.first()).toBeVisible({ timeout: 60_000 });
     const chains = await _chains.all();
 
     let addressElement: Locator | undefined;
