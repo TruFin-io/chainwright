@@ -7,10 +7,10 @@ export async function getAccountAddress(page: Page) {
     const copiedToast = page.locator(".chakra-toast").last();
 
     await copyAddressButton.click();
-    await copiedToast.waitFor({ state: "visible", timeout: 5_000 });
+    await copiedToast.waitFor({ state: "visible", timeout: 10_000 });
 
     const address = await page.evaluate(async () => await navigator.clipboard.readText());
-    await copiedToast.waitFor({ state: "hidden", timeout: 5_000 });
+    await copiedToast.waitFor({ state: "hidden", timeout: 15_000 });
 
     return address;
 }

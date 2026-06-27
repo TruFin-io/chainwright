@@ -42,7 +42,6 @@ export async function addWalletViaPrivateKey({
         walletName,
         mode,
         chains,
-        actionType: "privateKey",
     });
 }
 
@@ -84,7 +83,6 @@ export async function addWalletViaSeedPhrase({
         walletName,
         mode,
         chains,
-        actionType: "seedPhrase",
     });
 }
 
@@ -92,11 +90,10 @@ type AddAccountFlow = {
     page: Page;
     walletName: string;
     mode: AddAccount["mode"];
-    actionType: "seedPhrase" | "privateKey";
     chains: AddAccount["chains"];
 };
 
-async function addAccountFlow({ page, walletName, mode, chains, actionType }: AddAccountFlow) {
+async function addAccountFlow({ page, walletName, mode, chains }: AddAccountFlow) {
     const walletProfile = new KeplrProfile();
     const PASSWORD = await getWalletPasswordFromCache("keplr");
 
@@ -118,18 +115,10 @@ async function addAccountFlow({ page, walletName, mode, chains, actionType }: Ad
     await nextButton.click();
 
     const allNativeChains = page.locator("div:has-text('All Native Chains')").nth(-4);
-    const cosmosHubChain = page.locator(
-        `div[cursor='${actionType === "privateKey" ? "pointer" : "not-allowed"}']:has-text('Cosmos Hub')`,
-    );
     const allNativeChainsCheckbox = await allNativeChains.locator("input[type='checkbox']").getAttribute("checked");
-    const cosmosHubChainCheckbox =
-        actionType === "privateKey"
-            ? await cosmosHubChain.locator("input[type='checkbox']").getAttribute("checked")
-            : null;
 
     // Uncheck "All Native Chains" and "Cosmos Hub"
     if (allNativeChainsCheckbox !== null) await allNativeChains.click();
-    if (cosmosHubChainCheckbox !== null) await cosmosHubChain.click();
 
     const searchNetworkInput = page.locator(onboardingSelectors.searchNetworkInput);
 
