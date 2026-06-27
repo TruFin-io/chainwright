@@ -4,7 +4,7 @@ import { popupPageSelectors } from "../selectors/popup-page-selectors.solflare";
 export async function confirmTransaction(page: Page) {
     const approveButton = page.getByTestId(popupPageSelectors.approveButton);
     const networkFeeSection = page.getByTestId("section-network-fee");
-    await networkFeeSection.waitFor({ state: "attached", timeout: 15_000 }).catch(() => false);
+    await networkFeeSection.waitFor({ state: "attached", timeout: 45_000 }).catch(() => false);
 
     const infoBoxNetworkMismatch = page.getByTestId("info-box-network-mismatch");
     const isInfoBoxNetworkMismatchVisible = await infoBoxNetworkMismatch.isVisible().catch(() => false);
