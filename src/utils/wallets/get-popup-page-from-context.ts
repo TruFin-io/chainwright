@@ -19,7 +19,7 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
                     return !!popupPage;
                 },
                 {
-                    timeout: 60_000,
+                    timeout: 90_000,
                 },
             )
             .toBe(true);
@@ -29,8 +29,10 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
             .filter((_page) => _page.url().startsWith("chrome-extension://"))
             .map((p) => p.url());
         throw new Error(
-            `Popup page with path "${path}" not found in context after 30s. ` +
+            [
+                `Popup page with path "${path}" not found in context after 90s. `,
                 `Pages in context: ${JSON.stringify(urls)}`,
+            ].join("\n"),
         );
     }
 
@@ -50,7 +52,7 @@ export async function getPopupPageFromContext({ context, path, locator }: GetPop
 }
 
 async function waitForStablePage(page: Page, locator: string) {
-    const TIMEOUT = 40_000;
+    const TIMEOUT = 45_000;
     await page.waitForLoadState("load", { timeout: TIMEOUT });
     await page.waitForLoadState("domcontentloaded", { timeout: TIMEOUT });
 

@@ -1,5 +1,11 @@
 # @tobelabs/chainwright
 
+## 0.10.7
+
+### Patch Changes
+
+- Fix CI flakiness for Keplr and Meteor
+
 ## 0.10.6
 
 ### Patch Changes
