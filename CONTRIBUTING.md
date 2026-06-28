@@ -34,6 +34,7 @@ This repository uses two main long-lived branches:
 When contributing:
 
 - Create your feature/fix branch from `dev`.
+- Run the changeset script to log your changes. `pnpm run changeset`
 - Open pull requests targeting `dev` (not `main`).
 
 ## Project Structure
@@ -42,6 +43,7 @@ When contributing:
 - `tests/e2e/`: end-to-end wallet and dapp specs
 - `tests/wallet-setup/`: setup files used to build wallet cache
 - `scripts/`: helper tooling (including wallet scaffolding)
+- `examples/`: Contains wallet setup examples
 
 ## Development Commands
 
@@ -67,6 +69,10 @@ When contributing:
 Use the wallet scaffolder:
 
 - `pnpm run add:wallet`: Specify the wallet name
+
+```bash
+pnpm run add:wallet foxtrot
+```
 
 Then implement wallet-specific actions/selectors and add/update tests in `tests/e2e` and `tests/wallet-setup`.
 

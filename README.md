@@ -21,6 +21,7 @@ Chainwright is an end-to-end testing toolkit for Web3 dapps built on Playwright.
 ## Features
 
 - Wallet setup CLI to build reusable extension cache
+- Custom wallet extension source.
 - Playwright fixtures for wallet + Dapp testing
 - Support for multiple wallet profiles per wallet
 - Wallet action APIs for onboarding, account switching, transaction confirmation, and more
@@ -37,7 +38,7 @@ Chainwright is an end-to-end testing toolkit for Web3 dapps built on Playwright.
 ## Requirements
 
 - Node.js `>=22`
-- `@playwright/test@1.60.0` (peer dependency)
+- `@playwright/test@1.61.1` (peer dependency)
 
 ## Operating Systems
 Supports the following operating systems:
@@ -83,10 +84,11 @@ Create a setup directory (default: `tests/wallet-setup`) and add `*.setup.ts` fi
 - `petra.setup.ts`
 - `phantom-team-a.setup.ts`
 
-Each file must export `default defineWalletSetup(...)`.
+Each file must export `defineWalletSetup(...)`.
+
+Wallet setup examples: [Setup examples link](https://github.com/amaify/chainwright/tree/dev/examples)
 
 ```ts
-// tests/wallet-setup/metamask.setup.ts
 import { defineWalletSetup } from "chainwright/core";
 import { Metamask } from "chainwright/metamask";
 
@@ -113,7 +115,6 @@ export default defineWalletSetup(
 **For Wallets with additional accounts**
 
 ```ts
-// tests/wallet-setup/metamask.setup.ts
 import { defineWalletSetup } from "chainwright/core";
 import { Petra } from "chainwright/petra";
 
@@ -146,7 +147,7 @@ export default defineWalletSetup(
 
 To support multiple profiles in a single wallet (for example, MetaMask), only setup files from the second profile onward need an explicit, distinct profile name.
 
-`main.setup.ts` can use the default profile, while `main-two.setup.ts` (and any additional setup files) should declare a unique profile name. Then, in any fixture that should use that profile, pass the exact same profileName value.
+`main.setup.ts` can use the default profile, while `main-two.setup.ts` (and any additional setup files) should declare a unique profile name. Then, in any fixture that should use that profile, pass the exact `profileName` value.
 
 Example:
 - `main.setup.ts`: uses the default profile
@@ -154,7 +155,6 @@ Example:
 - Fixture usage: `metamaskFixture({ profileName: "profile two" })`
 
 ```ts
-// tests/wallet-setup/main-two.setup.ts
 import { defineWalletSetup } from "chainwright/core";
 import { Metamask } from "chainwright/metamask";
 
@@ -187,12 +187,12 @@ You must ensure that the version of the extension you provide matches the one Ch
 
 These are Chainwright's wallet extensions and their versions:
   
-  - **MetaMask**: v13.33.0
-  - **Petra**: v2.4.8
-  - **Phantom**: v26.10.0
-  - **Solflare**: v2.19.1
-  - **Meteor**: v0.7.0
-  - **Keplr**: v0.13.39
+  - **MetaMask**: v13.33.0 [Source](https://github.com/MetaMask/metamask-extension/releases/tag/v13.33.0)
+  - **Petra**: v2.4.8 [Source](https://github.com/amaify/chainwright/releases/tag/v0.1.0)
+  - **Phantom**: v26.10.0 [Source](https://github.com/amaify/chainwright/releases/tag/v0.1.0)
+  - **Solflare**: v2.19.1 [Source](https://github.com/amaify/chainwright/releases/tag/v0.1.0)
+  - **Meteor**: v0.7.0 [Source](https://github.com/amaify/chainwright/releases/tag/v0.1.0)
+  - **Keplr**: v0.13.39 [Source](https://github.com/chainapsis/keplr-wallet/releases/tag/v0.13.39)
 
 Example:
 
@@ -233,13 +233,32 @@ Run setup with the CLI (Supports **npx**, **bun**, **pnpm**, and **yarn**):
 By default, Chainwright looks for `tests/wallet-setup` in your base directory. However, you can specify the directory you want Chainwright to get your setup files from.
 
 ```bash
+
 bun chainwright --wallets <Wallets you want to support>
+
+Examples:
+# Multiple wallet setup command
+bun chainwright --wallets metamask phantom solflare
+
+# Single wallet setup command
+bun chainwright --metamask
+
+# Overriding existing wallet cache during setup
+bun chainwright --metamask --force
+
+# Overriding multiple existing wallet cache during setup
+bun chainwright --wallets metamask phantom petra --force
+
+# NOTE: These command will work with other package managers. npm, pnpm, and yarn.
 ```
 
 To specify a directory:
 
 ```bash
-bun chainwright <directory path> <wallet> -f #Optional flag
+bun chainwright <directory path> <wallet>
+
+Example:
+bun chainwright ./src/e2e/your-tests --metamask
 ```
 
 Useful flags:
@@ -289,6 +308,7 @@ test.describe("Example tests", () => {
   });
 })
 ```
+
 > [!NOTE]
 The wallet fixture will make use of the `default` wallet profile. If you specified a `profile-name` at the point of setting up, make sure to include it in the fixture.
 
@@ -450,7 +470,7 @@ defineWalletSetup(password, setupFn, config?)
 
 - `password: string` - wallet unlock password saved in cache metadata
 - `setupFn: ({ context, walletPage }) => Promise<void>` - runs onboarding/import flow
-- `config?: { profileName?: string; slowMo?: number }` - useful for setting up multiple wallet profiles and running the setup in slow motion `slowMo`.
+- `config?: { profileName?: string; slowMo?: number, extensionSource?: {...} }` - useful for setting up multiple wallet profiles, running the setup in slow motion `slowMo` and using a custom extension source.
 
 ### `testWithChainwright`
 
