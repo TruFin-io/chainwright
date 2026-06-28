@@ -80,7 +80,7 @@
         "version-package": "changeset version",
         "release": "pnpm run build && changeset publish",
         "dev": "tsx src/cli/index.ts ./tests/wallet-setup",
-        "setup-wallets": "tsx src/cli/index.ts ./tests/wallet-setup --all",
+        "setup-wallets": "tsx src/cli/index.ts ./tests/wallet-setup --all -f",
         "tests": "vitest --exclude '**/*.spec.ts'",
         "lint": "biome check ./src",
         "format": "biome format --write ./src",
@@ -89,27 +89,27 @@
         "add:wallet": "tsx scripts/add-wallet.ts"
     },
     "peerDependencies": {
-        "@playwright/test": "1.60.0"
+        "@playwright/test": "1.61.1"
     },
     "devDependencies": {
         "@biomejs/biome": "2.4.15",
         "@changesets/cli": "^2.31.0",
-        "@playwright/test": "1.60.0",
+        "@playwright/test": "1.61.1",
         "@types/adm-zip": "^0.5.8",
         "@types/cli-progress": "^3.11.6",
-        "@types/node": "^25.8.0",
+        "@types/node": "^26.0.1",
         "tsup": "^8.5.1",
         "typescript": "^6.0.3",
-        "vitest": "^4.1.6"
+        "vitest": "^4.1.9"
     },
     "dependencies": {
-        "@inquirer/checkbox": "^5.1.5",
+        "@inquirer/checkbox": "^5.2.1",
         "adm-zip": "^0.5.17",
         "cli-progress": "^3.12.0",
-        "commander": "^14.0.3",
+        "commander": "^15.0.0",
         "glob": "^13.0.6",
         "prool": "^0.2.4",
-        "tsx": "^4.22.0",
+        "tsx": "^4.22.4",
         "zod": "^4.4.3"
     },
     "overrides": {
