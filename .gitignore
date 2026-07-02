@@ -5,7 +5,6 @@ pnpm-workspace.yaml
 
 # output
 out
-dist
 *.tgz
 
 # code coverage

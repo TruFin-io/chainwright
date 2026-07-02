@@ -1,0 +1,1 @@
+async function u(t,s,i={}){return{fn:s,password:t,config:i}}import{test as o,mergeTests as p}from"@playwright/test";function a(t){return p(o,t)}export{u as defineWalletSetup,a as testWithChainwright};
