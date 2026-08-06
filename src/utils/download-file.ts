@@ -25,6 +25,7 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
                 { validateStream: false },
             ),
         );
+        controller.abort();
     }
 
     const totalBytes = parseInt(response.headers.get("content-length") || "0", 10);
