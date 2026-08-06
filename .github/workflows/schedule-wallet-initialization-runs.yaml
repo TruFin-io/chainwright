@@ -7,6 +7,9 @@ on:
     # Runs at 6 AM UTC, Monday - Friday
     - cron: "0 6 * * 1-5"
 
+permissions:
+  contents: read
+
 jobs:
   setup-wallets:
     runs-on: ubuntu-22.04

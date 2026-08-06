@@ -5,6 +5,9 @@ on:
     pull_request:
         branches: ["main", "dev"]
 
+permissions:
+    contents: read
+
 jobs:
     linting_and_unit_tests:
         runs-on: ubuntu-22.04
