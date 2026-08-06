@@ -136,8 +136,8 @@ describe("downloadFile", () => {
 
         // Verify the in-flight request was aborted
         const fetchMock = global.fetch as unknown as ReturnType<typeof vi.fn>;
-        const { signal } = fetchMock.mock.calls[0][1] as { signal: AbortSignal };
-        expect(signal.aborted).toBe(true);
+        const fetchOptions = fetchMock.mock.calls[0]?.[1] as { signal: AbortSignal };
+        expect(fetchOptions.signal.aborted).toBe(true);
 
         consoleErrorSpy.mockRestore();
     });
@@ -181,7 +181,9 @@ describe("downloadFile", () => {
 
         await expect(downloadFile({ url, destination })).rejects.toThrow();
 
-        expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining("❌ Download failed: HTTP 502 Bad Gateway"));
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+            expect.stringContaining("❌ Download failed: HTTP 502 Bad Gateway"),
+        );
         expect(consoleErrorSpy).not.toHaveBeenCalledWith(expect.stringContaining("\n"));
 
         consoleErrorSpy.mockRestore();
