@@ -17,9 +17,14 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
     const response = await fetch(url, { redirect: "follow", signal: controller.signal });
 
     if (!response.ok) {
-        console.error(styleText("redBright", `❌ Download failed: HTTP ${response.status}`, { validateStream: false }));
-        controller.abort();
-        process.exit(1);
+        const errorBody = await response.text().catch(() => "");
+        console.error(
+            styleText(
+                "redBright",
+                `❌ Download failed: HTTP ${response.status} ${response.statusText}${errorBody ? `\n${errorBody.slice(0, 500)}` : ""}`,
+                { validateStream: false },
+            ),
+        );
     }
 
     const totalBytes = parseInt(response.headers.get("content-length") || "0", 10);
@@ -53,7 +58,6 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
         });
     } catch (error) {
         console.error(styleText("redBright", `❌ Download failed: ${error}`, { validateStream: false }));
-        process.exit(1);
     } finally {
         clearTimeout(requestTimeout);
     }
