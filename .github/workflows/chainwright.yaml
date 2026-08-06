@@ -9,6 +9,9 @@ on:
       - "tests/e2e/**/*.spec.ts"
       - "src/wallets/**/actions/**/*.ts"
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-22.04
