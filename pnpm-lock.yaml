@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  tar: ^7.5.15
+  tar: ^7.5.21
 
 importers:
 
@@ -28,7 +28,7 @@ importers:
         version: 13.0.6
       prool:
         specifier: ^0.2.14
-        version: 0.2.14(debug@4.4.3)
+        version: 0.2.14
       tsx:
         specifier: ^4.23.9
         version: 4.23.9
@@ -2692,9 +2692,7 @@ snapshots:
       mlly: 1.8.2
       rollup: 4.60.4
 
-  follow-redirects@1.16.0(debug@4.4.3):
-    optionalDependencies:
-      debug: 4.4.3
+  follow-redirects@1.16.0: {}
 
   fs-extra@7.0.1:
     dependencies:
@@ -2742,10 +2740,10 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  http-proxy@1.18.1(debug@4.4.3):
+  http-proxy@1.18.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.16.0(debug@4.4.3)
+      follow-redirects: 1.16.0
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -2997,13 +2995,13 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  prool@0.2.14(debug@4.4.3):
+  prool@0.2.14:
     dependencies:
       change-case: 5.4.4
       eventemitter3: 5.0.4
       execa: 9.6.1
       get-port: 7.2.0
-      http-proxy: 1.18.1(debug@4.4.3)
+      http-proxy: 1.18.1
       tar: 7.5.22
     transitivePeerDependencies:
       - debug
