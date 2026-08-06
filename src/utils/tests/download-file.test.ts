@@ -114,7 +114,7 @@ describe("downloadFile", () => {
         expect(mockProgressBar.stop).toHaveBeenCalled();
     });
 
-    it("should exit with error code 1 when HTTP request fails", async () => {
+    it("should log the status and status text and rethrow when the HTTP request fails", async () => {
         const url = "https://example.com/not-found.txt";
         const destination = path.resolve(TEST_DIR, "not-found.txt");
 
@@ -122,21 +122,18 @@ describe("downloadFile", () => {
         global.fetch = vi.fn().mockResolvedValue({
             ok: false,
             status: 404,
+            statusText: "Not Found",
             headers: new Headers(),
-        });
-
-        const exitSpy = vi.spyOn(process, "exit").mockImplementation((code) => {
-            expect(code).toBe(1);
-            throw new Error("process.exit called");
         });
 
         const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-        await expect(downloadFile({ url, destination })).rejects.toThrow("process.exit called");
+        await expect(downloadFile({ url, destination })).rejects.toThrow("HTTP 404 Not Found");
 
-        expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining(`❌ Download failed: HTTP 404`));
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+            expect.stringContaining("❌ Wallet extension download failed: Error: HTTP 404 Not Found"),
+        );
 
-        exitSpy.mockRestore();
         consoleErrorSpy.mockRestore();
     });
 
@@ -153,10 +150,6 @@ describe("downloadFile", () => {
             body: Readable.toWeb(Readable.from(contentBuffer)) as ReadableStream,
         });
 
-        const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
-            throw new Error("process.exit called");
-        });
-
         await expect(downloadFile({ url, destination })).resolves.toBeUndefined();
 
         // Get the progress bar instance that was created
@@ -171,11 +164,9 @@ describe("downloadFile", () => {
         expect(fs.existsSync(destination)).toBe(true);
         const fileContent = fs.readFileSync(destination, "utf-8");
         expect(fileContent).toBe(content);
-
-        exitSpy.mockRestore();
     });
 
-    it("should handle timeout and abort the request", async () => {
+    it("should log the error and rethrow when the request is aborted", async () => {
         const url = "https://example.com/slow-file.txt";
         const destination = path.resolve(TEST_DIR, "slow-file.txt");
 
@@ -184,12 +175,41 @@ describe("downloadFile", () => {
         abortError.name = "AbortError";
         global.fetch = vi.fn().mockRejectedValue(abortError);
 
-        const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
-            throw new Error("process.exit called");
+        const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+        await expect(downloadFile({ url, destination })).rejects.toThrow("The operation was aborted");
+
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+            expect.stringContaining("❌ Wallet extension download failed: AbortError: The operation was aborted"),
+        );
+
+        consoleErrorSpy.mockRestore();
+    });
+
+    it("should log the error and rethrow when writing to the destination fails", async () => {
+        const url = "https://example.com/file.txt";
+        // Destination inside a directory that does not exist, so the write stream errors
+        const destination = path.resolve(TEST_DIR, "missing-dir", "file.txt");
+        const contentBuffer = Buffer.from("Hello, World!");
+
+        global.fetch = vi.fn().mockResolvedValue({
+            ok: true,
+            status: 200,
+            headers: new Headers({
+                "content-length": contentBuffer.length.toString(),
+            }),
+            body: Readable.toWeb(Readable.from(contentBuffer)) as ReadableStream,
         });
+
+        const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+        const clearTimeoutSpy = vi.spyOn(global, "clearTimeout");
 
         await expect(downloadFile({ url, destination })).rejects.toThrow();
 
-        exitSpy.mockRestore();
+        expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining("❌ Wallet extension download failed:"));
+        expect(clearTimeoutSpy).toHaveBeenCalled();
+
+        consoleErrorSpy.mockRestore();
+        clearTimeoutSpy.mockRestore();
     });
 });

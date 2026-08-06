@@ -14,20 +14,19 @@ type DownloadFileArgs = {
 export async function downloadFile({ url, destination }: DownloadFileArgs) {
     const controller = new AbortController();
     const requestTimeout = setTimeout(() => controller.abort(), TIMEOUT);
-    const response = await fetch(url, { redirect: "follow", signal: controller.signal });
-
-    if (!response.ok) {
-        console.error(styleText("redBright", `❌ Download failed: HTTP ${response.status}`, { validateStream: false }));
-        controller.abort();
-        process.exit(1);
-    }
-
-    const totalBytes = parseInt(response.headers.get("content-length") || "0", 10);
-    let downloaded = 0;
-
-    const nodeStream = Readable.fromWeb(response.body as streamWeb.ReadableStream);
 
     try {
+        const response = await fetch(url, { redirect: "follow", signal: controller.signal });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
+
+        const totalBytes = parseInt(response.headers.get("content-length") || "0", 10);
+        let downloaded = 0;
+
+        const nodeStream = Readable.fromWeb(response.body as streamWeb.ReadableStream);
+
         const progressBar = new cliProgress.SingleBar({
             format: `Downloading ${styleText("cyan", "{bar}", { validateStream: false })} {percentage}%`,
             clearOnComplete: true,
@@ -52,8 +51,10 @@ export async function downloadFile({ url, destination }: DownloadFileArgs) {
             });
         });
     } catch (error) {
-        console.error(styleText("redBright", `❌ Download failed: ${error}`, { validateStream: false }));
-        process.exit(1);
+        console.error(
+            styleText("redBright", `❌ Wallet extension download failed: ${error}`, { validateStream: false }),
+        );
+        throw error;
     } finally {
         clearTimeout(requestTimeout);
     }

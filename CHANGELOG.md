@@ -1,5 +1,17 @@
 # @tobelabs/chainwright
 
+## 0.10.14
+
+### Patch Changes
+
+- [Core] - Fix the error handling issue in the `downloadFile` function.
+
+## 0.10.13
+
+### Patch Changes
+
+- [CLI] - Enhance error handling in downloadFile function.
+
 ## 0.10.12
 
 ### Patch Changes
