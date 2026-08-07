@@ -29,6 +29,7 @@ jobs:
         uses: pnpm/setup@v2
         with:
           runtime: node@${{ matrix.node-version }}
+          version: 11
           cache: true
 
       - name: Use Node LTS
