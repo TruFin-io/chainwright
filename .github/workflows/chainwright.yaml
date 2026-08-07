@@ -70,7 +70,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Install XVFB
         run: sudo apt-get install -y xvfb
