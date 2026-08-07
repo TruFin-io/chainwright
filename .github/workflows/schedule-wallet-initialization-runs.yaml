@@ -30,13 +30,14 @@ jobs:
         with:
           runtime: node@${{ matrix.node-version }}
           version: 11
+          install: false
           cache: true
 
-      - name: Use Node LTS
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24.x
-          cache: "pnpm"
+      # - name: Use Node LTS
+      #   uses: actions/setup-node@v6
+      #   with:
+      #     node-version: 24.x
+      #     cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
