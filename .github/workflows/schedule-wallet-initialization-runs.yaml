@@ -28,7 +28,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/setup@v2
         with:
-          version: node@{{ matrix.node-version }}
+          version: node@${{ matrix.node-version }}
           cache: true
 
       - name: Use Node LTS
