@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   setup-wallets:
+    if: github.repository == 'amaify/chainwright'
     runs-on: ubuntu-22.04
     timeout-minutes: 60
     strategy:

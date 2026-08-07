@@ -11,6 +11,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
+    if: github.repository == 'amaify/chainwright'
     name: Changesets Release
     runs-on: ubuntu-latest
     permissions:

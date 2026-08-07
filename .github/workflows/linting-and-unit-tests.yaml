@@ -10,6 +10,7 @@ permissions:
 
 jobs:
     linting_and_unit_tests:
+        if: github.repository == 'amaify/chainwright'
         runs-on: ubuntu-22.04
         timeout-minutes: 60
 
