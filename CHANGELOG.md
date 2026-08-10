@@ -1,5 +1,23 @@
 # @tobelabs/chainwright
 
+## 0.11.0
+
+### Minor Changes
+
+- [Core] - Replace the 'glob' package with Node.js internal method
+
+## 0.10.17
+
+### Patch Changes
+
+- [Release] - Fix failing release build by reverting from Typescript v7.0.2 to v5.9.3
+
+## 0.10.16
+
+### Patch Changes
+
+- [Core] - Update Playwright and other core dependencies
+
 ## 0.10.15
 
 ### Patch Changes
