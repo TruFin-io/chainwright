@@ -3,7 +3,6 @@ import { W as WorkerScopeFixture } from '../../worker-scope-context-DSkOcWf-.js'
 export { w as workerScopeContext } from '../../worker-scope-context-DSkOcWf-.js';
 import * as _playwright_test from '@playwright/test';
 import { BrowserContext, Page } from '@playwright/test';
-import z from 'zod';
 
 declare class SolflareProfile {
     readonly name: "solflare";
@@ -21,11 +20,10 @@ type OnboardingArgs = {
     additionalAccounts?: Array<AddAccountArgs>;
 };
 type SwitchNetwork = Omit<Required<OnboardingArgs>, "recoveryPhrase">["network"];
-declare const addAccountSchema: z.ZodObject<{
-    walletName: z.ZodString;
-    privateKey: z.ZodString;
-}, z.core.$strip>;
-type AddAccountArgs = z.infer<typeof addAccountSchema>;
+type AddAccountArgs = {
+    walletName: string;
+    privateKey: string;
+};
 type RenameAccountArgs = {
     currentAccountName: string;
     newAccountName: string;

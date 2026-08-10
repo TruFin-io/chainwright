@@ -3,7 +3,6 @@ import { W as WorkerScopeFixture } from '../../worker-scope-context-DSkOcWf-.js'
 export { w as workerScopeContext } from '../../worker-scope-context-DSkOcWf-.js';
 import * as _playwright_test from '@playwright/test';
 import { BrowserContext, Page } from '@playwright/test';
-import z from 'zod';
 
 declare class KeplrProfile {
     readonly name: "keplr";
@@ -41,20 +40,18 @@ interface AddAccountViaPrivateKey extends AddAccount {
 interface AddAccountViaSeedPhrase extends AddAccount {
     seedPhrase: string;
 }
-declare const getAccountAddressSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
-    chain: z.ZodLiteral<"Injective" | "Injective (Testnet)" | "Polygon">;
-    walletName: z.ZodString;
-}, z.core.$strip>, z.ZodObject<{
-    chain: z.ZodLiteral<"Bitcoin" | "Bitcoin Signet" | "Bitcoin Testnet">;
-    chainTag: z.ZodLiteral<"Taproot" | "Native Segwit">;
-    walletName: z.ZodString;
-}, z.core.$strip>], "chain">;
-type GetAccountAddressArgs = z.infer<typeof getAccountAddressSchema>;
-declare const renameAccountSchema: z.ZodObject<{
-    currentAccountName: z.ZodString;
-    newAccountName: z.ZodString;
-}, z.core.$strip>;
-type RenameAccountArgs = z.infer<typeof renameAccountSchema>;
+type GetAccountAddressArgs = {
+    chain: "Injective" | "Injective (Testnet)" | "Polygon";
+    walletName: string;
+} | {
+    chain: "Bitcoin" | "Bitcoin Signet" | "Bitcoin Testnet";
+    chainTag: "Taproot" | "Native Segwit";
+    walletName: string;
+};
+type RenameAccountArgs = {
+    currentAccountName: string;
+    newAccountName: string;
+};
 type KeplrFixture = {
     contextPath: string;
     keplr: Keplr;

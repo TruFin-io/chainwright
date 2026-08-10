@@ -3,7 +3,6 @@ import { W as WorkerScopeFixture } from '../../worker-scope-context-DSkOcWf-.js'
 export { w as workerScopeContext } from '../../worker-scope-context-DSkOcWf-.js';
 import * as _playwright_test from '@playwright/test';
 import { Page, BrowserContext } from '@playwright/test';
-import z from 'zod';
 
 type RenameAccount = {
     page: Page;
@@ -32,13 +31,12 @@ type AddAccountArgs = {
     privateKey: string;
     accountName: string;
 };
-declare const addCustomNetworkSchema: z.ZodObject<{
-    networkName: z.ZodString;
-    rpcUrl: z.ZodURL;
-    chainId: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
-    currencySymbol: z.ZodString;
-}, z.core.$strip>;
-type AddCustomNetwork = z.infer<typeof addCustomNetworkSchema>;
+type AddCustomNetwork = {
+    networkName: string;
+    rpcUrl: string;
+    chainId: number | string;
+    currencySymbol: string;
+};
 type SwitchNetwork = {
     chainName: "Ethereum" | "Base" | "Linea";
     networkType: "mainnet";
@@ -427,4 +425,4 @@ declare const metamaskFixture: ({ slowMo, profileName }?: WalletProfileFixtureAr
 
 declare const metamaskWorkerScopeFixture: ({ profileName, slowMo }?: WalletProfileFixtureArgs) => _playwright_test.TestType<_playwright_test.PlaywrightTestArgs & _playwright_test.PlaywrightTestOptions & MetamaskFixture, _playwright_test.PlaywrightWorkerArgs & _playwright_test.PlaywrightWorkerOptions & WorkerScopeFixture<Metamask>>;
 
-export { type AddAccountArgs, type AddCustomNetwork, type AnvilNodeInstance, type AnvilNodeOptions, type CreateAnvilNodeResult, type GasFeeSettings, type GetAccountAddressChains, Metamask, type MetamaskFixture, type OnboardingArgs, type SwitchNetwork, WalletProfileFixtureArgs, WorkerScopeFixture, addCustomNetworkSchema, metamaskFixture, metamaskWorkerScopeFixture };
+export { type AddAccountArgs, type AddCustomNetwork, type AnvilNodeInstance, type AnvilNodeOptions, type CreateAnvilNodeResult, type GasFeeSettings, type GetAccountAddressChains, Metamask, type MetamaskFixture, type OnboardingArgs, type SwitchNetwork, WalletProfileFixtureArgs, WorkerScopeFixture, metamaskFixture, metamaskWorkerScopeFixture };

@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --import tsx
+#!/usr/bin/env node
 declare function clientEntry(): Promise<void>;
 
 export { clientEntry };
